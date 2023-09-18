@@ -106,7 +106,6 @@ public class StudentController extends BaseController {
 
     @PostMapping("export")
     public ResponseEntity<?> exportStudentList(@RequestBody ExportStudentListRequest request) throws IOException {
-        // updated
         String response = studentManager.exportToExcel(request);
         return buildItemResponse(response);
     }

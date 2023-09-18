@@ -26,19 +26,19 @@ public class CustomPointRepository {
             }
             if(point!=null) {
                 if(point==1){
-                    predicates.add(criteriaBuilder.between(root.get("medScore4"), 3.6, 4.0));
+                    predicates.add(criteriaBuilder.between(root.get("avgPoint4"), 3.6, 4.0));
                 } else if(point==2){
-                    predicates.add(criteriaBuilder.between(root.get("medScore4"), 3.2, 3.6));
+                    predicates.add(criteriaBuilder.between(root.get("avgPoint4"), 3.2, 3.6));
                 } else if(point==3){
-                    predicates.add(criteriaBuilder.between(root.get("medScore4"), 2.5, 3.2));
+                    predicates.add(criteriaBuilder.between(root.get("avgPoint4"), 2.5, 3.2));
                 } else if(point==4){
-                    predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("medScore4"), 2.5));
+                    predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("avgPoint4"), 2.5));
                 } else if(point==5){
-                    predicates.add(criteriaBuilder.between(root.get("medScore4"), 2.0, 2.5));
+                    predicates.add(criteriaBuilder.between(root.get("avgPoint4"), 2.0, 2.5));
                 } else if(point==6){
-                    predicates.add(criteriaBuilder.between(root.get("medScore4"), 1.0, 2.0));
+                    predicates.add(criteriaBuilder.between(root.get("avgPoint4"), 1.0, 2.0));
                 } else if(point==7){
-                    predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("medScore4"), 1.0));
+                    predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("avgPoint4"), 1.0));
                 }
             }
             if(trainingPoint!=null) {
@@ -60,19 +60,19 @@ public class CustomPointRepository {
             }
             if(accPoint!=null) {
                 if(accPoint==1){
-                    predicates.add(criteriaBuilder.between(root.get("scoreAccumulated4"), 3.6, 4.0));
+                    predicates.add(criteriaBuilder.between(root.get("pointAcc4"), 3.6, 4.0));
                 } else if(accPoint==2){
-                    predicates.add(criteriaBuilder.between(root.get("scoreAccumulated4"), 3.2, 3.6));
+                    predicates.add(criteriaBuilder.between(root.get("pointAcc4"), 3.2, 3.6));
                 } else if(accPoint==3){
-                    predicates.add(criteriaBuilder.between(root.get("scoreAccumulated4"), 2.5, 3.2));
+                    predicates.add(criteriaBuilder.between(root.get("pointAcc4"), 2.5, 3.2));
                 } else if(accPoint==4){
-                    predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("scoreAccumulated4"), 2.5));
+                    predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("pointAcc4"), 2.5));
                 } else if(accPoint==5){
-                    predicates.add(criteriaBuilder.between(root.get("scoreAccumulated4"), 2.0, 2.5));
+                    predicates.add(criteriaBuilder.between(root.get("pointAcc4"), 2.0, 2.5));
                 } else if(accPoint==6){
-                    predicates.add(criteriaBuilder.between(root.get("scoreAccumulated4"), 1.0, 2.0));
+                    predicates.add(criteriaBuilder.between(root.get("pointAcc4"), 1.0, 2.0));
                 } else if(accPoint==7){
-                    predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("scoreAccumulated4"), 1.0));
+                    predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("pointAcc4"), 1.0));
                 }
             }
             predicates.add(criteriaBuilder.isFalse(root.get("isDeleted")));

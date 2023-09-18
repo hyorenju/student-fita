@@ -83,7 +83,6 @@ public class PointController extends BaseController {
 
     @PostMapping("export")
     public ResponseEntity<?> exportPointList(@RequestBody ExportPointListRequest request){
-        //update
         String response = pointManager.exportToExcel(request);
         return buildItemResponse(response);
     }
