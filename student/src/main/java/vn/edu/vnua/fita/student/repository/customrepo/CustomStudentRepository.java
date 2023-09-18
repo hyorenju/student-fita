@@ -18,7 +18,7 @@ public class CustomStudentRepository {
         return ((root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
             if (StringUtils.hasText(courseId)) {
-                predicates.add(criteriaBuilder.like(root.get("course").get("id"), "K" + courseId));
+                predicates.add(criteriaBuilder.like(root.get("course").get("id"), courseId));
             }
             if (StringUtils.hasText(majorId)) {
                 predicates.add(criteriaBuilder.like(root.get("major").get("id"), majorId));
