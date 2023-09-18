@@ -4,7 +4,7 @@ import org.apache.poi.ss.formula.functions.T;
 
 import java.sql.Timestamp;
 
-public class StudentValidator {
+public class ImportStudentValidator {
     public static boolean validateId(String id) {
         return id.matches("^[0-9]+$");
     }

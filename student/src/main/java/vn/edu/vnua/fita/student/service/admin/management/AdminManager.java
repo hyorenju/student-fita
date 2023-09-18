@@ -136,12 +136,10 @@ public class AdminManager implements IAdminService {
     public Admin updateAvatar(MultipartFile file, String id) throws IOException {
         Admin admin = adminRepository.findById(id).orElseThrow(() -> new RuntimeException(String.format(adminNotFound, id)));
 
-        // Tạo một tên file
-        String originalFileName = file.getOriginalFilename();
-        String fileName = UUID.randomUUID() + getFileExtension(originalFileName);
-        Blob blob = firebaseService.uploadImage(file, fileName, bucketName);
+        Blob blob = firebaseService.uploadImage(file, bucketName);
 
         if(StringUtils.hasText(admin.getAvatar())){
+            String fileName = admin.getAvatar().split("[/?]")[4];
             blob.getStorage().delete(bucketName, fileName);
         }
 

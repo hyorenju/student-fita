@@ -6,6 +6,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 public interface IFirebaseService {
-    Blob uploadImage(MultipartFile file, String fileName, String bucketName) throws IOException;
+    Blob uploadImage(MultipartFile file, String bucketName) throws IOException;
     String uploadFileExcel(String filePath, String bucketName) throws IOException;
 }

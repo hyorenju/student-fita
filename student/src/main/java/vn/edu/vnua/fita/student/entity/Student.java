@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import vn.edu.vnua.fita.student.common.RoleConstant;
-import vn.edu.vnua.fita.student.domain.validator.StudentValidator;
+import vn.edu.vnua.fita.student.domain.validator.ImportStudentValidator;
 import vn.edu.vnua.fita.student.model.file.StudentExcelData;
 
 import java.sql.Timestamp;
@@ -114,37 +114,37 @@ public class Student {
     }
 
     public List<StudentExcelData.ErrorDetail> validateInformationDetailError(List<StudentExcelData.ErrorDetail> errorDetailList){
-        if (!StudentValidator.validateId(id)) {
+        if (!ImportStudentValidator.validateId(id)) {
             errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(0).errorMsg("Mã không hợp lệ").build());
         }
-        if (!StudentValidator.validateName(surname)) {
+        if (!ImportStudentValidator.validateName(surname)) {
             errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(1).errorMsg("Họ đệm không hợp lệ").build());
         }
-        if (!StudentValidator.validateName(lastName)) {
+        if (!ImportStudentValidator.validateName(lastName)) {
             errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(2).errorMsg("Tên không hợp lệ").build());
         }
-        if (!StudentValidator.validateCourse(course.getId())) {
+        if (!ImportStudentValidator.validateCourse(course.getId())) {
             errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(3).errorMsg("Khoá không hợp lệ").build());
         }
-        if (!StudentValidator.validateMajor(major.getId())) {
+        if (!ImportStudentValidator.validateMajor(major.getId())) {
             errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(4).errorMsg("Ngành không hợp lệ").build());
         }
-        if (!StudentValidator.validateClass(aclass.getId())) {
+        if (!ImportStudentValidator.validateClass(aclass.getId())) {
             errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(5).errorMsg("Lớp không hợp lệ").build());
         }
-        if (!StudentValidator.validateDob(dob)) {
+        if (!ImportStudentValidator.validateDob(dob)) {
             errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(6).errorMsg("Dạng dd/MM/yyyy").build());
         }
-        if (!StudentValidator.validateGender(gender)) {
+        if (!ImportStudentValidator.validateGender(gender)) {
             errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(7).errorMsg("Giới tính không hợp lệ").build());
         }
-        if (!StudentValidator.validatePhoneNumber(phoneNumber)) {
+        if (!ImportStudentValidator.validatePhoneNumber(phoneNumber)) {
             errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(8).errorMsg("Sđt không hợp lệ").build());
         }
-        if (!StudentValidator.validateEmail(email)) {
+        if (!ImportStudentValidator.validateEmail(email)) {
             errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(9).errorMsg("Email không hợp lệ").build());
         }
-        if (!StudentValidator.validateHomeTown(homeTown)) {
+        if (!ImportStudentValidator.validateHomeTown(homeTown)) {
             errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(10).errorMsg("Quê quán không hợp lệ").build());
         }
 

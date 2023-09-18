@@ -51,7 +51,7 @@ public class ExcelService implements IExcelService {
     }
 
     @Override
-    public String writeStudentToExcel(List<Student> students) throws IOException {
+    public String writeStudentToExcel(List<Student> students){
         try {
             Workbook workbook = new XSSFWorkbook();
             Sheet sheet = workbook.createSheet("danh-sach-sinh-vien");
@@ -176,7 +176,7 @@ public class ExcelService implements IExcelService {
 
         for (int i = 0; i < pointStrList.size(); i++) {
             String pointStr = pointStrList.get(i);
-            Callable<PointExcelData> callable = new StorePointWorker(studentRepository, pointRepository, pointStr, i);
+            Callable<PointExcelData> callable = new StorePointWorker(studentRepository, termRepository, pointRepository, pointStr, i);
             Future<PointExcelData> future = executor.submit(callable);
             studentExcelDataList.add(future.get());
         }

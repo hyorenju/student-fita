@@ -37,6 +37,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
@@ -208,12 +209,10 @@ public class StudentManager implements IStudentService {
     public Student updateAvatar(MultipartFile file, String id) throws IOException {
         Student student = studentRepository.findById(id).orElseThrow(() -> new RuntimeException(String.format(studentNotFound, id)));
 
-        // Tạo một tên file
-        String originalFileName = file.getOriginalFilename();
-        String fileName = UUID.randomUUID() + getFileExtension(originalFileName);
-        Blob blob = firebaseService.uploadImage(file, fileName, bucketName);
+        Blob blob = firebaseService.uploadImage(file, bucketName);
 
         if (StringUtils.hasText(student.getAvatar())) {
+            String fileName = student.getAvatar().split("[/?]")[4];
             blob.getStorage().delete(bucketName, fileName);
         }
 
@@ -230,7 +229,7 @@ public class StudentManager implements IStudentService {
     }
 
     @Override
-    public String exportToExcel(ExportStudentListRequest request) throws IOException {
+    public String exportToExcel(ExportStudentListRequest request){
         Specification<Student> specification = CustomStudentRepository.filterStudentList(
                 request.getFilter().getCourseId(),
                 request.getFilter().getMajorId(),
@@ -291,12 +290,5 @@ public class StudentManager implements IStudentService {
         Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
         Admin admin = adminRepository.findById(authentication.getPrincipal().toString()).orElseThrow(() -> new RuntimeException(byWhomNotFound));
         return admin.getName();
-    }
-
-    public String getFileExtension(String filename) {
-        if (filename != null && filename.lastIndexOf(".") != -1) {
-            return filename.substring(filename.lastIndexOf("."));
-        }
-        return "";
     }
 }

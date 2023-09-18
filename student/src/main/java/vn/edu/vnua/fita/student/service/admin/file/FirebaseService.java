@@ -16,10 +16,14 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class FirebaseService implements IFirebaseService {
     @Override
-    public Blob uploadImage(MultipartFile file, String fileName, String bucketName) throws IOException {
+    public Blob uploadImage(MultipartFile file, String bucketName) throws IOException {
         // Xác thực google firebase
         InputStream serviceAccountKey = getClass().getResourceAsStream("/serviceAccountKey.json");
         GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccountKey);
+
+        // Tạo một tên file
+        String originalFileName = file.getOriginalFilename();
+        String fileName = UUID.randomUUID() + getFileExtension(originalFileName);
 
         // Nhận storage service
         StorageOptions storageOptions = StorageOptions.newBuilder().setCredentials(credentials).build();
@@ -61,5 +65,12 @@ public class FirebaseService implements IFirebaseService {
         return storage.create(blobInfo, fileInputStream)
                 .signUrl(FirebaseExpirationTimeConstant.EXPIRATION_TIME, TimeUnit.MILLISECONDS)
                 .toString();
+    }
+
+    public String getFileExtension(String filename) {
+        if (filename != null && filename.lastIndexOf(".") != -1) {
+            return filename.substring(filename.lastIndexOf("."));
+        }
+        return "";
     }
 }
