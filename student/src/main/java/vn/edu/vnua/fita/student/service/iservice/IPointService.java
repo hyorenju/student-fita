@@ -1,11 +1,14 @@
 package vn.edu.vnua.fita.student.service.iservice;
 
 import org.springframework.data.domain.Page;
+import org.springframework.web.multipart.MultipartFile;
 import vn.edu.vnua.fita.student.entity.TrashPoint;
 import vn.edu.vnua.fita.student.entity.Point;
 import vn.edu.vnua.fita.student.request.admin.point.*;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 
 public interface IPointService {
@@ -17,5 +20,6 @@ public interface IPointService {
     TrashPoint restorePoint(Long id);
     List<TrashPoint> restoreManyPoint(RestorePointRequest request);
     Page<TrashPoint> getTrashPointList(GetTrashPointRequest request);
+    List<Point> importFromExcel(MultipartFile file) throws IOException, ExecutionException, InterruptedException;
     String exportToExcel(ExportPointListRequest request);
 }

@@ -6,6 +6,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import vn.edu.vnua.fita.student.controller.BaseController;
 import vn.edu.vnua.fita.student.entity.dto.PointDTO;
 import vn.edu.vnua.fita.student.entity.dto.TrashPointDTO;
@@ -14,7 +15,9 @@ import vn.edu.vnua.fita.student.entity.Point;
 import vn.edu.vnua.fita.student.request.admin.point.*;
 import vn.edu.vnua.fita.student.service.admin.management.PointManager;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("admin/point")
@@ -79,6 +82,14 @@ public class PointController extends BaseController {
                 trashPoint -> modelMapper.map(trashPoint, TrashPointDTO.class)
         ).toList();
         return buildPageItemResponse(request.getPage(), response.size(), page.getTotalElements(), response);
+    }
+
+    @PostMapping("import")
+    public ResponseEntity<?> importPointList(@RequestBody MultipartFile file) throws IOException, ExecutionException, InterruptedException {
+        List<PointDTO> response = pointManager.importFromExcel(file).stream().map(
+                point -> modelMapper.map(point, PointDTO.class)
+        ).toList();
+        return buildListItemResponse(response, response.size());
     }
 
     @PostMapping("export")

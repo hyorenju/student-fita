@@ -7,7 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import vn.edu.vnua.fita.student.common.RoleConstant;
 import vn.edu.vnua.fita.student.domain.validator.StudentValidator;
-import vn.edu.vnua.fita.student.model.file.ExcelData;
+import vn.edu.vnua.fita.student.model.file.StudentExcelData;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -113,39 +113,39 @@ public class Student {
         return authorities;
     }
 
-    public List<ExcelData.ErrorDetail> validateInformationDetailError(List<ExcelData.ErrorDetail> errorDetailList){
+    public List<StudentExcelData.ErrorDetail> validateInformationDetailError(List<StudentExcelData.ErrorDetail> errorDetailList){
         if (!StudentValidator.validateId(id)) {
-            errorDetailList.add(ExcelData.ErrorDetail.builder().columnIndex(0).errorMsg("Mã không hợp lệ").build());
+            errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(0).errorMsg("Mã không hợp lệ").build());
         }
         if (!StudentValidator.validateName(surname)) {
-            errorDetailList.add(ExcelData.ErrorDetail.builder().columnIndex(1).errorMsg("Họ đệm không hợp lệ").build());
+            errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(1).errorMsg("Họ đệm không hợp lệ").build());
         }
         if (!StudentValidator.validateName(lastName)) {
-            errorDetailList.add(ExcelData.ErrorDetail.builder().columnIndex(2).errorMsg("Tên không hợp lệ").build());
+            errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(2).errorMsg("Tên không hợp lệ").build());
         }
         if (!StudentValidator.validateCourse(course.getId())) {
-            errorDetailList.add(ExcelData.ErrorDetail.builder().columnIndex(3).errorMsg("Khoá không hợp lệ").build());
+            errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(3).errorMsg("Khoá không hợp lệ").build());
         }
         if (!StudentValidator.validateMajor(major.getId())) {
-            errorDetailList.add(ExcelData.ErrorDetail.builder().columnIndex(4).errorMsg("Ngành không hợp lệ").build());
+            errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(4).errorMsg("Ngành không hợp lệ").build());
         }
         if (!StudentValidator.validateClass(aclass.getId())) {
-            errorDetailList.add(ExcelData.ErrorDetail.builder().columnIndex(5).errorMsg("Lớp không hợp lệ").build());
+            errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(5).errorMsg("Lớp không hợp lệ").build());
         }
         if (!StudentValidator.validateDob(dob)) {
-            errorDetailList.add(ExcelData.ErrorDetail.builder().columnIndex(6).errorMsg("Dạng dd/MM/yyyy").build());
+            errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(6).errorMsg("Dạng dd/MM/yyyy").build());
         }
         if (!StudentValidator.validateGender(gender)) {
-            errorDetailList.add(ExcelData.ErrorDetail.builder().columnIndex(7).errorMsg("Giới tính không hợp lệ").build());
+            errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(7).errorMsg("Giới tính không hợp lệ").build());
         }
         if (!StudentValidator.validatePhoneNumber(phoneNumber)) {
-            errorDetailList.add(ExcelData.ErrorDetail.builder().columnIndex(8).errorMsg("Sđt không hợp lệ").build());
+            errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(8).errorMsg("Sđt không hợp lệ").build());
         }
         if (!StudentValidator.validateEmail(email)) {
-            errorDetailList.add(ExcelData.ErrorDetail.builder().columnIndex(9).errorMsg("Email không hợp lệ").build());
+            errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(9).errorMsg("Email không hợp lệ").build());
         }
         if (!StudentValidator.validateHomeTown(homeTown)) {
-            errorDetailList.add(ExcelData.ErrorDetail.builder().columnIndex(10).errorMsg("Quê quán không hợp lệ").build());
+            errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(10).errorMsg("Quê quán không hợp lệ").build());
         }
 
         return errorDetailList;

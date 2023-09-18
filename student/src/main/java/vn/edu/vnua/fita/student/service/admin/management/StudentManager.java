@@ -38,6 +38,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
@@ -207,11 +208,13 @@ public class StudentManager implements IStudentService {
     public Student updateAvatar(MultipartFile file, String id) throws IOException {
         Student student = studentRepository.findById(id).orElseThrow(() -> new RuntimeException(String.format(studentNotFound, id)));
 
-        Blob blob = firebaseService.uploadImage(file, bucketName);
+        // Tạo một tên file
+        String originalFileName = file.getOriginalFilename();
+        String fileName = UUID.randomUUID() + getFileExtension(originalFileName);
+        Blob blob = firebaseService.uploadImage(file, fileName, bucketName);
 
         if (StringUtils.hasText(student.getAvatar())) {
-            String[] strings = student.getAvatar().split("[/?]");
-            blob.getStorage().delete(bucketName, strings[9]);
+            blob.getStorage().delete(bucketName, fileName);
         }
 
         student.setAvatar(blob
@@ -288,5 +291,12 @@ public class StudentManager implements IStudentService {
         Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
         Admin admin = adminRepository.findById(authentication.getPrincipal().toString()).orElseThrow(() -> new RuntimeException(byWhomNotFound));
         return admin.getName();
+    }
+
+    public String getFileExtension(String filename) {
+        if (filename != null && filename.lastIndexOf(".") != -1) {
+            return filename.substring(filename.lastIndexOf("."));
+        }
+        return "";
     }
 }

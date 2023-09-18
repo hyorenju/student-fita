@@ -11,5 +11,6 @@ import java.util.concurrent.ExecutionException;
 public interface IExcelService {
     List<Student> readStudentFromExcel(MultipartFile file) throws IOException, ExecutionException, InterruptedException, ArrayIndexOutOfBoundsException;
     String writeStudentToExcel(List<Student> students) throws IOException;
+    List<Point> readPointFromExcel(MultipartFile file) throws IOException, ExecutionException, InterruptedException;
     String writePointToExcel(List<Point> points);
 }

@@ -7,14 +7,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import vn.edu.vnua.fita.student.common.FilePathConstant;
-import vn.edu.vnua.fita.student.common.ThreadsNumConstant;
 import vn.edu.vnua.fita.student.entity.Point;
 import vn.edu.vnua.fita.student.entity.Student;
 import vn.edu.vnua.fita.student.model.file.ExcelData;
-import vn.edu.vnua.fita.student.repository.jparepo.ClassRepository;
-import vn.edu.vnua.fita.student.repository.jparepo.CourseRepository;
-import vn.edu.vnua.fita.student.repository.jparepo.MajorRepository;
-import vn.edu.vnua.fita.student.repository.jparepo.StudentRepository;
+import vn.edu.vnua.fita.student.model.file.PointExcelData;
+import vn.edu.vnua.fita.student.model.file.StudentExcelData;
+import vn.edu.vnua.fita.student.repository.jparepo.*;
 import vn.edu.vnua.fita.student.service.admin.file.thread.*;
 import vn.edu.vnua.fita.student.service.iservice.IExcelService;
 
@@ -31,32 +29,32 @@ public class ExcelService implements IExcelService {
     private final CourseRepository courseRepository;
     private final ClassRepository classRepository;
     private final MajorRepository majorRepository;
+    private final PointRepository pointRepository;
+    private final TermRepository termRepository;
     private final FirebaseService firebaseService;
+    private final ExecutorService executor;
     private final String dataNotFound = "Không tìm thấy dữ liệu. Hãy chắc chắn rằng file excel được nhập từ ô A1";
-    private final List<ExcelData> excelDataList = new CopyOnWriteArrayList<>();
 
     @Value("${firebase.storage.bucket}")
     private String bucketName;
 
     @Override
     public List<Student> readStudentFromExcel(MultipartFile file) throws IOException, ExecutionException, InterruptedException {
-        List<String> studentStrList = readStudentList(file);
-        List<ExcelData> excelDataList = storeData(studentStrList);
-        if (!isContinue(excelDataList)) {
-            throw new RuntimeException(exportErrorList(excelDataList));
+        List<String> studentStrList = readExcel(file);
+        List<StudentExcelData> studentExcelDataList = storeStudentData(studentStrList);
+        if (!isContinue(studentExcelDataList)) {
+            throw new RuntimeException(exportErrorStudentList(studentExcelDataList));
         }
         List<Student> students = new ArrayList<>();
-        excelDataList.forEach(excelData -> students.add(excelData.getStudent()));
+        studentExcelDataList.forEach(studentExcelData -> students.add(studentExcelData.getStudent()));
         return students;
     }
 
     @Override
     public String writeStudentToExcel(List<Student> students) throws IOException {
-        ExecutorService executor = Executors.newFixedThreadPool(ThreadsNumConstant.MAX_THREADS);
-
         try {
             Workbook workbook = new XSSFWorkbook();
-            Sheet sheet = workbook.createSheet("Dsđtb");
+            Sheet sheet = workbook.createSheet("danh-sach-sinh-vien");
 
             // Tạo hàng tiêu đề
             createStudentListHeader(sheet);
@@ -90,12 +88,22 @@ public class ExcelService implements IExcelService {
     }
 
     @Override
-    public String writePointToExcel(List<Point> points) {
-        ExecutorService executor = Executors.newFixedThreadPool(ThreadsNumConstant.MAX_THREADS);
+    public List<Point> readPointFromExcel(MultipartFile file) throws IOException, ExecutionException, InterruptedException {
+        List<String> pointStrList = readExcel(file);
+        List<PointExcelData> pointExcelDataList = storePointData(pointStrList);
+        if (!isContinue(pointExcelDataList)) {
+            throw new RuntimeException(exportErrorPointList(pointExcelDataList));
+        }
+        List<Point> points = new ArrayList<>();
+        pointExcelDataList.forEach(pointExcelData -> points.add(pointExcelData.getPoint()));
+        return points;
+    }
 
+    @Override
+    public String writePointToExcel(List<Point> points) {
         try {
             Workbook workbook = new XSSFWorkbook();
-            Sheet sheet = workbook.createSheet("Dsđtb");
+            Sheet sheet = workbook.createSheet("danh-sach-diem");
 
             // Tạo hàng tiêu đề
             createPointListHeader(sheet);
@@ -128,8 +136,7 @@ public class ExcelService implements IExcelService {
         }
     }
 
-    private List<String> readStudentList(MultipartFile file) throws IOException, ExecutionException, InterruptedException {
-        ExecutorService executor = Executors.newFixedThreadPool(ThreadsNumConstant.MAX_THREADS);
+    private List<String> readExcel(MultipartFile file) throws IOException, ExecutionException, InterruptedException {
         List<String> stringList = new CopyOnWriteArrayList<>();
 
         Workbook workbook = new XSSFWorkbook(file.getInputStream());
@@ -152,20 +159,31 @@ public class ExcelService implements IExcelService {
         return stringList;
     }
 
-    private List<ExcelData> storeData(List<String> studentStrList) throws ExecutionException, InterruptedException {
-        ExecutorService executor = Executors.newFixedThreadPool(ThreadsNumConstant.MAX_THREADS);
-        List<ExcelData> excelDataList = new CopyOnWriteArrayList<>();
+    private List<StudentExcelData> storeStudentData(List<String> studentStrList) throws ExecutionException, InterruptedException {
+        List<StudentExcelData> studentExcelDataList = new CopyOnWriteArrayList<>();
 
         for (int i = 0; i < studentStrList.size(); i++) {
             String studentStr = studentStrList.get(i);
-            Callable<ExcelData> callable = new StoreDataWorker(studentRepository, courseRepository, classRepository, majorRepository, studentStr, i);
-            Future<ExcelData> future = executor.submit(callable);
-            excelDataList.add(future.get());
+            Callable<StudentExcelData> callable = new StoreStudentWorker(studentRepository, courseRepository, classRepository, majorRepository, studentStr, i);
+            Future<StudentExcelData> future = executor.submit(callable);
+            studentExcelDataList.add(future.get());
         }
-        return excelDataList;
+        return studentExcelDataList;
     }
 
-    private boolean isContinue(List<ExcelData> excelDataList) {
+    private List<PointExcelData> storePointData(List<String> pointStrList) throws ExecutionException, InterruptedException {
+        List<PointExcelData> studentExcelDataList = new CopyOnWriteArrayList<>();
+
+        for (int i = 0; i < pointStrList.size(); i++) {
+            String pointStr = pointStrList.get(i);
+            Callable<PointExcelData> callable = new StorePointWorker(studentRepository, pointRepository, pointStr, i);
+            Future<PointExcelData> future = executor.submit(callable);
+            studentExcelDataList.add(future.get());
+        }
+        return studentExcelDataList;
+    }
+
+    private boolean isContinue(List<? extends ExcelData> excelDataList) {
         for (ExcelData excelData :
                 excelDataList) {
             if (!excelData.isValid()) {
@@ -175,12 +193,10 @@ public class ExcelService implements IExcelService {
         return true;
     }
 
-    private String exportErrorList(List<ExcelData> excelDataList) {
-        ExecutorService executor = Executors.newFixedThreadPool(ThreadsNumConstant.MAX_THREADS);
-
+    private String exportErrorStudentList(List<StudentExcelData> studentExcelDataList) {
         try {
             Workbook workbook = new XSSFWorkbook();
-            Sheet sheet = workbook.createSheet("Dssv");
+            Sheet sheet = workbook.createSheet("danh-sach-sv-loi");
 
             // Tạo hàng tiêu đề
             createStudentErrorHeader(sheet);
@@ -191,12 +207,12 @@ public class ExcelService implements IExcelService {
             cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
             // Sử dụng đa luồng in dữ liệu lỗi ra excel
-            for (ExcelData excelData :
-                    excelDataList) {
-                Row row = sheet.createRow(excelData.getRowIndex() + 1);
-                Student student = excelData.getStudent();
+            for (StudentExcelData studentExcelData :
+                    studentExcelDataList) {
+                Row row = sheet.createRow(studentExcelData.getRowIndex() + 1);
+                Student student = studentExcelData.getStudent();
 
-                Callable<Void> callable = new WriteErrorWorker(row, student, cellStyle, excelData);
+                Callable<Void> callable = new WriteErrorStudentWorker(row, student, cellStyle, studentExcelData);
                 Future<Void> future = executor.submit(callable);
                 try {
                     future.get(); // Đợi và nhận giá trị null từ Callable
@@ -213,6 +229,48 @@ public class ExcelService implements IExcelService {
 
             //gọi hàm upload firebase
             return firebaseService.uploadFileExcel(FilePathConstant.ERROR_STUDENT_FILE, bucketName);
+
+        } catch (IOException e) {
+            throw new RuntimeException("Đã có lỗi, không thể ghi file.");
+        }
+    }
+
+    private String exportErrorPointList(List<PointExcelData> pointExcelDataList) {
+        try {
+            Workbook workbook = new XSSFWorkbook();
+            Sheet sheet = workbook.createSheet("danh-sach-diem-loi");
+
+            // Tạo hàng tiêu đề
+            createPointErrorHeader(sheet);
+
+            // Tạo style cho error cell
+            CellStyle cellStyle = workbook.createCellStyle();
+            cellStyle.setFillForegroundColor(IndexedColors.YELLOW.getIndex());
+            cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+            // Sử dụng đa luồng in dữ liệu lỗi ra excel
+            for (PointExcelData pointExcelData :
+                    pointExcelDataList) {
+                Row row = sheet.createRow(pointExcelData.getRowIndex() + 1);
+                Point point = pointExcelData.getPoint();
+
+                Callable<Void> callable = new WriteErrorPointWorker(row, point, cellStyle, pointExcelData);
+                Future<Void> future = executor.submit(callable);
+                try {
+                    future.get(); // Đợi và nhận giá trị null từ Callable
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            FileOutputStream fos = new FileOutputStream(FilePathConstant.ERROR_POINT_FILE);
+            workbook.write(fos);
+
+            workbook.close();
+            fos.close();
+
+            //gọi hàm upload firebase
+            return firebaseService.uploadFileExcel(FilePathConstant.ERROR_POINT_FILE, bucketName);
 
         } catch (IOException e) {
             throw new RuntimeException("Đã có lỗi, không thể ghi file.");
@@ -253,6 +311,18 @@ public class ExcelService implements IExcelService {
         headerRow.createCell(13).setCellValue("Sđt bố");
         headerRow.createCell(14).setCellValue("Họ tên mẹ");
         headerRow.createCell(15).setCellValue("Sđt mẹ");
+    }
+
+    private void createPointErrorHeader(Sheet sheet) {
+        Row headerRow = sheet.createRow(0);
+        headerRow.createCell(0).setCellValue("Mã sinh viên");
+        headerRow.createCell(1).setCellValue("Học kỳ");
+        headerRow.createCell(2).setCellValue("ĐTB hệ 10");
+        headerRow.createCell(3).setCellValue("ĐTB hệ 4");
+        headerRow.createCell(4).setCellValue("ĐRL");
+        headerRow.createCell(5).setCellValue("TC tích luỹ");
+        headerRow.createCell(6).setCellValue("ĐTBTL hệ 10");
+        headerRow.createCell(7).setCellValue("ĐTBTL hệ 4");
     }
 
     private void createPointListHeader(Sheet sheet) {

@@ -9,12 +9,6 @@ public class ModelMapperConfig {
     @Bean
     public ModelMapper modelMapper(){
         ModelMapper modelMapper = new ModelMapper();
-//        modelMapper.addMappings(new PropertyMap<Point, PointDTO>() {
-//            @Override
-//            protected void configure() {
-//                map().setId(source.getId());
-//            }
-//        });
         return modelMapper;
     }
 }

@@ -11,14 +11,15 @@ import vn.edu.vnua.fita.student.entity.AClass;
 import vn.edu.vnua.fita.student.entity.Course;
 import vn.edu.vnua.fita.student.entity.Major;
 import vn.edu.vnua.fita.student.entity.Student;
-import vn.edu.vnua.fita.student.model.file.ExcelData;
+import vn.edu.vnua.fita.student.model.file.StudentExcelData;
 import vn.edu.vnua.fita.student.repository.jparepo.ClassRepository;
 import vn.edu.vnua.fita.student.repository.jparepo.CourseRepository;
 import vn.edu.vnua.fita.student.repository.jparepo.MajorRepository;
 import vn.edu.vnua.fita.student.repository.jparepo.StudentRepository;
 import vn.edu.vnua.fita.student.util.MyUtils;
 
-public class StoreDataWorker implements Callable<ExcelData> {
+@AllArgsConstructor
+public class StoreStudentWorker implements Callable<StudentExcelData> {
     private final StudentRepository studentRepository;
     private final CourseRepository courseRepository;
     private final ClassRepository classRepository;
@@ -26,18 +27,18 @@ public class StoreDataWorker implements Callable<ExcelData> {
     private final String studentStr;
     private final int row;
 
-    public StoreDataWorker(StudentRepository studentRepository, CourseRepository courseRepository, ClassRepository classRepository, MajorRepository majorRepository, String studentStr, int row) {
-        this.studentRepository = studentRepository;
-        this.courseRepository = courseRepository;
-        this.classRepository = classRepository;
-        this.majorRepository = majorRepository;
-        this.studentStr = studentStr;
-        this.row = row;
-    }
+//    public StoreStudentWorker(StudentRepository studentRepository, CourseRepository courseRepository, ClassRepository classRepository, MajorRepository majorRepository, String studentStr, int row) {
+//        this.studentRepository = studentRepository;
+//        this.courseRepository = courseRepository;
+//        this.classRepository = classRepository;
+//        this.majorRepository = majorRepository;
+//        this.studentStr = studentStr;
+//        this.row = row;
+//    }
 
     @Override
-    public ExcelData call() {
-        ExcelData excelData = new ExcelData();
+    public StudentExcelData call() {
+        StudentExcelData studentExcelData = new StudentExcelData();
 
         if (!studentStr.isEmpty()) {
             String[] infoList = studentStr.strip().split(",");
@@ -69,31 +70,31 @@ public class StoreDataWorker implements Callable<ExcelData> {
                     .role(Role.builder().id(RoleConstant.STUDENT).build())
                     .build();
 
-            List<ExcelData.ErrorDetail> errorDetailList = student.validateInformationDetailError(new CopyOnWriteArrayList<>());
+            List<StudentExcelData.ErrorDetail> errorDetailList = student.validateInformationDetailError(new CopyOnWriteArrayList<>());
             if (infoList.length != 11) {
-                errorDetailList.add(ExcelData.ErrorDetail.builder().columnIndex(11).errorMsg("Thừa trường dữ liệu").build());
+                errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(11).errorMsg("Thừa trường dữ liệu").build());
             }
             if (studentRepository.existsById(id)) {
-                errorDetailList.add(ExcelData.ErrorDetail.builder().columnIndex(0).errorMsg("Mã đã tồn tại").build());
+                errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(0).errorMsg("Mã đã tồn tại").build());
             }
             if (!courseRepository.existsById(courseId)) {
-                errorDetailList.add(ExcelData.ErrorDetail.builder().columnIndex(3).errorMsg("Khoá không tồn tại").build());
+                errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(3).errorMsg("Khoá không tồn tại").build());
             }
             if (!majorRepository.existsById(majorId)){
-                errorDetailList.add(ExcelData.ErrorDetail.builder().columnIndex(4).errorMsg("Ngành không tồn tại").build());
+                errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(4).errorMsg("Ngành không tồn tại").build());
             }
             if (!classRepository.existsById(classId)) {
-                errorDetailList.add(ExcelData.ErrorDetail.builder().columnIndex(5).errorMsg("Lớp không tồn tại").build());
+                errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(5).errorMsg("Lớp không tồn tại").build());
             }
 
-            excelData.setStudent(student);
+            studentExcelData.setStudent(student);
             if (!errorDetailList.isEmpty()) {
-                excelData.setErrorDetailList(errorDetailList);
-                excelData.setValid(false);
+                studentExcelData.setErrorDetailList(errorDetailList);
+                studentExcelData.setValid(false);
             }
-            excelData.setRowIndex(row);
+            studentExcelData.setRowIndex(row);
         }
 
-        return excelData;
+        return studentExcelData;
     }
 }

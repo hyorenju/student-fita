@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -135,11 +136,13 @@ public class AdminManager implements IAdminService {
     public Admin updateAvatar(MultipartFile file, String id) throws IOException {
         Admin admin = adminRepository.findById(id).orElseThrow(() -> new RuntimeException(String.format(adminNotFound, id)));
 
-        Blob blob = firebaseService.uploadImage(file, bucketName);
+        // Tạo một tên file
+        String originalFileName = file.getOriginalFilename();
+        String fileName = UUID.randomUUID() + getFileExtension(originalFileName);
+        Blob blob = firebaseService.uploadImage(file, fileName, bucketName);
 
         if(StringUtils.hasText(admin.getAvatar())){
-            String[] strings = admin.getAvatar().split("[/?]");
-            blob.getStorage().delete(bucketName, strings[9]);
+            blob.getStorage().delete(bucketName, fileName);
         }
 
         admin.setAvatar(blob
@@ -170,5 +173,12 @@ public class AdminManager implements IAdminService {
         Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
         Admin admin = adminRepository.findById(authentication.getPrincipal().toString()).orElseThrow(() -> new RuntimeException(byWhomNotFound));
         return admin.getName();
+    }
+
+    public String getFileExtension(String filename) {
+        if (filename != null && filename.lastIndexOf(".") != -1) {
+            return filename.substring(filename.lastIndexOf("."));
+        }
+        return "";
     }
 }

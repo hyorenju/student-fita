@@ -8,6 +8,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import vn.edu.vnua.fita.student.common.DateTimeConstant;
 import vn.edu.vnua.fita.student.entity.TrashPoint;
 import vn.edu.vnua.fita.student.entity.Admin;
@@ -20,11 +21,13 @@ import vn.edu.vnua.fita.student.request.admin.point.*;
 import vn.edu.vnua.fita.student.service.admin.file.ExcelService;
 import vn.edu.vnua.fita.student.service.iservice.IPointService;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @Service
 @RequiredArgsConstructor
@@ -145,6 +148,11 @@ public class PointManager implements IPointService {
     @Override
     public Page<TrashPoint> getTrashPointList(GetTrashPointRequest request) {
         return trashPointRepository.findAll(PageRequest.of(request.getPage()-1, request.getSize(), Sort.by("id").descending()));
+    }
+
+    @Override
+    public List<Point> importFromExcel(MultipartFile file) throws IOException, ExecutionException, InterruptedException {
+        return pointRepository.saveAllAndFlush(excelService.readPointFromExcel(file));
     }
 
     @Override
