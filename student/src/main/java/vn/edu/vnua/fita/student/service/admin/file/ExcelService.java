@@ -323,6 +323,7 @@ public class ExcelService implements IExcelService {
         headerRow.createCell(5).setCellValue("TC tích luỹ");
         headerRow.createCell(6).setCellValue("ĐTBTL hệ 10");
         headerRow.createCell(7).setCellValue("ĐTBTL hệ 4");
+        headerRow.createCell(8).setCellValue("Ghi chú");
     }
 
     private void createPointListHeader(Sheet sheet) {

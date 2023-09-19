@@ -123,15 +123,15 @@ public class Student {
         if (!ImportStudentValidator.validateName(lastName)) {
             errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(2).errorMsg("Tên không hợp lệ").build());
         }
-        if (!ImportStudentValidator.validateCourse(course.getId())) {
-            errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(3).errorMsg("Khoá không hợp lệ").build());
-        }
-        if (!ImportStudentValidator.validateMajor(major.getId())) {
-            errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(4).errorMsg("Ngành không hợp lệ").build());
-        }
-        if (!ImportStudentValidator.validateClass(aclass.getId())) {
-            errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(5).errorMsg("Lớp không hợp lệ").build());
-        }
+//        if (!ImportStudentValidator.validateCourse(course.getId())) {
+//            errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(3).errorMsg("Khoá không hợp lệ").build());
+//        }
+//        if (!ImportStudentValidator.validateMajor(major.getId())) {
+//            errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(4).errorMsg("Ngành không hợp lệ").build());
+//        }
+//        if (!ImportStudentValidator.validateClass(aclass.getId())) {
+//            errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(5).errorMsg("Lớp không hợp lệ").build());
+//        }
         if (!ImportStudentValidator.validateDob(dob)) {
             errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(6).errorMsg("Dạng dd/MM/yyyy").build());
         }

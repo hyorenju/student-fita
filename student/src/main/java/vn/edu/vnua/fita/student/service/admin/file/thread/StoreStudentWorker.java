@@ -71,9 +71,6 @@ public class StoreStudentWorker implements Callable<StudentExcelData> {
                     .build();
 
             List<StudentExcelData.ErrorDetail> errorDetailList = student.validateInformationDetailError(new CopyOnWriteArrayList<>());
-            if (infoList.length != 11) {
-                errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(11).errorMsg("Thừa trường dữ liệu").build());
-            }
             if (studentRepository.existsById(id)) {
                 errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(0).errorMsg("Mã đã tồn tại").build());
             }

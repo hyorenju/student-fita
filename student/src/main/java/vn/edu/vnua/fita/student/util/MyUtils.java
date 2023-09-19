@@ -34,6 +34,30 @@ public class MyUtils {
         return simpleDateFormat.format(inputDate);
     }
 
+    public static String parseFloatToString(Float input) {
+        try {
+            return String.format("%.2f", input);
+        } catch (NumberFormatException e){
+            return null;
+        }
+    }
+
+    public static Float parseFloatFromString(String input) {
+        try {
+            return Float.parseFloat(input);
+        } catch (NumberFormatException e){
+            return null;
+        }
+    }
+
+    public static Integer parseIntegerFromString(String input){
+        try {
+            return Integer.parseInt(input);
+        } catch (NumberFormatException e){
+            return null;
+        }
+    }
+
     public String test(String input){
         int lastSpaceIndex = input.lastIndexOf(" ");
 

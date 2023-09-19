@@ -13,17 +13,17 @@ public class ImportStudentValidator {
         return name.matches("^[\\p{L} ]+$");
     }
 
-    public static boolean validateCourse(String courseId){
-        return courseId.matches("^\\d+$");
-    }
-
-    public static boolean validateMajor(String majorId){
-        return majorId.matches("^[A-Z]+$");
-    }
-
-    public static boolean validateClass(String classId){
-        return classId.matches("^K\\d+[A-Z]+$");
-    }
+//    public static boolean validateCourse(String courseId){
+//        return courseId.matches("^\\d+$");
+//    }
+//
+//    public static boolean validateMajor(String majorId){
+//        return majorId.matches("^[A-Z]+$");
+//    }
+//
+//    public static boolean validateClass(String classId){
+//        return classId.matches("^K\\d+[A-Z]+$");
+//    }
 
     public static boolean validateDob(Timestamp dob) {
         return !dob.equals(new Timestamp(0));

@@ -18,12 +18,12 @@ public class WritePointWorker implements Callable<Void> {
         row.createCell(1).setCellValue(point.getSurname());
         row.createCell(2).setCellValue(point.getLastName());
         row.createCell(3).setCellValue(point.getTermId());
-        row.createCell(4).setCellValue(point.getAvgPoint10());
-        row.createCell(5).setCellValue(point.getAvgPoint4());
+        row.createCell(4).setCellValue(MyUtils.parseFloatToString(point.getAvgPoint10()));
+        row.createCell(5).setCellValue(MyUtils.parseFloatToString(point.getAvgPoint4()));
         row.createCell(6).setCellValue(point.getTrainingPoint());
         row.createCell(7).setCellValue(point.getCreditsAcc());
-        row.createCell(8).setCellValue(point.getPointAcc10());
-        row.createCell(9).setCellValue(point.getPointAcc4());
+        row.createCell(8).setCellValue(MyUtils.parseFloatToString(point.getPointAcc10()));
+        row.createCell(9).setCellValue(MyUtils.parseFloatToString(point.getPointAcc4()));
         return null;
     }
 }
