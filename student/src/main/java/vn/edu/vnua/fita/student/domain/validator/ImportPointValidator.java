@@ -8,4 +8,10 @@ public class ImportPointValidator {
     public static boolean validateStudentName(String studentName) {
         return studentName.matches("^[\\p{L} ]+$");
     }
+
+    public static boolean validateTermId(String termId){
+        return termId.matches("^[0-9]+$");
+    }
+
+//    public static boolean
 }

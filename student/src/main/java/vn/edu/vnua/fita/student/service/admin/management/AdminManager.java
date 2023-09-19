@@ -138,10 +138,10 @@ public class AdminManager implements IAdminService {
 
         Blob blob = firebaseService.uploadImage(file, bucketName);
 
-        if(StringUtils.hasText(admin.getAvatar())){
-            String fileName = admin.getAvatar().split("[/?]")[4];
-            blob.getStorage().delete(bucketName, fileName);
-        }
+//        if(StringUtils.hasText(admin.getAvatar())){
+//            String fileName = admin.getAvatar().split("[/?]")[4];
+//            blob.getStorage().delete(bucketName, fileName);
+//        }
 
         admin.setAvatar(blob
                 .signUrl(FirebaseExpirationTimeConstant.EXPIRATION_TIME, TimeUnit.MILLISECONDS)

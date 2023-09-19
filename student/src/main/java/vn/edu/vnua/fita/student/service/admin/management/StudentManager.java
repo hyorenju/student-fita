@@ -211,10 +211,10 @@ public class StudentManager implements IStudentService {
 
         Blob blob = firebaseService.uploadImage(file, bucketName);
 
-        if (StringUtils.hasText(student.getAvatar())) {
-            String fileName = student.getAvatar().split("[/?]")[4];
-            blob.getStorage().delete(bucketName, fileName);
-        }
+//        if (StringUtils.hasText(student.getAvatar())) {
+//            String fileName = student.getAvatar().split("[/?]")[4];
+//            blob.getStorage().delete(bucketName, fileName);
+//        }
 
         student.setAvatar(blob
                 .signUrl(FirebaseExpirationTimeConstant.EXPIRATION_TIME, TimeUnit.MILLISECONDS)
