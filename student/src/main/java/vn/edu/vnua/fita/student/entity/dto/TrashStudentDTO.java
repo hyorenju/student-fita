@@ -3,6 +3,7 @@ package vn.edu.vnua.fita.student.entity.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import vn.edu.vnua.fita.student.common.DateTimeConstant;
+import vn.edu.vnua.fita.student.entity.Admin;
 
 import java.sql.Timestamp;
 
@@ -15,5 +16,5 @@ public class TrashStudentDTO {
     @JsonFormat(pattern = DateTimeConstant.DATE_TIME_FORMAT)
     private Timestamp time;
 
-    private String byWhom;
+    private AdminDTO deletedBy;
 }

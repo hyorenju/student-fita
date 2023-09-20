@@ -9,7 +9,7 @@ import vn.edu.vnua.fita.student.repository.jparepo.MajorRepository;
 import vn.edu.vnua.fita.student.request.admin.major.CreateMajorRequest;
 import vn.edu.vnua.fita.student.request.admin.major.GetMajorListRequest;
 import vn.edu.vnua.fita.student.request.admin.major.UpdateMajorRequest;
-import vn.edu.vnua.fita.student.service.iservice.IMajorService;
+import vn.edu.vnua.fita.student.service.admin.iservice.IMajorService;
 
 @Service
 @RequiredArgsConstructor

@@ -1,4 +1,4 @@
-package vn.edu.vnua.fita.student.service.iservice;
+package vn.edu.vnua.fita.student.service.admin.iservice;
 
 import com.google.cloud.storage.Blob;
 import org.springframework.web.multipart.MultipartFile;

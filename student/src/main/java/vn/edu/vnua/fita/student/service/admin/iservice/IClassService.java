@@ -1,4 +1,4 @@
-package vn.edu.vnua.fita.student.service.iservice;
+package vn.edu.vnua.fita.student.service.admin.iservice;
 
 import org.springframework.data.domain.Page;
 import vn.edu.vnua.fita.student.entity.AClass;

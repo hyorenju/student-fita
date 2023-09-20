@@ -1,9 +1,5 @@
 package vn.edu.vnua.fita.student.service.admin.management;
 
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
@@ -12,8 +8,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import vn.edu.vnua.fita.student.common.DateTimeConstant;
-import vn.edu.vnua.fita.student.common.FilePathConstant;
-import vn.edu.vnua.fita.student.common.FirebaseExpirationTimeConstant;
 import vn.edu.vnua.fita.student.common.RoleConstant;
 import vn.edu.vnua.fita.student.entity.*;
 import vn.edu.vnua.fita.student.repository.customrepo.CustomStudentRepository;
@@ -21,27 +15,22 @@ import vn.edu.vnua.fita.student.repository.jparepo.*;
 import vn.edu.vnua.fita.student.request.admin.student.*;
 import vn.edu.vnua.fita.student.service.admin.file.ExcelService;
 import vn.edu.vnua.fita.student.service.admin.file.FirebaseService;
-import vn.edu.vnua.fita.student.service.iservice.IStudentService;
+import vn.edu.vnua.fita.student.service.admin.iservice.IStudentService;
 import vn.edu.vnua.fita.student.util.MyUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import com.google.cloud.storage.Blob;
 
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -121,14 +110,14 @@ public class StudentManager implements IStudentService {
 
         }
 
-        createStudentStatus(student);
         studentRepository.saveAndFlush(student);
+        createStudentStatus(student);
 
         return student;
     }
 
     @Override
-    public Student updateStudent(UpdateStudentRequest request){
+    public Student updateStudent(UpdateStudentRequest request) {
         Student student = studentRepository.findById(request.getId()).orElseThrow(() -> new RuntimeException(String.format(studentNotFound, request.getId())));
         Course course = courseRepository.findById(request.getCourse().getId()).orElseThrow(() -> new RuntimeException(String.format(courseNotFound, request.getCourse().getId())));
         AClass aClass = classRepository.findById(request.getAclass().getId()).orElseThrow(() -> new RuntimeException(String.format(classNotFound, request.getAclass().getId())));
@@ -206,30 +195,12 @@ public class StudentManager implements IStudentService {
     }
 
     @Override
-    public Student updateAvatar(MultipartFile file, String id) throws IOException {
-        Student student = studentRepository.findById(id).orElseThrow(() -> new RuntimeException(String.format(studentNotFound, id)));
-
-        Blob blob = firebaseService.uploadImage(file, bucketName);
-
-//        if (StringUtils.hasText(student.getAvatar())) {
-//            String fileName = student.getAvatar().split("[/?]")[4];
-//            blob.getStorage().delete(bucketName, fileName);
-//        }
-
-        student.setAvatar(blob
-                .signUrl(FirebaseExpirationTimeConstant.EXPIRATION_TIME, TimeUnit.MILLISECONDS)
-                .toString());
-
-        return studentRepository.saveAndFlush(student);
-    }
-
-    @Override
     public void importFromExcel(MultipartFile file) throws IOException, ExecutionException, InterruptedException {
         studentRepository.saveAllAndFlush(excelService.readStudentFromExcel(file));
     }
 
     @Override
-    public String exportToExcel(ExportStudentListRequest request){
+    public String exportToExcel(ExportStudentListRequest request) {
         Specification<Student> specification = CustomStudentRepository.filterStudentList(
                 request.getFilter().getCourseId(),
                 request.getFilter().getMajorId(),
@@ -246,12 +217,13 @@ public class StudentManager implements IStudentService {
         return excelService.writeStudentToExcel(students);
     }
 
-    private void createStudentStatus(Student student) {
+    public void createStudentStatus(Student student) {
         StudentStatus studentStatus = StudentStatus.builder()
                 .studentId(student.getId())
                 .surname(student.getSurname())
                 .lastName(student.getLastName())
                 .statusId(1)
+                .statusName("Đã nhập học")
                 .time(Timestamp.valueOf(LocalDateTime.now()))
                 .build();
         int term = studentStatus.getTime().getMonth() >= 8 ? 2 : 1;
@@ -262,11 +234,11 @@ public class StudentManager implements IStudentService {
     }
 
     private TrashStudent moveToTrash(Student student) {
-        String byWhom = findAdminDeletedIt();
+        Admin admin = findAdminDeletedIt();
         TrashStudent trashStudent = TrashStudent.builder()
                 .student(student)
                 .time(Timestamp.valueOf(LocalDateTime.now(ZoneId.of(DateTimeConstant.TIME_ZONE))))
-                .byWhom(byWhom)
+                .deletedBy(admin)
                 .build();
         trashStudentRepository.saveAndFlush(trashStudent);
         return trashStudent;
@@ -286,9 +258,8 @@ public class StudentManager implements IStudentService {
         return students;
     }
 
-    private String findAdminDeletedIt() {
-        Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
-        Admin admin = adminRepository.findById(authentication.getPrincipal().toString()).orElseThrow(() -> new RuntimeException(byWhomNotFound));
-        return admin.getName();
+    private Admin findAdminDeletedIt() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return adminRepository.findById(authentication.getPrincipal().toString()).orElseThrow(() -> new RuntimeException(byWhomNotFound));
     }
 }

@@ -73,9 +73,9 @@ public class AdminController extends BaseController {
         return buildPageItemResponse(request.getPage(), response.size(), page.getTotalElements(), response);
     }
 
-    @PostMapping("avatar/{id}")
-    public ResponseEntity<?> updateAvatar(@RequestBody MultipartFile file, @PathVariable String id) throws IOException {
-        AdminDTO response = modelMapper.map(adminManager.updateAvatar(file, id), AdminDTO.class);
+    @PostMapping("avatar")
+    public ResponseEntity<?> updateAvatar(@RequestBody MultipartFile file) throws IOException {
+        AdminDTO response = modelMapper.map(adminManager.updateAvatar(file), AdminDTO.class);
         return buildItemResponse(response);
     }
 }

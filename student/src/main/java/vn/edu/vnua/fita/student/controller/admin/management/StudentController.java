@@ -91,12 +91,6 @@ public class StudentController extends BaseController {
 
     }
 
-    @PostMapping("avatar/{id}")
-    public ResponseEntity<?> updateAvatar(@RequestBody MultipartFile file, @PathVariable String id) throws IOException {
-        StudentDTO response = modelMapper.map(studentManager.updateAvatar(file, id), StudentDTO.class);
-        return buildItemResponse(response);
-    }
-
     @PostMapping("import")
     public ResponseEntity<?> importStudentList(MultipartFile file) throws IOException, ExecutionException, InterruptedException {
         studentManager.importFromExcel(file);

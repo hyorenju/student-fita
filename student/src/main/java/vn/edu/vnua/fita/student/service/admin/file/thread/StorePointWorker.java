@@ -50,6 +50,7 @@ public class StorePointWorker implements Callable<PointExcelData> {
                     .creditsAcc(MyUtils.parseIntegerFromString(creditsAcc))
                     .pointAcc10(MyUtils.parseFloatFromString(pointAcc10))
                     .pointAcc4(MyUtils.parseFloatFromString(pointAcc4))
+                    .isDeleted(false)
                     .build();
 
             List<PointExcelData.ErrorDetail> errorDetailList = point.validateInformationDetailError(new CopyOnWriteArrayList<>());

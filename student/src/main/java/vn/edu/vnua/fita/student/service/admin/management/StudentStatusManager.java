@@ -15,7 +15,7 @@ import vn.edu.vnua.fita.student.repository.jparepo.StudentStatusRepository;
 import vn.edu.vnua.fita.student.request.admin.student_status.CreateStudentStatusRequest;
 import vn.edu.vnua.fita.student.request.admin.student_status.GetStudentStatusListRequest;
 import vn.edu.vnua.fita.student.request.admin.student_status.UpdateStudentStatusRequest;
-import vn.edu.vnua.fita.student.service.iservice.IStudentStatusService;
+import vn.edu.vnua.fita.student.service.admin.iservice.IStudentStatusService;
 import vn.edu.vnua.fita.student.util.MyUtils;
 
 import java.sql.Timestamp;

@@ -9,7 +9,7 @@ import vn.edu.vnua.fita.student.repository.jparepo.StatusRepository;
 import vn.edu.vnua.fita.student.request.admin.status.CreateStatusRequest;
 import vn.edu.vnua.fita.student.request.admin.status.GetStatusListRequest;
 import vn.edu.vnua.fita.student.request.admin.status.UpdateStatusRequest;
-import vn.edu.vnua.fita.student.service.iservice.IStatusService;
+import vn.edu.vnua.fita.student.service.admin.iservice.IStatusService;
 
 @Service
 @RequiredArgsConstructor

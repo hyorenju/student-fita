@@ -10,7 +10,7 @@ import vn.edu.vnua.fita.student.repository.customrepo.CustomTermRepository;
 import vn.edu.vnua.fita.student.repository.jparepo.TermRepository;
 import vn.edu.vnua.fita.student.request.admin.term.CreateTermRequest;
 import vn.edu.vnua.fita.student.request.admin.term.GetTermListRequest;
-import vn.edu.vnua.fita.student.service.iservice.ITermService;
+import vn.edu.vnua.fita.student.service.admin.iservice.ITermService;
 
 @Service
 @RequiredArgsConstructor

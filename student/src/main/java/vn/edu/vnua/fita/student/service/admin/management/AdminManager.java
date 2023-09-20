@@ -24,13 +24,12 @@ import vn.edu.vnua.fita.student.repository.jparepo.RoleRepository;
 import vn.edu.vnua.fita.student.repository.jparepo.TrashAdminRepository;
 import vn.edu.vnua.fita.student.request.admin.admin.*;
 import vn.edu.vnua.fita.student.service.admin.file.FirebaseService;
-import vn.edu.vnua.fita.student.service.iservice.IAdminService;
+import vn.edu.vnua.fita.student.service.admin.iservice.IAdminService;
 
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -45,8 +44,9 @@ public class AdminManager implements IAdminService {
     private final String emailHadUsed = "Email đã được sử dụng cho một tài khoản khác";
     private final String roleNotFound = "Mã quyền không tồn tại trong hệ thống";
     private final String validAdminId = "Mã quản trị viên phải bắt đầu bằng chữ cái";
-    private final String adminNotFound = "Không tìm thấy mã quản trị viên %s";
+    private final String adminNotFound = "Không tìm thấy quản trị viên";
     private final String byWhomNotFound = "Không thể xác định danh tính người xoá";
+    private final String trashNotFound = "Không tìm thấy rác muốn khôi phục";
 
 
     @Value("${firebase.storage.bucket}")
@@ -84,7 +84,7 @@ public class AdminManager implements IAdminService {
 
     @Override
     public Admin updateAdmin(UpdateAdminRequest request) {
-        Admin admin = adminRepository.findById(request.getId()).orElseThrow(() -> new RuntimeException(String.format(adminNotFound, request.getId())));
+        Admin admin = adminRepository.findById(request.getId()).orElseThrow(() -> new RuntimeException(adminNotFound));
         if (!roleRepository.existsById(request.getRoleId())) {
             throw new RuntimeException(roleNotFound);
         }
@@ -101,7 +101,7 @@ public class AdminManager implements IAdminService {
 
     @Override
     public Admin updateProfile(UpdateProfileRequest request) {
-        Admin admin = adminRepository.findById(request.getId()).orElseThrow(() -> new RuntimeException(String.format(adminNotFound, request.getId())));
+        Admin admin = adminRepository.findById(request.getId()).orElseThrow(() -> new RuntimeException(adminNotFound));
         admin.setName(request.getInfo().getName());
         admin.setEmail(request.getInfo().getEmail());
         adminRepository.saveAndFlush(admin);
@@ -110,7 +110,7 @@ public class AdminManager implements IAdminService {
 
     @Override
     public TrashAdmin deleteAdmin(String id) {
-        Admin admin = adminRepository.findById(id).orElseThrow(() -> new RuntimeException(String.format(adminNotFound, id)));
+        Admin admin = adminRepository.findById(id).orElseThrow(() -> new RuntimeException(adminNotFound));
         admin.setIsDeleted(true);
         TrashAdmin trashAdmin = moveToTrash(admin);
         adminRepository.saveAndFlush(admin);
@@ -119,7 +119,7 @@ public class AdminManager implements IAdminService {
 
     @Override
     public TrashAdmin restoreAdmin(Long id) {
-        TrashAdmin trashAdmin = trashAdminRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy rác muốn khôi phục"));
+        TrashAdmin trashAdmin = trashAdminRepository.findById(id).orElseThrow(() -> new RuntimeException(trashNotFound));
         Admin admin = trashAdmin.getAdmin();
         admin.setIsDeleted(false);
         restoreFromTrash(admin);
@@ -133,15 +133,11 @@ public class AdminManager implements IAdminService {
     }
 
     @Override
-    public Admin updateAvatar(MultipartFile file, String id) throws IOException {
-        Admin admin = adminRepository.findById(id).orElseThrow(() -> new RuntimeException(String.format(adminNotFound, id)));
+    public Admin updateAvatar(MultipartFile file) throws IOException {
+        Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
+        Admin admin = adminRepository.findById(authentication.getPrincipal().toString()).orElseThrow(() -> new RuntimeException(adminNotFound));
 
         Blob blob = firebaseService.uploadImage(file, bucketName);
-
-//        if(StringUtils.hasText(admin.getAvatar())){
-//            String fileName = admin.getAvatar().split("[/?]")[4];
-//            blob.getStorage().delete(bucketName, fileName);
-//        }
 
         admin.setAvatar(blob
                 .signUrl(FirebaseExpirationTimeConstant.EXPIRATION_TIME, TimeUnit.MILLISECONDS)
@@ -151,12 +147,12 @@ public class AdminManager implements IAdminService {
     }
 
     private TrashAdmin moveToTrash(Admin admin) {
-        String byWhom = findAdminDeletedIt();
+        Admin anotherAdmin = findAdminDeletedIt();
 
         TrashAdmin trashAdmin = TrashAdmin.builder()
                 .admin(admin)
                 .time(Timestamp.valueOf(LocalDateTime.now(ZoneId.of(DateTimeConstant.TIME_ZONE))))
-                .byWhom(byWhom)
+                .deletedBy(anotherAdmin)
                 .build();
         trashAdminRepository.saveAndFlush(trashAdmin);
         return trashAdmin;
@@ -167,10 +163,9 @@ public class AdminManager implements IAdminService {
         trashAdminRepository.deleteById(trashAdmin.getId());
     }
 
-    private String findAdminDeletedIt() {
+    private Admin findAdminDeletedIt() {
         Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
-        Admin admin = adminRepository.findById(authentication.getPrincipal().toString()).orElseThrow(() -> new RuntimeException(byWhomNotFound));
-        return admin.getName();
+        return adminRepository.findById(authentication.getPrincipal().toString()).orElseThrow(() -> new RuntimeException(byWhomNotFound));
     }
 
     public String getFileExtension(String filename) {

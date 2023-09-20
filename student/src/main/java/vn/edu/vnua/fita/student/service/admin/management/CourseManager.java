@@ -10,7 +10,7 @@ import vn.edu.vnua.fita.student.repository.customrepo.CustomCourseRepository;
 import vn.edu.vnua.fita.student.repository.jparepo.CourseRepository;
 import vn.edu.vnua.fita.student.request.admin.course.CreateCourseRequest;
 import vn.edu.vnua.fita.student.request.admin.course.GetCourseListRequest;
-import vn.edu.vnua.fita.student.service.iservice.ICourseService;
+import vn.edu.vnua.fita.student.service.admin.iservice.ICourseService;
 
 @Service
 @RequiredArgsConstructor

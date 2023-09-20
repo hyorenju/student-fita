@@ -5,10 +5,12 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import vn.edu.vnua.fita.student.domain.validator.EmailAnnotation;
 import vn.edu.vnua.fita.student.domain.validator.InputDate;
 import vn.edu.vnua.fita.student.request.admin.aclass.CreateClassRequest;
 import vn.edu.vnua.fita.student.request.admin.course.CreateCourseRequest;
 import vn.edu.vnua.fita.student.request.admin.major.CreateMajorRequest;
+import vn.edu.vnua.fita.student.domain.validator.PhoneNumber;
 
 
 @Data
@@ -42,12 +44,12 @@ public class CreateStudentRequest {
     @NotBlank(message = "Giới tính không được để trống")
     private String gender;
 
-    @Pattern(regexp = "^(0|\\+84)(\\s|\\.)?((3[2-9])|(5[689])|(7[06-9])|(8[1-689])|(9[0-46-9]))(\\d)(\\s|\\.)?(\\d{3})(\\s|\\.)?(\\d{3})$", message = "Số điện thoại không đúng định dạng")
+    @NotBlank(message = "Số điện thoại không được để trống")
+    @PhoneNumber(message = "Số điện thoại không đúng định dạng")
     private String phoneNumber;
 
     @NotBlank(message = "Email không được để trống")
-    @Email(message = "Email không hợp lệ")
-    @Size(min = 5, max = 200, message = "Email chỉ được từ 5-200 ký tự")
+    @EmailAnnotation(message = "Email không đúng định dạng")
     private String email;
 
     @NotBlank(message = "Quê quán không được để trống")

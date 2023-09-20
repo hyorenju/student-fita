@@ -9,7 +9,7 @@ import vn.edu.vnua.fita.student.model.authorization.PermissionChecker;
 import vn.edu.vnua.fita.student.entity.Role;
 import vn.edu.vnua.fita.student.repository.jparepo.PermissionRepository;
 import vn.edu.vnua.fita.student.repository.jparepo.RoleRepository;
-import vn.edu.vnua.fita.student.service.iservice.IRoleService;
+import vn.edu.vnua.fita.student.service.admin.iservice.IRoleService;
 
 import java.util.HashMap;
 import java.util.List;

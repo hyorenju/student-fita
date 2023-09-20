@@ -1,4 +1,4 @@
-package vn.edu.vnua.fita.student.service.iservice;
+package vn.edu.vnua.fita.student.service.admin.iservice;
 
 import org.springframework.web.multipart.MultipartFile;
 import vn.edu.vnua.fita.student.entity.TrashStudent;
@@ -21,7 +21,6 @@ public interface IStudentService {
     TrashStudent restoreStudent(Long id);
     List<TrashStudent> restoreManyStudent(RestoreStudentRequest request);
     Page<TrashStudent> getTrashStudentList(GetTrashStudentRequest request);
-    Student updateAvatar(MultipartFile file, String id) throws IOException;
     void importFromExcel(MultipartFile file) throws IOException, ExecutionException, InterruptedException;
     String exportToExcel(ExportStudentListRequest request) throws IOException;
 }

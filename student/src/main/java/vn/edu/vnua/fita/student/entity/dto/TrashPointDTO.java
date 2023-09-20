@@ -15,5 +15,5 @@ public class TrashPointDTO {
     @JsonFormat(pattern = DateTimeConstant.DATE_TIME_FORMAT)
     private Timestamp time;
 
-    private String byWhom;
+    private AdminDTO deletedBy;
 }

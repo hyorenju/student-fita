@@ -26,6 +26,7 @@ public class TrashStudent {
     @Column
     private Timestamp time;
 
-    @Column(name = "by_whom", length = 100)
-    private String byWhom;
+    @OneToOne
+    @JoinColumn(name = "deleted_by")
+    private Admin deletedBy;
 }

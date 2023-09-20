@@ -5,7 +5,7 @@ import com.google.cloud.storage.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import vn.edu.vnua.fita.student.common.FirebaseExpirationTimeConstant;
-import vn.edu.vnua.fita.student.service.iservice.IFirebaseService;
+import vn.edu.vnua.fita.student.service.admin.iservice.IFirebaseService;
 
 import java.io.FileInputStream;
 import java.io.IOException;

@@ -1,5 +1,6 @@
 package vn.edu.vnua.fita.student.domain.validator;
 
+import jakarta.validation.ConstraintValidatorContext;
 import org.apache.poi.ss.formula.functions.T;
 
 import java.sql.Timestamp;
@@ -34,11 +35,11 @@ public class ImportStudentValidator {
     }
 
     public static boolean validatePhoneNumber(String phoneNumber){
-        return phoneNumber.matches("^(0|\\+84)(\\s|\\.)?((3[2-9])|(5[689])|(7[06-9])|(8[1-689])|(9[0-46-9]))(\\d)(\\s|\\.)?(\\d{3})(\\s|\\.)?(\\d{3})$");
+        return new PhoneNumberValidator().validatePhoneNumber(phoneNumber);
     }
 
     public static boolean validateEmail(String email){
-        return email.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
+        return new EmailValidator().validateEmail(email);
     }
 
     public static boolean validateHomeTown(String homeTown){

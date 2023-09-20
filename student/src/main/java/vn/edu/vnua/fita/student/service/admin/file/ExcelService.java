@@ -14,7 +14,7 @@ import vn.edu.vnua.fita.student.model.file.PointExcelData;
 import vn.edu.vnua.fita.student.model.file.StudentExcelData;
 import vn.edu.vnua.fita.student.repository.jparepo.*;
 import vn.edu.vnua.fita.student.service.admin.file.thread.*;
-import vn.edu.vnua.fita.student.service.iservice.IExcelService;
+import vn.edu.vnua.fita.student.service.admin.iservice.IExcelService;
 
 import java.io.FileOutputStream;
 import java.io.IOException;

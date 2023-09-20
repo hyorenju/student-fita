@@ -19,7 +19,7 @@ import vn.edu.vnua.fita.student.repository.customrepo.CustomPointRepository;
 import vn.edu.vnua.fita.student.repository.jparepo.*;
 import vn.edu.vnua.fita.student.request.admin.point.*;
 import vn.edu.vnua.fita.student.service.admin.file.ExcelService;
-import vn.edu.vnua.fita.student.service.iservice.IPointService;
+import vn.edu.vnua.fita.student.service.admin.iservice.IPointService;
 
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -169,12 +169,12 @@ public class PointManager implements IPointService {
     }
 
     private TrashPoint moveToTrash(Point point) {
-        String byWhom = findAdminDeletedIt();
+        Admin admin = findAdminDeletedIt();
 
         TrashPoint trashPoint = TrashPoint.builder()
                 .point(point)
                 .time(Timestamp.valueOf(LocalDateTime.now(ZoneId.of(DateTimeConstant.TIME_ZONE))))
-                .byWhom(byWhom)
+                .deletedBy(admin)
                 .build();
         trashPointRepository.saveAndFlush(trashPoint);
         return trashPoint;
@@ -194,9 +194,8 @@ public class PointManager implements IPointService {
         return points;
     }
 
-    private String findAdminDeletedIt() {
+    private Admin findAdminDeletedIt() {
         Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
-        Admin admin = adminRepository.findById(authentication.getPrincipal().toString()).orElseThrow(() -> new RuntimeException(byWhomNotFound));
-        return admin.getName();
+        return adminRepository.findById(authentication.getPrincipal().toString()).orElseThrow(() -> new RuntimeException(byWhomNotFound));
     }
 }

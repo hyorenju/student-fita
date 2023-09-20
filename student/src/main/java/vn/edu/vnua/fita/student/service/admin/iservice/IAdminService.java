@@ -1,4 +1,4 @@
-package vn.edu.vnua.fita.student.service.iservice;
+package vn.edu.vnua.fita.student.service.admin.iservice;
 
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,5 +16,5 @@ public interface IAdminService {
     TrashAdmin deleteAdmin(String id);
     TrashAdmin restoreAdmin(Long id);
     Page<TrashAdmin> getTrashAdminList(GetTrashAdminRequest request);
-    Admin updateAvatar(MultipartFile file, String id) throws IOException;
+    Admin updateAvatar(MultipartFile file) throws IOException;
 }

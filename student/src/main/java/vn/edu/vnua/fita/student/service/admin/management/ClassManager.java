@@ -11,7 +11,7 @@ import vn.edu.vnua.fita.student.repository.jparepo.ClassRepository;
 import vn.edu.vnua.fita.student.request.admin.aclass.CreateClassRequest;
 import vn.edu.vnua.fita.student.request.admin.aclass.GetClassListRequest;
 import vn.edu.vnua.fita.student.request.admin.aclass.UpdateClassRequest;
-import vn.edu.vnua.fita.student.service.iservice.IClassService;
+import vn.edu.vnua.fita.student.service.admin.iservice.IClassService;
 
 @Service
 @RequiredArgsConstructor
