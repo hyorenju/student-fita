@@ -57,7 +57,8 @@ public class AdminManager implements IAdminService {
         Specification<Admin> specification = CustomAdminRepository.filterAdminList(
                 request.getId()
         );
-        return adminRepository.findAll(specification, PageRequest.of(request.getPage() - 1, request.getSize()));
+        return adminRepository.findAll(specification, PageRequest.of(request.getPage() - 1, request.getSize(),
+                Sort.by("name").ascending()));
     }
 
     @Override

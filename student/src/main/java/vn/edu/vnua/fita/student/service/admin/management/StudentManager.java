@@ -65,7 +65,12 @@ public class StudentManager implements IStudentService {
         );
         return studentRepository.findAll(
                 specification,
-                PageRequest.of(request.getPage() - 1, request.getSize())
+                PageRequest.of(request.getPage() - 1, request.getSize(),
+                        Sort.by("course.id").ascending()
+                                .and(Sort.by("major.id").ascending()
+                                        .and(Sort.by("aclass.id").ascending()
+                                                .and(Sort.by("lastName").ascending()
+                                                        .and(Sort.by("surname").ascending())))))
         );
     }
 
@@ -107,7 +112,6 @@ public class StudentManager implements IStudentService {
             student.setPassword(encoder.encode(request.getPassword()));
         } else {
             student.setPassword(encoder.encode(MyUtils.formatDobToPassword(request.getDob())));
-
         }
 
         studentRepository.saveAndFlush(student);
@@ -196,7 +200,8 @@ public class StudentManager implements IStudentService {
 
     @Override
     public void importFromExcel(MultipartFile file) throws IOException, ExecutionException, InterruptedException {
-        studentRepository.saveAllAndFlush(excelService.readStudentFromExcel(file));
+        studentRepository.saveAllAndFlush(excelService.readStudentFromExcel(file))
+                .forEach(this::createStudentStatus);
     }
 
     @Override

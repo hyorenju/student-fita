@@ -56,13 +56,16 @@ public class PointManager implements IPointService {
         );
         return pointRepository.findAll(
                 specification,
-                PageRequest.of(request.getPage() - 1, request.getSize())
+                PageRequest.of(request.getPage() - 1, request.getSize(),
+                        Sort.by("termId").descending()
+                                .and(Sort.by("lastName").ascending()
+                                        .and(Sort.by("surname").ascending())))
         );
     }
 
     @Override
     public Point createPoint(CreatePointRequest request) {
-        if(pointRepository.existsByStudentIdAndTermId(request.getStudentId(), request.getTermId())){
+        if (pointRepository.existsByStudentIdAndTermId(request.getStudentId(), request.getTermId())) {
             throw new RuntimeException(String.format(pointHadExistedMsg, request.getStudentId(), request.getTermId()));
         }
         Student student = studentRepository.findById(request.getStudentId()).orElseThrow(() -> new RuntimeException(String.format(studentNotFoundMsg, request.getStudentId())));
@@ -147,7 +150,7 @@ public class PointManager implements IPointService {
 
     @Override
     public Page<TrashPoint> getTrashPointList(GetTrashPointRequest request) {
-        return trashPointRepository.findAll(PageRequest.of(request.getPage()-1, request.getSize(), Sort.by("id").descending()));
+        return trashPointRepository.findAll(PageRequest.of(request.getPage() - 1, request.getSize(), Sort.by("id").descending()));
     }
 
     @Override
@@ -195,7 +198,7 @@ public class PointManager implements IPointService {
     }
 
     private Admin findAdminDeletedIt() {
-        Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return adminRepository.findById(authentication.getPrincipal().toString()).orElseThrow(() -> new RuntimeException(byWhomNotFound));
     }
 }

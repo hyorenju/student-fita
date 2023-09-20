@@ -3,7 +3,9 @@ package vn.edu.vnua.fita.student.service.admin.management;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import vn.edu.vnua.fita.student.entity.Course;
 import vn.edu.vnua.fita.student.repository.customrepo.CustomCourseRepository;
@@ -24,19 +26,16 @@ public class CourseManager implements ICourseService {
         Specification<Course> specification = CustomCourseRepository.filterCourseList(
                 request.getId()
         );
-        return courseRepository.findAll(specification, PageRequest.of(request.getPage()-1, request.getSize()));
+        return courseRepository.findAll(specification, PageRequest.of(request.getPage() - 1, request.getSize(),
+                Sort.by("id").descending()));
     }
 
     @Override
     public Course createCourse(CreateCourseRequest request) {
-        if(courseRepository.existsById(request.getId())){
+        if (courseRepository.existsById(request.getId())) {
             throw new RuntimeException(courseHadExisted);
         }
-        Course course = Course.builder()
-                .id(request.getId())
-                .name("Khóa "+request.getId())
-                .build();
-        return courseRepository.saveAndFlush(course);
+        return courseRepository.saveAndFlush(buildCourse(request.getId()));
     }
 
     @Override
@@ -44,5 +43,21 @@ public class CourseManager implements ICourseService {
         Course course = courseRepository.findById(id).orElseThrow(() -> new RuntimeException(String.format(courseNotFound, id)));
         courseRepository.deleteById(id);
         return course;
+    }
+
+    @Override
+    @Scheduled(cron = "0 0 0 1 1 ?")
+//    @Scheduled(cron = "15 * * * * ?")
+    public void createCoursePeriodic() {
+        String courseId = courseRepository.findFirstByOrderByIdDesc().getId();
+        String newCourseId = "" + (Integer.parseInt(courseId) + 1);
+        courseRepository.saveAndFlush(buildCourse(newCourseId));
+    }
+
+    private Course buildCourse(String courseId) {
+        return Course.builder()
+                .id(courseId)
+                .name("Khóa " + courseId)
+                .build();
     }
 }

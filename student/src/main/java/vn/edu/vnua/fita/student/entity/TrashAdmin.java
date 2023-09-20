@@ -26,7 +26,7 @@ public class TrashAdmin {
     @Column
     private Timestamp time;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "deleted_by")
     private Admin deletedBy;
 }

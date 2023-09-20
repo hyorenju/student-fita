@@ -59,10 +59,8 @@ public class MyUtils {
     }
 
     public String test(String input){
-        int lastSpaceIndex = input.lastIndexOf(" ");
-
-        String surname = input.substring(0, lastSpaceIndex);
-        String lastName = input.substring(lastSpaceIndex + 1);
-        return surname;
+        String year = input.substring(0, input.length()-1);
+        String term = input.substring(input.length()-1);
+        return term;
     }
 }

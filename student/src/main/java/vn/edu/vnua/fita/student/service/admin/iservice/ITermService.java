@@ -9,4 +9,5 @@ public interface ITermService {
     Page<Term> getTermList(GetTermListRequest request);
     Term createTerm(CreateTermRequest request);
     Term deleteTerm(String id);
+    void createTermPeriodic();
 }

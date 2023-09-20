@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import vn.edu.vnua.fita.student.entity.Term;
 import vn.edu.vnua.fita.student.repository.customrepo.CustomTermRepository;
@@ -32,13 +33,7 @@ public class TermManager implements ITermService {
         if (termRepository.existsById(request.getId())) {
             throw new RuntimeException(termHadExisted);
         }
-
-        Term term = Term.builder()
-                .id(request.getId())
-                .name("Học kỳ " + request.getId().charAt(4) + " - năm " + request.getId().substring(0, 4))
-                .build();
-
-        return termRepository.saveAndFlush(term);
+        return termRepository.saveAndFlush(buildTerm(request.getId()));
     }
 
     @Override
@@ -46,5 +41,28 @@ public class TermManager implements ITermService {
         Term term = termRepository.findById(id).orElseThrow(() -> new RuntimeException(String.format(termNotFound, id)));
         termRepository.deleteById(id);
         return term;
+    }
+
+    @Override
+    @Scheduled(cron = "0 0 0 1 6 ?")
+//    @Scheduled(cron = "15 * * * * ?")
+    public void createTermPeriodic() {
+        String termId = termRepository.findFirstByOrderByIdDesc().getId();
+        int year = Integer.parseInt(termId.substring(0, termId.length() - 1));
+        int term = Integer.parseInt(termId.substring(termId.length() - 1));
+        if (term == 1) {
+            String newTermId = year + "2";
+            termRepository.saveAndFlush(buildTerm(newTermId));
+        } else if (term == 2) {
+            String newTermId = (year + 1) + "1";
+            termRepository.saveAndFlush(buildTerm(newTermId));
+        }
+    }
+
+    private Term buildTerm(String termId) {
+        return Term.builder()
+                .id(termId)
+                .name("Học kỳ " + termId.charAt(termId.length() - 1) + " - năm " + termId.substring(0, termId.length() - 1))
+                .build();
     }
 }

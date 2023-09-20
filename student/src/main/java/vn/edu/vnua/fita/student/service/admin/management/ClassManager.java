@@ -3,6 +3,7 @@ package vn.edu.vnua.fita.student.service.admin.management;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import vn.edu.vnua.fita.student.entity.AClass;
@@ -27,7 +28,8 @@ public class ClassManager implements IClassService {
         Specification<AClass> specification = CustomClassRepository.filterClassList(
                 request.getId()
         );
-        return classRepository.findAll(specification, PageRequest.of(request.getPage() - 1, request.getSize()));
+        return classRepository.findAll(specification, PageRequest.of(request.getPage() - 1, request.getSize(),
+                Sort.by("id").descending()));
     }
 
     @Override

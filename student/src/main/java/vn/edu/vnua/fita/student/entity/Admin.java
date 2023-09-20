@@ -54,4 +54,16 @@ public class Admin {
         }
         return authorities;
     }
+
+    @OneToMany(mappedBy = "deletedBy", cascade = CascadeType.ALL)
+    private Collection<TrashAdmin> trashAdmins;
+
+    @OneToMany(mappedBy = "deletedBy", cascade = CascadeType.ALL)
+    private Collection<TrashNews> trashNews;
+
+    @OneToMany(mappedBy = "deletedBy", cascade = CascadeType.ALL)
+    private Collection<TrashPoint> trashPoints;
+
+    @OneToMany(mappedBy = "deletedBy", cascade = CascadeType.ALL)
+    private Collection<TrashStudent> trashStudents;
 }

@@ -3,6 +3,7 @@ package vn.edu.vnua.fita.student.service.admin.management;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import vn.edu.vnua.fita.student.entity.Major;
 import vn.edu.vnua.fita.student.repository.jparepo.MajorRepository;
@@ -20,7 +21,8 @@ public class MajorManager implements IMajorService {
 
     @Override
     public Page<Major> getMajorList(GetMajorListRequest request) {
-        return majorRepository.findAll(PageRequest.of(request.getPage()-1, request.getSize()));
+        return majorRepository.findAll(PageRequest.of(request.getPage()-1, request.getSize(),
+                Sort.by("id").ascending()));
     }
 
     @Override

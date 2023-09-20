@@ -3,6 +3,7 @@ package vn.edu.vnua.fita.student.service.admin.management;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import vn.edu.vnua.fita.student.entity.Status;
@@ -39,7 +40,8 @@ public class StudentStatusManager implements IStudentStatusService {
         );
         return studentStatusRepository.findAll(
                 specification,
-                PageRequest.of(request.getPage() - 1, request.getSize())
+                PageRequest.of(request.getPage() - 1, request.getSize(),
+                        Sort.by("time").ascending())
         );
     }
 

@@ -9,5 +9,5 @@ public interface ICourseService {
     Page<Course> getCourseList(GetCourseListRequest request);
     Course createCourse(CreateCourseRequest request);
     Course deleteCourse(String id);
-
+    void createCoursePeriodic();
 }

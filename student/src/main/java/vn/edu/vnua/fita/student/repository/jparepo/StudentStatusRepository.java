@@ -11,4 +11,6 @@ import java.util.List;
 public interface StudentStatusRepository extends JpaRepository<StudentStatus, Long>, JpaSpecificationExecutor<StudentStatus> {
     boolean existsByStudentIdAndStatusId(String studentId, Integer statusId);
     List<StudentStatus> findAllByStudentId(String studentId);
+    List<StudentStatus> findAllByStatusId(Integer statusId);
+
 }

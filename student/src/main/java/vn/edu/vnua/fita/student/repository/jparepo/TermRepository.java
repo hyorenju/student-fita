@@ -7,4 +7,5 @@ import vn.edu.vnua.fita.student.entity.Term;
 
 @Repository
 public interface TermRepository extends JpaRepository<Term, String>, JpaSpecificationExecutor<Term> {
+    Term findFirstByOrderByIdDesc();
 }
