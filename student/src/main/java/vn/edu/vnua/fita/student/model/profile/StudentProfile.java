@@ -53,7 +53,7 @@ public class StudentProfile {
 
     @Data
     @Builder
-    public class StudentStatusProfile {
+    public static class StudentStatusProfile {
         private String statusName;
 
         @JsonFormat(pattern = DateTimeConstant.DATE_FORMAT)

@@ -22,7 +22,7 @@ import java.util.concurrent.ExecutionException;
 @RestController
 @RequestMapping("admin/student")
 @RequiredArgsConstructor
-public class StudentController extends BaseController {
+public class StudentManagerController extends BaseController {
     private final StudentManager studentManager;
     private final ModelMapper modelMapper;
 
