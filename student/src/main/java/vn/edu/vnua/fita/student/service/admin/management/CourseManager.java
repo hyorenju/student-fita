@@ -7,7 +7,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import vn.edu.vnua.fita.student.entity.Course;
+import vn.edu.vnua.fita.student.model.entity.Course;
 import vn.edu.vnua.fita.student.repository.customrepo.CustomCourseRepository;
 import vn.edu.vnua.fita.student.repository.jparepo.CourseRepository;
 import vn.edu.vnua.fita.student.request.admin.course.CreateCourseRequest;

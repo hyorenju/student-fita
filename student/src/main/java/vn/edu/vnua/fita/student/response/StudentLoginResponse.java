@@ -2,11 +2,10 @@ package vn.edu.vnua.fita.student.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
-import org.modelmapper.internal.bytebuddy.implementation.bind.annotation.Super;
 import vn.edu.vnua.fita.student.common.DateTimeConstant;
-import vn.edu.vnua.fita.student.entity.dto.ClassDTO;
-import vn.edu.vnua.fita.student.entity.dto.CourseDTO;
-import vn.edu.vnua.fita.student.entity.dto.MajorDTO;
+import vn.edu.vnua.fita.student.model.dto.ClassDTO;
+import vn.edu.vnua.fita.student.model.dto.CourseDTO;
+import vn.edu.vnua.fita.student.model.dto.MajorDTO;
 
 import java.sql.Timestamp;
 

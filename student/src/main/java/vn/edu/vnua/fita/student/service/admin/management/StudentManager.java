@@ -9,7 +9,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import vn.edu.vnua.fita.student.common.DateTimeConstant;
 import vn.edu.vnua.fita.student.common.RoleConstant;
-import vn.edu.vnua.fita.student.entity.*;
+import vn.edu.vnua.fita.student.model.entity.*;
 import vn.edu.vnua.fita.student.repository.customrepo.CustomStudentRepository;
 import vn.edu.vnua.fita.student.repository.jparepo.*;
 import vn.edu.vnua.fita.student.request.admin.student.*;

@@ -1,17 +1,20 @@
 package vn.edu.vnua.fita.student.service.admin.iservice;
 
-import vn.edu.vnua.fita.student.entity.ClassClassification;
-import vn.edu.vnua.fita.student.entity.CourseClassification;
-import vn.edu.vnua.fita.student.entity.DropoutStatistic;
-import vn.edu.vnua.fita.student.entity.MajorClassification;
+import vn.edu.vnua.fita.student.model.entity.*;
+import vn.edu.vnua.fita.student.model.statistic.StudentStatistic;
+
+import java.util.List;
 
 public interface IStatisticService {
-    void createStatisticPeriodic();
+    void createDropoutStatisticPeriodic();
     void createClassClassification();
     void createCourseClassification();
     void createMajorClassification();
-    DropoutStatistic getDropoutStatistic(String fromTerm, String toTerm);
-    ClassClassification getClassClassification(String classId, String fromTerm, String toTerm);
-    CourseClassification getCourseClassification(String courseId, String fromTerm, String toTerm);
-    MajorClassification getMajorClassification(String majorId, String fromTerm, String toTerm);
+    void createFacultyClassification();
+    StudentStatistic getStudentStatistic(String id);
+    List<DropoutStatistic> getDropoutStatistic(String fromTerm, String toTerm);
+    List<ClassClassification> getClassClassification(String classId, String fromTerm, String toTerm);
+    List<CourseClassification> getCourseClassification(String courseId, String fromTerm, String toTerm);
+    List<MajorClassification> getMajorClassification(String majorId, String fromTerm, String toTerm);
+    List<FacultyClassification> getFacultyClassification();
 }

@@ -8,10 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import vn.edu.vnua.fita.student.controller.BaseController;
-import vn.edu.vnua.fita.student.entity.dto.PointDTO;
-import vn.edu.vnua.fita.student.entity.dto.TrashPointDTO;
-import vn.edu.vnua.fita.student.entity.TrashPoint;
-import vn.edu.vnua.fita.student.entity.Point;
+import vn.edu.vnua.fita.student.model.dto.PointDTO;
+import vn.edu.vnua.fita.student.model.dto.TrashPointDTO;
+import vn.edu.vnua.fita.student.model.entity.TrashPoint;
+import vn.edu.vnua.fita.student.model.entity.Point;
 import vn.edu.vnua.fita.student.request.admin.point.*;
 import vn.edu.vnua.fita.student.service.admin.management.PointManager;
 

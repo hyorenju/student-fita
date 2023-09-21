@@ -6,11 +6,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import lombok.AllArgsConstructor;
 import vn.edu.vnua.fita.student.common.RoleConstant;
-import vn.edu.vnua.fita.student.entity.Role;
-import vn.edu.vnua.fita.student.entity.AClass;
-import vn.edu.vnua.fita.student.entity.Course;
-import vn.edu.vnua.fita.student.entity.Major;
-import vn.edu.vnua.fita.student.entity.Student;
+import vn.edu.vnua.fita.student.model.entity.Role;
+import vn.edu.vnua.fita.student.model.entity.AClass;
+import vn.edu.vnua.fita.student.model.entity.Course;
+import vn.edu.vnua.fita.student.model.entity.Major;
+import vn.edu.vnua.fita.student.model.entity.Student;
 import vn.edu.vnua.fita.student.model.file.StudentExcelData;
 import vn.edu.vnua.fita.student.repository.jparepo.ClassRepository;
 import vn.edu.vnua.fita.student.repository.jparepo.CourseRepository;

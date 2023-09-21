@@ -7,12 +7,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.vnua.fita.student.controller.BaseController;
-import vn.edu.vnua.fita.student.entity.dto.ClassDTO;
+import vn.edu.vnua.fita.student.model.dto.ClassDTO;
 import vn.edu.vnua.fita.student.request.admin.aclass.CreateClassRequest;
 import vn.edu.vnua.fita.student.request.admin.aclass.GetClassListRequest;
 import vn.edu.vnua.fita.student.request.admin.aclass.UpdateClassRequest;
 import vn.edu.vnua.fita.student.service.admin.management.ClassManager;
-import vn.edu.vnua.fita.student.entity.AClass;
+import vn.edu.vnua.fita.student.model.entity.AClass;
 
 import java.util.List;
 

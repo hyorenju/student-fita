@@ -1,6 +1,5 @@
 package vn.edu.vnua.fita.student.response;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 

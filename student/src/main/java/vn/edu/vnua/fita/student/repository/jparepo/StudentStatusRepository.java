@@ -1,6 +1,6 @@
 package vn.edu.vnua.fita.student.repository.jparepo;
 
-import vn.edu.vnua.fita.student.entity.StudentStatus;
+import vn.edu.vnua.fita.student.model.entity.StudentStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
@@ -12,5 +12,5 @@ public interface StudentStatusRepository extends JpaRepository<StudentStatus, Lo
     boolean existsByStudentIdAndStatusId(String studentId, Integer statusId);
     List<StudentStatus> findAllByStudentId(String studentId);
     List<StudentStatus> findAllByStatusId(Integer statusId);
-
+    List<StudentStatus> findAllByTermIdAndStatusId(String termId, Integer statusId);
 }

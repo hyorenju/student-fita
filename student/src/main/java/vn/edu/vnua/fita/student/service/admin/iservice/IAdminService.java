@@ -2,8 +2,8 @@ package vn.edu.vnua.fita.student.service.admin.iservice;
 
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
-import vn.edu.vnua.fita.student.entity.TrashAdmin;
-import vn.edu.vnua.fita.student.entity.Admin;
+import vn.edu.vnua.fita.student.model.entity.TrashAdmin;
+import vn.edu.vnua.fita.student.model.entity.Admin;
 import vn.edu.vnua.fita.student.request.admin.admin.*;
 
 import java.io.IOException;

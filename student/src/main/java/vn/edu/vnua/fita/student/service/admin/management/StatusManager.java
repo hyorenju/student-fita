@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import vn.edu.vnua.fita.student.entity.Status;
+import vn.edu.vnua.fita.student.model.entity.Status;
 import vn.edu.vnua.fita.student.repository.jparepo.StatusRepository;
 import vn.edu.vnua.fita.student.request.admin.status.CreateStatusRequest;
 import vn.edu.vnua.fita.student.request.admin.status.GetStatusListRequest;
@@ -21,7 +21,7 @@ public class StatusManager implements IStatusService {
 
     @Override
     public Page<Status> getStatusList(GetStatusListRequest request) {
-        return statusRepository.findAll(PageRequest.of(request.getPage()-1, request.getSize()));
+        return statusRepository.findAll(PageRequest.of(request.getPage() - 1, request.getSize()));
     }
 
     @Override
@@ -41,7 +41,7 @@ public class StatusManager implements IStatusService {
 
     @Override
     public Status deleteStatus(Integer id) {
-        if(id==1){
+        if (id == 1 || id == 2 || id == 3) {
             throw new RuntimeException(cannotDelete);
         }
         Status status = statusRepository.findById(id).orElseThrow(() -> new RuntimeException(statusNotFound));

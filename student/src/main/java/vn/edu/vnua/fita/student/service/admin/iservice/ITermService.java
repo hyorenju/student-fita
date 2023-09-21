@@ -1,7 +1,7 @@
 package vn.edu.vnua.fita.student.service.admin.iservice;
 
 import org.springframework.data.domain.Page;
-import vn.edu.vnua.fita.student.entity.Term;
+import vn.edu.vnua.fita.student.model.entity.Term;
 import vn.edu.vnua.fita.student.request.admin.term.CreateTermRequest;
 import vn.edu.vnua.fita.student.request.admin.term.GetTermListRequest;
 

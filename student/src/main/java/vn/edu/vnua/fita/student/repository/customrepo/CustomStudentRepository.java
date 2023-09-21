@@ -1,6 +1,6 @@
 package vn.edu.vnua.fita.student.repository.customrepo;
 
-import vn.edu.vnua.fita.student.entity.Student;
+import vn.edu.vnua.fita.student.model.entity.Student;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;

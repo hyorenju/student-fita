@@ -4,7 +4,7 @@ import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
-import vn.edu.vnua.fita.student.entity.Admin;
+import vn.edu.vnua.fita.student.model.entity.Admin;
 
 import java.util.ArrayList;
 import java.util.List;

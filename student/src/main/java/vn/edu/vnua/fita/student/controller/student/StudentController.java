@@ -2,19 +2,16 @@ package vn.edu.vnua.fita.student.controller.student;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import vn.edu.vnua.fita.student.controller.BaseController;
-import vn.edu.vnua.fita.student.entity.dto.PointDTO;
-import vn.edu.vnua.fita.student.entity.dto.StudentDTO;
+import vn.edu.vnua.fita.student.model.dto.StudentDTO;
 import vn.edu.vnua.fita.student.request.student.UpdateStudentProfileRequest;
 import vn.edu.vnua.fita.student.service.student.StudentServiceImpl;
 
 import java.io.IOException;
-import java.util.List;
 
 @RequestMapping("student")
 @RequiredArgsConstructor

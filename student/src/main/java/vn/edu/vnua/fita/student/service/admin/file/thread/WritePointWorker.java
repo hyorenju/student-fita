@@ -2,7 +2,7 @@ package vn.edu.vnua.fita.student.service.admin.file.thread;
 
 import lombok.AllArgsConstructor;
 import org.apache.poi.ss.usermodel.Row;
-import vn.edu.vnua.fita.student.entity.Point;
+import vn.edu.vnua.fita.student.model.entity.Point;
 import vn.edu.vnua.fita.student.util.MyUtils;
 
 import java.util.concurrent.Callable;

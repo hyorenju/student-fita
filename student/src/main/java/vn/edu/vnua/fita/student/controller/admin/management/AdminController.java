@@ -8,10 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import vn.edu.vnua.fita.student.controller.BaseController;
-import vn.edu.vnua.fita.student.entity.dto.AdminDTO;
-import vn.edu.vnua.fita.student.entity.dto.TrashAdminDTO;
-import vn.edu.vnua.fita.student.entity.TrashAdmin;
-import vn.edu.vnua.fita.student.entity.Admin;
+import vn.edu.vnua.fita.student.model.dto.AdminDTO;
+import vn.edu.vnua.fita.student.model.dto.TrashAdminDTO;
+import vn.edu.vnua.fita.student.model.entity.TrashAdmin;
+import vn.edu.vnua.fita.student.model.entity.Admin;
 import vn.edu.vnua.fita.student.request.admin.admin.*;
 import vn.edu.vnua.fita.student.service.admin.management.AdminManager;
 
