@@ -37,7 +37,7 @@ public class UserDetailsImpl implements UserDetails {
 
     private MajorDTO major;
 
-    private ClassDTO aClass;
+    private ClassDTO aclass;
 
     @JsonFormat(pattern = DateTimeConstant.DATE_FORMAT)
     private Timestamp dob;

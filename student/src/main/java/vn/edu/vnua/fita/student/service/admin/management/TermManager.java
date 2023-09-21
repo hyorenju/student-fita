@@ -44,7 +44,7 @@ public class TermManager implements ITermService {
     }
 
     @Override
-    @Scheduled(cron = "0 0 0 1 6 ?")
+    @Scheduled(cron = "0 0 0 1 5,12 ?")
 //    @Scheduled(cron = "15 * * * * ?")
     public void createTermPeriodic() {
         String termId = termRepository.findFirstByOrderByIdDesc().getId();

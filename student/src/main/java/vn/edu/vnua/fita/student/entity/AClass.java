@@ -24,4 +24,11 @@ public class AClass {
 
     @OneToMany(mappedBy = "aclass", cascade = CascadeType.ALL)
     private Collection<Student> students;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(name = "classes_terms",
+            joinColumns = @JoinColumn(name = "class_id"),
+            inverseJoinColumns = @JoinColumn(name = "term_id")
+    )
+    private Collection<Term> terms;
 }

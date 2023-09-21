@@ -27,5 +27,12 @@ public class Major {
 
     @OneToMany(mappedBy = "major", cascade = CascadeType.ALL)
     private Collection<Student> students;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(name = "majors_terms",
+            joinColumns = @JoinColumn(name = "major_id"),
+            inverseJoinColumns = @JoinColumn(name = "term_id")
+    )
+    private Collection<Term> terms;
 }
 

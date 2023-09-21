@@ -44,7 +44,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                     .avatar(student.getAvatar())
                     .course(modelMapper.map(student.getCourse(), CourseDTO.class))
                     .major(modelMapper.map(student.getMajor(), MajorDTO.class))
-                    .aClass(modelMapper.map(student.getAclass(), ClassDTO.class))
+                    .aclass(modelMapper.map(student.getAclass(), ClassDTO.class))
                     .dob(student.getDob())
                     .gender(student.getGender())
                     .phoneNumber(student.getPhoneNumber())

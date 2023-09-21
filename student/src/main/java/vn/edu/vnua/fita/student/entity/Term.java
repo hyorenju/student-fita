@@ -24,4 +24,13 @@ public class Term {
 
     @ManyToMany(mappedBy = "terms")
     private Collection<Student> students;
+
+    @ManyToMany(mappedBy = "terms")
+    private Collection<AClass> classes;
+
+    @ManyToMany(mappedBy = "terms")
+    private Collection<Course> courses;
+
+    @ManyToMany(mappedBy = "terms")
+    private Collection<Major> majors;
 }
