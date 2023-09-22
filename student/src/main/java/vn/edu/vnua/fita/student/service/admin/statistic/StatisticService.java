@@ -1,8 +1,10 @@
 package vn.edu.vnua.fita.student.service.admin.statistic;
 
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import vn.edu.vnua.fita.student.model.dto.StudentDTO;
 import vn.edu.vnua.fita.student.model.entity.*;
 import vn.edu.vnua.fita.student.model.statistic.ClassificationCounter;
 import vn.edu.vnua.fita.student.model.statistic.StudentStatistic;
@@ -27,6 +29,7 @@ public class StatisticService implements IStatisticService {
     private final MajorRepository majorRepository;
     private final MajorClassificationRepository majorClassificationRepository;
     private final FacultyClassificationRepository facultyClassificationRepository;
+    private final ModelMapper modelMapper;
 
     @Override
     @Scheduled(cron = "0 0 0 1 1,6 ?")
@@ -54,7 +57,7 @@ public class StatisticService implements IStatisticService {
 
     @Override
     @Scheduled(cron = "0 0 0 1 1,6 ?")
-    public void createClassClassification() {
+    public void createClassClassificationPeriodic() {
         List<Term> terms = termRepository.findAll();
         for (Term term :
                 terms) {
@@ -84,7 +87,7 @@ public class StatisticService implements IStatisticService {
 
     @Override
     @Scheduled(cron = "0 0 0 1 1,6 ?")
-    public void createCourseClassification() {
+    public void createCourseClassificationPeriodic() {
         List<Term> terms = termRepository.findAll();
         for (Term term :
                 terms) {
@@ -114,7 +117,7 @@ public class StatisticService implements IStatisticService {
 
     @Override
     @Scheduled(cron = "0 0 0 1 1,6 ?")
-    public void createMajorClassification() {
+    public void createMajorClassificationPeriodic() {
         List<Term> terms = termRepository.findAll();
         for (Term term :
                 terms) {
@@ -143,7 +146,7 @@ public class StatisticService implements IStatisticService {
     }
 
     @Override
-    public void createFacultyClassification() {
+    public void createFacultyClassificationPeriodic() {
         List<Term> terms = termRepository.findAll();
         for (Term term :
                 terms) {
@@ -169,6 +172,7 @@ public class StatisticService implements IStatisticService {
     @Override
     public StudentStatistic getStudentStatistic(String id) {
         Student student = studentRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy sinh viên"));
+        StudentDTO studentDTO = modelMapper.map(student, StudentDTO.class);
         List<Point> points = pointRepository.findAllByStudentId(id);
         List<StudentStatistic.AvgPoint4> avgPoint4List = new ArrayList<>();
         List<StudentStatistic.AvgPoint10> avgPoint10List = new ArrayList<>();
@@ -196,6 +200,7 @@ public class StatisticService implements IStatisticService {
         Integer totalCredits = student.getMajor().getTotalCredits();
         Float accPoint4 = lastPoint.getPointAcc4();
         return StudentStatistic.builder()
+                .student(studentDTO)
                 .avgPoint4List(avgPoint4List)
                 .avgPoint10List(avgPoint10List)
                 .trainingPointList(trainingPointList)

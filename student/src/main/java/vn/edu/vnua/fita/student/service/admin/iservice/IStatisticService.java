@@ -7,10 +7,10 @@ import java.util.List;
 
 public interface IStatisticService {
     void createDropoutStatisticPeriodic();
-    void createClassClassification();
-    void createCourseClassification();
-    void createMajorClassification();
-    void createFacultyClassification();
+    void createClassClassificationPeriodic();
+    void createCourseClassificationPeriodic();
+    void createMajorClassificationPeriodic();
+    void createFacultyClassificationPeriodic();
     StudentStatistic getStudentStatistic(String id);
     List<DropoutStatistic> getDropoutStatistic(String fromTerm, String toTerm);
     List<ClassClassification> getClassClassification(String classId, String fromTerm, String toTerm);

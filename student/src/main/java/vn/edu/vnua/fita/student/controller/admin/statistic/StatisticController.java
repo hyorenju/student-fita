@@ -7,11 +7,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import vn.edu.vnua.fita.student.controller.BaseController;
-import vn.edu.vnua.fita.student.model.entity.DropoutStatistic;
 import vn.edu.vnua.fita.student.model.statistic.StudentStatistic;
 import vn.edu.vnua.fita.student.service.admin.statistic.StatisticService;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("admin/statistic")
@@ -25,9 +22,34 @@ public class StatisticController extends BaseController {
         return buildItemResponse(response);
     }
 
+    
+    
+    
+    
+    // Dưới đây là API periodic creating, đề nghị front-end dev không sử dụng dưới mọi hình thức
     @PostMapping("dropout")
     public ResponseEntity<?> createDropoutStatistic(){
         statisticService.createDropoutStatisticPeriodic();
+        return buildItemResponse("Tạo thành công");
+    }
+    @PostMapping("class-classification")
+    public ResponseEntity<?> createClassClassification(){
+        statisticService.createClassClassificationPeriodic();
+        return buildItemResponse("Tạo thành công");
+    }
+    @PostMapping("course-classification")
+    public ResponseEntity<?> createCourseClassification(){
+        statisticService.createCourseClassificationPeriodic();
+        return buildItemResponse("Tạo thành công");
+    }
+    @PostMapping("major-classification")
+    public ResponseEntity<?> createMajorClassification(){
+        statisticService.createMajorClassificationPeriodic();
+        return buildItemResponse("Tạo thành công");
+    }
+    @PostMapping("faculty-classification")
+    public ResponseEntity<?> createFacultyClassification(){
+        statisticService.createFacultyClassificationPeriodic();
         return buildItemResponse("Tạo thành công");
     }
 }
