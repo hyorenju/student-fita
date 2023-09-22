@@ -1,4 +1,4 @@
-package vn.edu.vnua.fita.student.controller.admin.management;
+package vn.edu.vnua.fita.student.controller.admin;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

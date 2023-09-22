@@ -1,4 +1,4 @@
-package vn.edu.vnua.fita.student.controller.admin.statistic;
+package vn.edu.vnua.fita.student.controller.admin;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +20,26 @@ public class StatisticController extends BaseController {
     public ResponseEntity<?> getStudentStatistic(@PathVariable String id){
         StudentStatistic response = statisticService.getStudentStatistic(id);
         return buildItemResponse(response);
+    }
+
+    @PostMapping("class/{id}")
+    public ResponseEntity<?> getClassStatistic(@PathVariable String id){
+        return null;
+    }
+
+    @PostMapping("course/{id}")
+    public ResponseEntity<?> getCourseStatistic(@PathVariable String id){
+        return null;
+    }
+
+    @PostMapping("major/{id}")
+    public ResponseEntity<?> getMajorStatistic(@PathVariable String id){
+        return null;
+    }
+
+    @PostMapping("faculty/{id}")
+    public ResponseEntity<?> getFacultyStatistic(@PathVariable String id){
+        return null;
     }
 
     

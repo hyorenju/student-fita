@@ -3,6 +3,7 @@ package vn.edu.vnua.fita.student.service.admin.file.thread;
 import lombok.AllArgsConstructor;
 import vn.edu.vnua.fita.student.model.entity.Point;
 import vn.edu.vnua.fita.student.model.entity.Student;
+import vn.edu.vnua.fita.student.model.entity.Term;
 import vn.edu.vnua.fita.student.model.file.PointExcelData;
 import vn.edu.vnua.fita.student.repository.jparepo.PointRepository;
 import vn.edu.vnua.fita.student.repository.jparepo.StudentRepository;
@@ -38,8 +39,8 @@ public class StorePointWorker implements Callable<PointExcelData> {
             String pointAcc4 = infoList[7].strip();
 
             Point point = Point.builder()
-                    .student(studentRepository.findById(studentId).get())
-                    .term(termRepository.findById(termId).get())
+                    .student(Student.builder().id(studentId).build())
+                    .term(Term.builder().id(termId).build())
                     .avgPoint10(MyUtils.parseFloatFromString(avgPoint10))
                     .avgPoint4(MyUtils.parseFloatFromString(avgPoint4))
                     .trainingPoint(MyUtils.parseIntegerFromString(trainingPoint))
@@ -50,8 +51,7 @@ public class StorePointWorker implements Callable<PointExcelData> {
                     .build();
 
             List<PointExcelData.ErrorDetail> errorDetailList = point.validateInformationDetailError(new CopyOnWriteArrayList<>());
-            Optional<Student> studentOptional = studentRepository.findById(studentId);
-            if(studentOptional.isEmpty()){
+            if(!studentRepository.existsById(studentId)){
                 errorDetailList.add(PointExcelData.ErrorDetail.builder().columnIndex(0).errorMsg("Mã sv không tồn tại").build());
             }
             if(!termRepository.existsById(termId)){
