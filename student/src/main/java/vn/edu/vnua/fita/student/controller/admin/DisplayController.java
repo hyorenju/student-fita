@@ -34,6 +34,12 @@ public class DisplayController extends BaseController {
         return buildPageItemResponse(request.getPage(), response.size(), page.getTotalElements(), response);
     }
 
+    @PostMapping("{id}")
+    public ResponseEntity<?> getDisplay(@PathVariable Long id){
+        DisplayDTO response = modelMapper.map(displayService.getDisplay(id), DisplayDTO.class);
+        return buildItemResponse(response);
+    }
+
     @PostMapping("update/{id}")
     public ResponseEntity<?> updateDisplay(@PathVariable Long id, @RequestBody @Valid UpdateDisplayRequest request) {
         DisplayDTO response = modelMapper.map(displayService.updateDisplay(id, request), DisplayDTO.class);

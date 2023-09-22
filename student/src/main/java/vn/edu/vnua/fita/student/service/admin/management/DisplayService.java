@@ -34,6 +34,11 @@ public class DisplayService implements IDisplayService {
     }
 
     @Override
+    public Display getDisplay(Long id) {
+        return displayRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy hiển thị"));
+    }
+
+    @Override
     public Display createDisplay(CreateDisplayRequest request) {
         Display display = Display.builder()
                 .img(request.getImg())

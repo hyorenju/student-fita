@@ -11,6 +11,7 @@ import java.io.IOException;
 
 public interface IDisplayService {
     Page<Display> getDisplayList(GetDisplayListRequest request);
+    Display getDisplay(Long id);
     Display createDisplay(CreateDisplayRequest request);
     Display updateDisplay(Long id, UpdateDisplayRequest request);
     String uploadImg(MultipartFile file) throws IOException;
