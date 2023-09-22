@@ -18,8 +18,11 @@ public class Display {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 500)
+    @Column(length = 1000)
     private String img;
+
+    @Column(length = 500)
+    private String title;
 
     @Column(length = 4000)
     private String content;
