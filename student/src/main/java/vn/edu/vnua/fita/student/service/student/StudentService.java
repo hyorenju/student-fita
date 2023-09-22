@@ -9,8 +9,6 @@ import java.io.IOException;
 import java.util.List;
 
 public interface StudentService {
-    Student getStudent();
     Student updateAvatar(MultipartFile file) throws IOException;
-    List<Point> getPoint();
     Student updateProfile(UpdateStudentProfileRequest request);
 }

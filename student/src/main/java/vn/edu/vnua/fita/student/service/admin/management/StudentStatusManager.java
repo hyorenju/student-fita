@@ -54,11 +54,8 @@ public class StudentStatusManager implements IStudentStatusService {
         Status status = statusRepository.findById(request.getStatusId()).orElseThrow(() -> new RuntimeException(statusNotFound));
 
         StudentStatus studentStatus = StudentStatus.builder()
-                .studentId(request.getStudentId())
-                .surname(student.getSurname())
-                .lastName(student.getLastName())
-                .statusId(request.getStatusId())
-                .statusName(status.getName())
+                .student(student)
+                .status(status)
                 .time(MyUtils.convertTimestampFromString(request.getTime()))
                 .note(request.getNote())
                 .build();

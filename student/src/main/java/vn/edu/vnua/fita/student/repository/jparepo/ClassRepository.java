@@ -10,5 +10,4 @@ import java.util.List;
 
 @Repository
 public interface ClassRepository extends JpaRepository<AClass, String>, JpaSpecificationExecutor<AClass> {
-    List<AClass> findAllByTerms(Term term);
 }

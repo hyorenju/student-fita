@@ -17,11 +17,13 @@ public class ClassClassification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "term_id")
-    private String termId;
+    @ManyToOne
+    @JoinColumn(name = "class_id")
+    private AClass aclass;
 
-    @Column(name = "class_id")
-    private String classId;
+    @ManyToOne
+    @JoinColumn(name = "term_id")
+    private Term term;
 
     @Column(name = "excellent")
     private Integer excellent;

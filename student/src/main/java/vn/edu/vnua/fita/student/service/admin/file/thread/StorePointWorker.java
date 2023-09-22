@@ -38,8 +38,8 @@ public class StorePointWorker implements Callable<PointExcelData> {
             String pointAcc4 = infoList[7].strip();
 
             Point point = Point.builder()
-                    .studentId(studentId)
-                    .termId(termId)
+                    .student(studentRepository.findById(studentId).get())
+                    .term(termRepository.findById(termId).get())
                     .avgPoint10(MyUtils.parseFloatFromString(avgPoint10))
                     .avgPoint4(MyUtils.parseFloatFromString(avgPoint4))
                     .trainingPoint(MyUtils.parseIntegerFromString(trainingPoint))
@@ -53,10 +53,6 @@ public class StorePointWorker implements Callable<PointExcelData> {
             Optional<Student> studentOptional = studentRepository.findById(studentId);
             if(studentOptional.isEmpty()){
                 errorDetailList.add(PointExcelData.ErrorDetail.builder().columnIndex(0).errorMsg("Mã sv không tồn tại").build());
-            } else {
-                Student student = studentOptional.get();
-                point.setSurname(student.getSurname());
-                point.setLastName(student.getLastName());
             }
             if(!termRepository.existsById(termId)){
                 errorDetailList.add(PointExcelData.ErrorDetail.builder().columnIndex(1).errorMsg("Học kỳ không tồn tại").build());

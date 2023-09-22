@@ -21,6 +21,12 @@ public class FacultyClassification {
     @JoinColumn(name = "term_id")
     private Term term;
 
+    @Column(name = "dropout_without_permission")
+    private Integer dropoutWithoutPermission;
+
+    @Column(name = "dropout_with_permission")
+    private Integer dropoutWithPermission;
+
     @Column(name = "excellent")
     private Integer excellent;
 

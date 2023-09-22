@@ -10,10 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import vn.edu.vnua.fita.student.common.DateTimeConstant;
-import vn.edu.vnua.fita.student.model.entity.TrashPoint;
-import vn.edu.vnua.fita.student.model.entity.Admin;
-import vn.edu.vnua.fita.student.model.entity.Point;
-import vn.edu.vnua.fita.student.model.entity.Student;
+import vn.edu.vnua.fita.student.model.entity.*;
 import vn.edu.vnua.fita.student.repository.customrepo.CustomPointListRepository;
 import vn.edu.vnua.fita.student.repository.customrepo.CustomPointRepository;
 import vn.edu.vnua.fita.student.repository.jparepo.*;
@@ -57,9 +54,11 @@ public class PointManager implements IPointService {
         return pointRepository.findAll(
                 specification,
                 PageRequest.of(request.getPage() - 1, request.getSize(),
-                        Sort.by("termId").descending()
-                                .and(Sort.by("lastName").ascending()
-                                        .and(Sort.by("surname").ascending())))
+                        Sort.by("id").descending().and(
+                                Sort.by("termId").descending().and(
+                                        Sort.by("student.lastName").ascending().and(
+                                                Sort.by("student.surname").ascending()
+                                        ))))
         );
     }
 
@@ -69,12 +68,10 @@ public class PointManager implements IPointService {
             throw new RuntimeException(String.format(pointHadExistedMsg, request.getStudentId(), request.getTermId()));
         }
         Student student = studentRepository.findById(request.getStudentId()).orElseThrow(() -> new RuntimeException(String.format(studentNotFoundMsg, request.getStudentId())));
-        termRepository.findById(request.getTermId()).orElseThrow(() -> new RuntimeException(String.format(termNotFoundMsg, request.getTermId())));
+        Term term = termRepository.findById(request.getTermId()).orElseThrow(() -> new RuntimeException(String.format(termNotFoundMsg, request.getTermId())));
         Point point = Point.builder()
-                .studentId(request.getStudentId())
-                .surname(student.getSurname())
-                .lastName(student.getLastName())
-                .termId(request.getTermId())
+                .student(student)
+                .term(term)
                 .avgPoint10(request.getAvgPoint10())
                 .avgPoint4(request.getAvgPoint4())
                 .trainingPoint(request.getTrainingPoint())
@@ -90,11 +87,11 @@ public class PointManager implements IPointService {
     @Override
     public Point updatePoint(Long id, UpdatePointRequest request) {
         Point point = pointRepository.findById(id).orElseThrow(() -> new RuntimeException(String.format(pointHadExistedMsg, request.getStudentId(), request.getTermId())));
-        studentRepository.findById(request.getStudentId()).orElseThrow(() -> new RuntimeException(String.format(studentNotFoundMsg, request.getStudentId())));
-        termRepository.findById(request.getTermId()).orElseThrow(() -> new RuntimeException(String.format(termNotFoundMsg, request.getTermId())));
+        Student student = studentRepository.findById(request.getStudentId()).orElseThrow(() -> new RuntimeException(String.format(studentNotFoundMsg, request.getStudentId())));
+        Term term = termRepository.findById(request.getTermId()).orElseThrow(() -> new RuntimeException(String.format(termNotFoundMsg, request.getTermId())));
 
-        point.setStudentId(request.getStudentId());
-        point.setTermId(request.getTermId());
+        point.setStudent(student);
+        point.setTerm(term);
         point.setAvgPoint10(request.getAvgPoint10());
         point.setAvgPoint4(request.getAvgPoint4());
         point.setTrainingPoint(request.getTrainingPoint());
@@ -167,7 +164,7 @@ public class PointManager implements IPointService {
                 request.getFilter().getAccPoint(),
                 request.getFilter().getTrainingPoint()
         );
-        List<Point> points = pointRepository.findAll(specification, Sort.by("lastName").ascending().and(Sort.by("surname").ascending()));
+        List<Point> points = pointRepository.findAll(specification, Sort.by("student.lastName").ascending().and(Sort.by("student.surname").ascending()));
         return excelService.writePointToExcel(points);
     }
 

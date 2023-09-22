@@ -8,13 +8,9 @@ import java.sql.Timestamp;
 
 @Data
 public class StudentStatusDTO {
-    private String studentId;
+    private StudentDTO student;
 
-    private String surname;
-
-    private String lastName;
-
-    private String statusName;
+    private StatusDTO status;
 
     @JsonFormat(pattern = DateTimeConstant.DATE_FORMAT)
     private Timestamp time;

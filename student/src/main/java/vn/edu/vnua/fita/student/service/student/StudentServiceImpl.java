@@ -25,19 +25,12 @@ import java.util.concurrent.TimeUnit;
 public class StudentServiceImpl implements StudentService {
     private final StudentRepository studentRepository;
     private final PointRepository pointRepository;
-    private final StudentStatusRepository studentStatusRepository;
     private final FirebaseService firebaseService;
     private final String studentNotFound = "Không tìm thấy sinh viên";
 
 
     @Value("${firebase.storage.bucket}")
     private String bucketName;
-
-    @Override
-    public Student getStudent() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return studentRepository.findById(authentication.getPrincipal().toString()).orElseThrow(() -> new RuntimeException(studentNotFound));
-    }
 
     @Override
     public Student updateAvatar(MultipartFile file) throws IOException {
@@ -51,13 +44,6 @@ public class StudentServiceImpl implements StudentService {
                 .toString());
 
         return studentRepository.saveAndFlush(student);
-    }
-
-    @Override
-    public List<Point> getPoint() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String studentId = authentication.getPrincipal().toString();
-        return pointRepository.findAllByStudentId(studentId);
     }
 
     @Override

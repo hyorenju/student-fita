@@ -19,20 +19,13 @@ public class StudentStatus {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "student_id", length = 100)
-    private String studentId;
+    @ManyToOne
+    @JoinColumn(name = "student_id")
+    private Student student;
 
-    @Column(name = "surname", length = 200)
-    private String surname;
-
-    @Column(name = "last_name", length = 200)
-    private String lastName;
-
-    @Column(name = "status_id", length = 100)
-    private Integer statusId;
-
-    @Column(name = "status_name", length = 200)
-    private String statusName;
+    @ManyToOne
+    @JoinColumn(name = "status_Id")
+    private Status status;
 
     @Column
     private Timestamp time;

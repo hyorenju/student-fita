@@ -16,10 +16,10 @@ public class CustomStudentStatusRepository {
         return ((root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
             if (StringUtils.hasText(studentId)) {
-                predicates.add(criteriaBuilder.like(root.get("studentId"), studentId + "%"));
+                predicates.add(criteriaBuilder.like(root.get("student").get("id"), studentId + "%"));
             }
             if(StringUtils.hasText(statusId)){
-                predicates.add(criteriaBuilder.like(root.get("statusId"), statusId + "%"));
+                predicates.add(criteriaBuilder.like(root.get("status").get("id"), statusId + "%"));
             }
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         });

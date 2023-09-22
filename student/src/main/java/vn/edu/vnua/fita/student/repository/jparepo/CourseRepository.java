@@ -11,5 +11,4 @@ import java.util.List;
 @Repository
 public interface CourseRepository extends JpaRepository<Course, String>, JpaSpecificationExecutor<Course> {
     Course findFirstByOrderByIdDesc();
-    List<Course> findAllByTerms(Term term);
 }

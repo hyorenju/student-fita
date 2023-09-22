@@ -17,11 +17,13 @@ public class MajorClassification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "term_id")
-    private String termId;
+    @ManyToOne
+    @JoinColumn(name = "major_id")
+    private Major major;
 
-    @Column(name = "major_id")
-    private String majorId;
+    @ManyToOne
+    @JoinColumn(name = "term_id")
+    private Term term;
 
     @Column(name = "excellent")
     private Integer excellent;

@@ -20,12 +20,6 @@ public class StudentController extends BaseController {
     private final StudentServiceImpl studentService;
     private final ModelMapper modelMapper;
 
-    @PostMapping("")
-    public ResponseEntity<?> getMyProfile() {
-        StudentDTO response = modelMapper.map(studentService.getStudent(), StudentDTO.class);
-        return buildItemResponse(response);
-    }
-
     @PostMapping("avatar")
     public ResponseEntity<?> updateMyAvatar(@RequestBody MultipartFile file) throws IOException {
         StudentDTO response = modelMapper.map(studentService.updateAvatar(file), StudentDTO.class);

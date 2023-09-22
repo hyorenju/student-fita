@@ -13,4 +13,5 @@ public interface StudentStatusRepository extends JpaRepository<StudentStatus, Lo
     List<StudentStatus> findAllByStudentId(String studentId);
     List<StudentStatus> findAllByStatusId(Integer statusId);
     List<StudentStatus> findAllByTermIdAndStatusId(String termId, Integer statusId);
+    StudentStatus findByStudentIdAndTermId(String studentId, String termId);
 }

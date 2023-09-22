@@ -21,8 +21,8 @@ public class WriteErrorPointWorker implements Callable<Void> {
 
     @Override
     public Void call() throws Exception {
-        row.createCell(0).setCellValue(point.getStudentId());
-        row.createCell(1).setCellValue(point.getTermId());
+        row.createCell(0).setCellValue(point.getStudent().getId());
+        row.createCell(1).setCellValue(point.getTerm().getId());
         row.createCell(2).setCellValue(MyUtils.parseFloatToString(point.getAvgPoint10()));
         row.createCell(3).setCellValue(MyUtils.parseFloatToString(point.getAvgPoint4()));
         row.createCell(4).setCellValue(point.getTrainingPoint());

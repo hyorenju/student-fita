@@ -19,10 +19,10 @@ public class CustomPointRepository {
         return ((root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
             if (StringUtils.hasText(studentId)) {
-                predicates.add(criteriaBuilder.like(root.get("studentId"), studentId));
+                predicates.add(criteriaBuilder.like(root.get("student").get("id"), studentId));
             }
             if (StringUtils.hasText(termId)) {
-                predicates.add(criteriaBuilder.like(root.get("termId"), termId));
+                predicates.add(criteriaBuilder.like(root.get("term").get("id"), termId));
             }
             if(point!=null) {
                 if(point==1){

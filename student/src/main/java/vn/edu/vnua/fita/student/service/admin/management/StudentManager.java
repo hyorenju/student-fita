@@ -224,11 +224,8 @@ public class StudentManager implements IStudentService {
 
     public void createStudentStatus(Student student) {
         StudentStatus studentStatus = StudentStatus.builder()
-                .studentId(student.getId())
-                .surname(student.getSurname())
-                .lastName(student.getLastName())
-                .statusId(1)
-                .statusName("Đã nhập học")
+                .student(student)
+                .status(Status.builder().id(1).build())
                 .time(Timestamp.valueOf(LocalDateTime.now()))
                 .build();
         int term = studentStatus.getTime().getMonth() >= 8 ? 2 : 1;

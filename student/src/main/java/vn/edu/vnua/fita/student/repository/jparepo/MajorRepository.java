@@ -9,5 +9,4 @@ import java.util.List;
 
 @Repository
 public interface MajorRepository extends JpaRepository<Major, String> {
-    List<Major> findAllByTerms(Term term);
 }

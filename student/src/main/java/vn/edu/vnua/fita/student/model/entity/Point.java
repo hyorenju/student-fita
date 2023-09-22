@@ -22,17 +22,13 @@ public class Point{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "student_id", length = 100)
-    private String studentId;
+    @ManyToOne
+    @JoinColumn(name = "student_id")
+    private Student student;
 
-    @Column(length = 200)
-    private String surname;
-
-    @Column(name = "last_name", length = 200)
-    private String lastName;
-
-    @Column(name = "term_id", length = 100)
-    private String termId;
+    @ManyToOne
+    @JoinColumn(name = "term_id")
+    private Term term;
 
     @Column(name = "average_point_10")
     private Float avgPoint10;

@@ -27,11 +27,6 @@ public class StatisticController extends BaseController {
     
     
     // Dưới đây là API periodic creating, đề nghị front-end dev không sử dụng dưới mọi hình thức
-    @PostMapping("dropout")
-    public ResponseEntity<?> createDropoutStatistic(){
-        statisticService.createDropoutStatisticPeriodic();
-        return buildItemResponse("Tạo thành công");
-    }
     @PostMapping("class-classification")
     public ResponseEntity<?> createClassClassification(){
         statisticService.createClassClassificationPeriodic();
