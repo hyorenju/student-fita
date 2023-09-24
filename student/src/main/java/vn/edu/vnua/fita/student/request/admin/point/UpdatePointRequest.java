@@ -2,17 +2,15 @@ package vn.edu.vnua.fita.student.request.admin.point;
 
 import lombok.Data;
 import jakarta.validation.constraints.*;
+import vn.edu.vnua.fita.student.request.admin.student.CreateStudentRequest;
+import vn.edu.vnua.fita.student.request.admin.term.CreateTermRequest;
 
 
 @Data
 public class UpdatePointRequest {
-    @NotBlank(message = "Mã sinh viên không được để trống")
-    @Size(max = 10, message = "Mã sinh viên quá dài")
-    private String studentId;
+    private CreateStudentRequest student;
 
-    @NotBlank(message = "Mã học kỳ không được để trống")
-    @Size(min = 5, max = 5, message = "Mã học kỳ phải đủ 5 ký tự")
-    private String termId;
+    private CreateTermRequest term;
 
     @NotNull(message = "Điểm trung bình hệ 10 không được để trống")
     @Min(value = 0, message = "Điểm trung bình hệ 10 không được dưới 0")

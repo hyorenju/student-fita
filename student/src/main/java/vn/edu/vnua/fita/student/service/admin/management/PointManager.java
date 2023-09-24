@@ -64,11 +64,13 @@ public class PointManager implements IPointService {
 
     @Override
     public Point createPoint(CreatePointRequest request) {
-        if (pointRepository.existsByStudentIdAndTermId(request.getStudentId(), request.getTermId())) {
-            throw new RuntimeException(String.format(pointHadExistedMsg, request.getStudentId(), request.getTermId()));
+        String studentId = request.getStudent().getId();
+        String termId = request.getTerm().getId();
+        if (pointRepository.existsByStudentIdAndTermId(studentId, termId)) {
+            throw new RuntimeException(String.format(pointHadExistedMsg, studentId, termId));
         }
-        Student student = studentRepository.findById(request.getStudentId()).orElseThrow(() -> new RuntimeException(String.format(studentNotFoundMsg, request.getStudentId())));
-        Term term = termRepository.findById(request.getTermId()).orElseThrow(() -> new RuntimeException(String.format(termNotFoundMsg, request.getTermId())));
+        Student student = studentRepository.findById(studentId).orElseThrow(() -> new RuntimeException(String.format(studentNotFoundMsg, studentId)));
+        Term term = termRepository.findById(termId).orElseThrow(() -> new RuntimeException(String.format(termNotFoundMsg, termId)));
         Point point = Point.builder()
                 .student(student)
                 .term(term)
@@ -86,9 +88,11 @@ public class PointManager implements IPointService {
 
     @Override
     public Point updatePoint(Long id, UpdatePointRequest request) {
-        Point point = pointRepository.findById(id).orElseThrow(() -> new RuntimeException(String.format(pointHadExistedMsg, request.getStudentId(), request.getTermId())));
-        Student student = studentRepository.findById(request.getStudentId()).orElseThrow(() -> new RuntimeException(String.format(studentNotFoundMsg, request.getStudentId())));
-        Term term = termRepository.findById(request.getTermId()).orElseThrow(() -> new RuntimeException(String.format(termNotFoundMsg, request.getTermId())));
+        String studentId = request.getStudent().getId();
+        String termId = request.getTerm().getId();
+        Point point = pointRepository.findById(id).orElseThrow(() -> new RuntimeException(String.format(pointHadExistedMsg, studentId, termId)));
+        Student student = studentRepository.findById(studentId).orElseThrow(() -> new RuntimeException(String.format(studentNotFoundMsg, studentId)));
+        Term term = termRepository.findById(termId).orElseThrow(() -> new RuntimeException(String.format(termNotFoundMsg, termId)));
 
         point.setStudent(student);
         point.setTerm(term);
