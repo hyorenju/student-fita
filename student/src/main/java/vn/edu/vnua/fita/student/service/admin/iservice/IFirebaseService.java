@@ -8,4 +8,5 @@ import java.io.IOException;
 public interface IFirebaseService {
     Blob uploadImage(MultipartFile file, String bucketName) throws IOException;
     String uploadFileExcel(String filePath, String bucketName) throws IOException;
+    void sendOTP(String phoneNumber);
 }
