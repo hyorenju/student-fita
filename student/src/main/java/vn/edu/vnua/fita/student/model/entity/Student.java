@@ -55,6 +55,12 @@ public class Student {
     @Column(name = "phone_number", length = 200)
     private String phoneNumber;
 
+    @Column(name = "new_phone", length = 200)
+    private String newPhone;
+
+    @Column(name = "is_verified")
+    private Boolean isVerified;
+
     @Column(length = 200)
     private String email;
 

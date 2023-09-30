@@ -84,6 +84,12 @@
             <artifactId>twilio</artifactId>
             <version>9.9.1</version>
         </dependency>
+        <dependency>
+            <groupId>io.github.atkawa7</groupId>
+            <artifactId>kannel-sms</artifactId>
+            <version>0.0.6</version>
+        </dependency>
+
     </dependencies>
 
     <build>

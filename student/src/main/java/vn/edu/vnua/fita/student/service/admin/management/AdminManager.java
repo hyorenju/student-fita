@@ -15,6 +15,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import vn.edu.vnua.fita.student.common.DateTimeConstant;
 import vn.edu.vnua.fita.student.common.FirebaseExpirationTimeConstant;
+import vn.edu.vnua.fita.student.common.RoleConstant;
 import vn.edu.vnua.fita.student.model.entity.TrashAdmin;
 import vn.edu.vnua.fita.student.model.entity.Admin;
 import vn.edu.vnua.fita.student.model.entity.Role;
@@ -112,10 +113,15 @@ public class AdminManager implements IAdminService {
     @Override
     public TrashAdmin deleteAdmin(String id) {
         Admin admin = adminRepository.findById(id).orElseThrow(() -> new RuntimeException(adminNotFound));
-        admin.setIsDeleted(true);
-        TrashAdmin trashAdmin = moveToTrash(admin);
-        adminRepository.saveAndFlush(admin);
-        return trashAdmin;
+        if(admin.getRole().getId().equals(RoleConstant.SUPERADMIN)){
+            throw new RuntimeException("Không thể xoá SUPERADMIN");
+        } else {
+            admin.setIsDeleted(true);
+            TrashAdmin trashAdmin = moveToTrash(admin);
+            adminRepository.saveAndFlush(admin);
+            return trashAdmin;
+        }
+
     }
 
     @Override

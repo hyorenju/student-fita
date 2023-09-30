@@ -2,15 +2,21 @@ package vn.edu.vnua.fita.student.service.admin.statistic;
 
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import vn.edu.vnua.fita.student.model.dto.StudentDTO;
 import vn.edu.vnua.fita.student.model.entity.*;
 import vn.edu.vnua.fita.student.model.statistic.ClassificationCounter;
 import vn.edu.vnua.fita.student.model.statistic.StudentStatistic;
+import vn.edu.vnua.fita.student.repository.customrepo.*;
 import vn.edu.vnua.fita.student.repository.jparepo.*;
+import vn.edu.vnua.fita.student.request.admin.statistic.GetStatisticRequest;
 import vn.edu.vnua.fita.student.service.admin.iservice.IStatisticService;
+import vn.edu.vnua.fita.student.util.MyUtils;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -37,14 +43,15 @@ public class StatisticService implements IStatisticService {
 //        List<Term> terms = termRepository.findAll();
 //        for (Term term :
 //                terms) {
-            Term term = termRepository.findFirstByOrderByIdDesc();
-            if (classClassificationRepository.findByTermId(term.getId()) == null) {
-                String termId = term.getId();
-                List<AClass> classes = classRepository.findAll();
-                for (AClass aclass :
-                        classes) {
-                    List<Student> students = studentRepository.findAllByAclass(aclass);
-                    ClassificationCounter classificationCounter = countClassified(students, termId);
+        Term term = termRepository.findFirstByOrderByIdDesc();
+        if (classClassificationRepository.findByTermId(term.getId()) == null) {
+            String termId = term.getId();
+            List<AClass> classes = classRepository.findAll();
+            for (AClass aclass :
+                    classes) {
+                List<Student> students = studentRepository.findAllByAclass(aclass);
+                ClassificationCounter classificationCounter = countClassified(students, termId);
+                if (classificationCounter != null) {
                     ClassClassification classClassification = ClassClassification.builder()
                             .aclass(aclass)
                             .term(term)
@@ -58,6 +65,7 @@ public class StatisticService implements IStatisticService {
                     classClassificationRepository.saveAndFlush(classClassification);
                 }
             }
+        }
 //        }
     }
 
@@ -67,14 +75,15 @@ public class StatisticService implements IStatisticService {
 //        List<Term> terms = termRepository.findAll();
 //        for (Term term :
 //                terms) {
-            Term term = termRepository.findFirstByOrderByIdDesc();
-            if (courseClassificationRepository.findByTermId(term.getId()) == null) {
-                String termId = term.getId();
-                List<Course> courses = courseRepository.findAll();
-                for (Course course :
-                        courses) {
-                    List<Student> students = studentRepository.findAllByCourse(course);
-                    ClassificationCounter classificationCounter = countClassified(students, termId);
+        Term term = termRepository.findFirstByOrderByIdDesc();
+        if (courseClassificationRepository.findByTermId(term.getId()) == null) {
+            String termId = term.getId();
+            List<Course> courses = courseRepository.findAll();
+            for (Course course :
+                    courses) {
+                List<Student> students = studentRepository.findAllByCourse(course);
+                ClassificationCounter classificationCounter = countClassified(students, termId);
+                if (classificationCounter != null) {
                     CourseClassification courseClassification = CourseClassification.builder()
                             .course(course)
                             .term(term)
@@ -88,6 +97,7 @@ public class StatisticService implements IStatisticService {
                     courseClassificationRepository.saveAndFlush(courseClassification);
                 }
             }
+        }
 //        }
     }
 
@@ -97,14 +107,15 @@ public class StatisticService implements IStatisticService {
 //        List<Term> terms = termRepository.findAll();
 //        for (Term term :
 //                terms) {
-            Term term = termRepository.findFirstByOrderByIdDesc();
-            if (majorClassificationRepository.findByTermId(term.getId()) == null) {
-                String termId = term.getId();
-                List<Major> majors = majorRepository.findAll();
-                for (Major major :
-                        majors) {
-                    List<Student> students = studentRepository.findAllByMajor(major);
-                    ClassificationCounter classificationCounter = countClassified(students, termId);
+        Term term = termRepository.findFirstByOrderByIdDesc();
+        if (majorClassificationRepository.findByTermId(term.getId()) == null) {
+            String termId = term.getId();
+            List<Major> majors = majorRepository.findAll();
+            for (Major major :
+                    majors) {
+                List<Student> students = studentRepository.findAllByMajor(major);
+                ClassificationCounter classificationCounter = countClassified(students, termId);
+                if (classificationCounter != null) {
                     MajorClassification majorClassification = MajorClassification.builder()
                             .major(major)
                             .term(term)
@@ -118,42 +129,43 @@ public class StatisticService implements IStatisticService {
                     majorClassificationRepository.saveAndFlush(majorClassification);
                 }
             }
+        }
 //        }
     }
 
     @Override
     @Scheduled(cron = "0 0 12 1 1,6 ?")
     public void createFacultyClassificationPeriodic() {
-        List<Term> terms = termRepository.findAll();
-        for (Term term :
-                terms) {
-            FacultyClassification facultyClassification = new FacultyClassification();
-//            Term term = termRepository.findFirstByOrderByIdDesc();
-            if (facultyClassificationRepository.findByTerm(term) == null) {
-                String termId = term.getId();
-                Integer dropoutWithoutPermission = studentStatusRepository
-                        .findAllByTermIdAndStatusId(termId, 2).size();
-                Integer dropoutWithPermission = studentStatusRepository
-                        .findAllByTermIdAndStatusId(termId, 3).size();
+//        List<Term> terms = termRepository.findAll();
+//        for (Term term :
+//                terms) {
+        FacultyClassification facultyClassification = new FacultyClassification();
+        Term term = termRepository.findFirstByOrderByIdDesc();
+        if (facultyClassificationRepository.findByTerm(term) == null) {
+            String termId = term.getId();
+            Integer dropoutWithoutPermission = studentStatusRepository
+                    .findAllByTermIdAndStatusId(termId, 2).size();
+            Integer dropoutWithPermission = studentStatusRepository
+                    .findAllByTermIdAndStatusId(termId, 3).size();
 
-                facultyClassification.setTerm(term);
-                facultyClassification.setDropoutWithoutPermission(dropoutWithoutPermission);
-                facultyClassification.setDropoutWithPermission(dropoutWithPermission);
-            }
-            if (facultyClassificationRepository.findByTerm(term) == null) {
-                String termId = term.getId();
-                List<Student> students = studentRepository.findAllByTerms(term);
-                ClassificationCounter classificationCounter = countClassified(students, termId);
-
-                facultyClassification.setExcellent(classificationCounter.getExcellent());
-                facultyClassification.setGood(classificationCounter.getGood());
-                facultyClassification.setFair(classificationCounter.getFair());
-                facultyClassification.setMedium(classificationCounter.getMedium());
-                facultyClassification.setWeak(classificationCounter.getWeak());
-                facultyClassification.setWorst(classificationCounter.getWorst());
-            }
-            facultyClassificationRepository.saveAndFlush(facultyClassification);
+            facultyClassification.setTerm(term);
+            facultyClassification.setDropoutWithoutPermission(dropoutWithoutPermission);
+            facultyClassification.setDropoutWithPermission(dropoutWithPermission);
         }
+        if (facultyClassificationRepository.findByTerm(term) == null) {
+            String termId = term.getId();
+            List<Student> students = studentRepository.findAllByTerms(term);
+            ClassificationCounter classificationCounter = countClassified(students, termId);
+
+            facultyClassification.setExcellent(classificationCounter.getExcellent());
+            facultyClassification.setGood(classificationCounter.getGood());
+            facultyClassification.setFair(classificationCounter.getFair());
+            facultyClassification.setMedium(classificationCounter.getMedium());
+            facultyClassification.setWeak(classificationCounter.getWeak());
+            facultyClassification.setWorst(classificationCounter.getWorst());
+        }
+        facultyClassificationRepository.saveAndFlush(facultyClassification);
+//        }
     }
 
     @Override
@@ -179,7 +191,7 @@ public class StatisticService implements IStatisticService {
                     .point(point.getTrainingPoint())
                     .build());
         }
-        Point lastPoint = points.get(points.size()-1);
+        Point lastPoint = points.get(points.size() - 1);
         Integer creditsAcc = lastPoint.getCreditsAcc();
         Integer totalCredits = student.getMajor().getTotalCredits();
         Float accPoint4 = lastPoint.getPointAcc4();
@@ -193,38 +205,58 @@ public class StatisticService implements IStatisticService {
                 .accPoint4(accPoint4)
                 .build();
     }
+
     @Override
-    public List<ClassClassification> getClassClassification(String classId, String fromTerm, String toTerm) {
-        return null;
+    public List<ClassClassification> getClassClassification(String classId, GetStatisticRequest request) {
+        Specification<ClassClassification> specification = CustomClassClassificationRepository.filterClassClassificationList(
+                classId,
+                request.getStart(),
+                request.getEnd()
+        );
+        return classClassificationRepository.findAll(specification, Sort.by("term.id").ascending());
     }
 
     @Override
-    public List<CourseClassification> getCourseClassification(String courseId, String fromTerm, String toTerm) {
-        return null;
+    public List<CourseClassification> getCourseClassification(String courseId, GetStatisticRequest request) {
+        Specification<CourseClassification> specification = CustomCourseClassificationRepository.filterCourseClassificationList(
+                courseId,
+                request.getStart(),
+                request.getEnd()
+        );
+        return courseClassificationRepository.findAll(specification, Sort.by("term.id").ascending());
     }
 
     @Override
-    public List<MajorClassification> getMajorClassification(String majorId, String fromTerm, String toTerm) {
-        return null;
+    public List<MajorClassification> getMajorClassification(String majorId, GetStatisticRequest request) {
+        Specification<MajorClassification> specification = CustomMajorClassificationRepository.filterMajorClassificationList(
+                majorId,
+                request.getStart(),
+                request.getEnd()
+        );
+        return majorClassificationRepository.findAll(specification, Sort.by("term.id").ascending());
     }
 
     @Override
-    public List<FacultyClassification> getFacultyClassification() {
-        return null;
+    public List<FacultyClassification> getFacultyClassification(GetStatisticRequest request) {
+        Specification<FacultyClassification> specification = CustomFacultyClassificationRepository.filterFacultyClassificationList(
+                request.getStart(),
+                request.getEnd()
+        );
+        return facultyClassificationRepository.findAll(specification, Sort.by("term.id").ascending());
     }
 
     private ClassificationCounter countClassified(List<Student> students, String termId) {
-        Integer excellent = 0;
-        Integer good = 0;
-        Integer fair = 0;
-        Integer medium = 0;
-        Integer weak = 0;
-        Integer worse = 0;
+        int excellent = 0;
+        int good = 0;
+        int fair = 0;
+        int medium = 0;
+        int weak = 0;
+        int worse = 0;
 
         for (Student student :
                 students) {
             Optional<Point> pointOptional = pointRepository.findByStudentIdAndTermId(student.getId(), termId);
-            if(pointOptional.isPresent()){
+            if (pointOptional.isPresent()) {
                 Integer trainingPoint = pointOptional.get().getTrainingPoint();
                 if (trainingPoint >= 90) {
                     excellent++;
@@ -242,13 +274,17 @@ public class StatisticService implements IStatisticService {
             }
         }
 
-        return ClassificationCounter.builder()
-                .excellent(excellent)
-                .good(good)
-                .fair(fair)
-                .medium(medium)
-                .weak(weak)
-                .worst(worse)
-                .build();
+        if (excellent == 0 && good == 0 && fair == 0 && medium == 0 && weak == 0 && worse == 0){
+            return null;
+        } else {
+            return ClassificationCounter.builder()
+                    .excellent(excellent)
+                    .good(good)
+                    .fair(fair)
+                    .medium(medium)
+                    .weak(weak)
+                    .worst(worse)
+                    .build();
+        }
     }
 }

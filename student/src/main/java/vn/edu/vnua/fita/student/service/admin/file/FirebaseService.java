@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import vn.edu.vnua.fita.student.common.FirebaseExpirationTimeConstant;
 import vn.edu.vnua.fita.student.config.FirebaseConfig;
 import vn.edu.vnua.fita.student.config.TwilioConfig;
+import vn.edu.vnua.fita.student.request.student.UpdatePhoneNumberRequest;
 import vn.edu.vnua.fita.student.service.admin.iservice.IFirebaseService;
 
 import java.io.FileInputStream;
@@ -26,16 +27,6 @@ import java.util.logging.Logger;
 public class FirebaseService implements IFirebaseService {
     private final FirebaseConfig firebaseConfig;
     private final TwilioConfig twilioConfig;
-
-
-    @Value("${twilio.accountSid}")
-    private String accountSid;
-
-    @Value("${twilio.authToken}")
-    private String authToken;
-
-    @Value("${twilio.phoneNumber}")
-    private String phoneNumber;
 
     @Override
     public Blob uploadImage(MultipartFile file, String bucketName) throws IOException {
@@ -82,14 +73,19 @@ public class FirebaseService implements IFirebaseService {
     }
 
     @Override
-    public void sendOTP(String phoneNumber) {
-        PhoneNumber to = new PhoneNumber(phoneNumber);
-        PhoneNumber from = new PhoneNumber(twilioConfig.getTrialNumber());
-        String otp = generateOTP();
-        String otpMessage = "Bạn đã yêu cầu cập nhật số điện thoại. Mã OTP của bạn là " + otp + ", vui lòng không chia sẻ mã này cho bất kỳ ai. Nếu bạn không yêu cầu điều này, vui lòng bỏ qua tin nhắn.";
-        Message message = Message.creator(to, from, otpMessage).create();
+    public void sendOTP(UpdatePhoneNumberRequest request) {
+        try {
+            PhoneNumber to = new PhoneNumber(request.getPhoneNumber());
+            PhoneNumber from = new PhoneNumber(twilioConfig.getTrialNumber());
+            String otp = generateOTP();
+            String otpMessage = "Bạn đã yêu cầu cập nhật số điện thoại. Mã OTP của bạn là " + otp + ", vui lòng không chia sẻ mã này cho bất kỳ ai. Nếu bạn không yêu cầu điều này, vui lòng bỏ qua tin nhắn.";
 
-        // Log thông tin gửi OTP tại đây (thông qua logger)
+            System.out.println("Sending OTP " + otp + " to " + request.getPhoneNumber());
+
+            Message.creator(to, from, otpMessage).create();
+        } catch (Exception e) {
+            throw new RuntimeException("K thể gửi sms");
+        }
     }
 
     private String getFileExtension(String filename) {
