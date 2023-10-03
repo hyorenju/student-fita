@@ -8,15 +8,12 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import vn.edu.vnua.fita.student.model.dto.StudentDTO;
 import vn.edu.vnua.fita.student.model.entity.*;
-import vn.edu.vnua.fita.student.model.statistic.ClassificationCounter;
-import vn.edu.vnua.fita.student.model.statistic.StudentStatistic;
+import vn.edu.vnua.fita.student.model.statistic.*;
 import vn.edu.vnua.fita.student.repository.customrepo.*;
 import vn.edu.vnua.fita.student.repository.jparepo.*;
 import vn.edu.vnua.fita.student.request.admin.statistic.GetStatisticRequest;
 import vn.edu.vnua.fita.student.service.admin.iservice.IStatisticService;
-import vn.edu.vnua.fita.student.util.MyUtils;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -40,97 +37,97 @@ public class StatisticService implements IStatisticService {
     @Override
     @Scheduled(cron = "0 0 0 4 1,6 ?")
     public void createClassClassificationPeriodic() {
-//        List<Term> terms = termRepository.findAll();
-//        for (Term term :
-//                terms) {
-        Term term = termRepository.findFirstByOrderByIdDesc();
-        if (classClassificationRepository.findByTermId(term.getId()) == null) {
-            String termId = term.getId();
-            List<AClass> classes = classRepository.findAll();
-            for (AClass aclass :
-                    classes) {
-                List<Student> students = studentRepository.findAllByAclass(aclass);
-                ClassificationCounter classificationCounter = countClassified(students, termId);
-                if (classificationCounter != null) {
-                    ClassClassification classClassification = ClassClassification.builder()
-                            .aclass(aclass)
-                            .term(term)
-                            .excellent(classificationCounter.getExcellent())
-                            .good(classificationCounter.getGood())
-                            .fair(classificationCounter.getFair())
-                            .medium(classificationCounter.getMedium())
-                            .weak(classificationCounter.getWeak())
-                            .worst(classificationCounter.getWorst())
-                            .build();
-                    classClassificationRepository.saveAndFlush(classClassification);
+        List<Term> terms = termRepository.findAll();
+        for (Term term :
+                terms) {
+//        Term term = termRepository.findFirstByOrderByIdDesc();
+            if (classClassificationRepository.findByTermId(term.getId()) == null) {
+                String termId = term.getId();
+                List<AClass> classes = classRepository.findAll();
+                for (AClass aclass :
+                        classes) {
+                    List<Student> students = studentRepository.findAllByAclass(aclass);
+                    ClassificationCounter classificationCounter = countClassified(students, termId);
+                    if (classificationCounter != null) {
+                        ClassClassification classClassification = ClassClassification.builder()
+                                .aclass(aclass)
+                                .term(term)
+                                .excellent(classificationCounter.getExcellent())
+                                .good(classificationCounter.getGood())
+                                .fair(classificationCounter.getFair())
+                                .medium(classificationCounter.getMedium())
+                                .weak(classificationCounter.getWeak())
+                                .worst(classificationCounter.getWorst())
+                                .build();
+                        classClassificationRepository.saveAndFlush(classClassification);
+                    }
                 }
             }
         }
-//        }
     }
 
     @Override
     @Scheduled(cron = "0 0 0 3 1,6 ?")
     public void createCourseClassificationPeriodic() {
-//        List<Term> terms = termRepository.findAll();
-//        for (Term term :
-//                terms) {
-        Term term = termRepository.findFirstByOrderByIdDesc();
-        if (courseClassificationRepository.findByTermId(term.getId()) == null) {
-            String termId = term.getId();
-            List<Course> courses = courseRepository.findAll();
-            for (Course course :
-                    courses) {
-                List<Student> students = studentRepository.findAllByCourse(course);
-                ClassificationCounter classificationCounter = countClassified(students, termId);
-                if (classificationCounter != null) {
-                    CourseClassification courseClassification = CourseClassification.builder()
-                            .course(course)
-                            .term(term)
-                            .excellent(classificationCounter.getExcellent())
-                            .good(classificationCounter.getGood())
-                            .fair(classificationCounter.getFair())
-                            .medium(classificationCounter.getMedium())
-                            .weak(classificationCounter.getWeak())
-                            .worst(classificationCounter.getWorst())
-                            .build();
-                    courseClassificationRepository.saveAndFlush(courseClassification);
+        List<Term> terms = termRepository.findAll();
+        for (Term term :
+                terms) {
+//        Term term = termRepository.findFirstByOrderByIdDesc();
+            if (courseClassificationRepository.findByTermId(term.getId()) == null) {
+                String termId = term.getId();
+                List<Course> courses = courseRepository.findAll();
+                for (Course course :
+                        courses) {
+                    List<Student> students = studentRepository.findAllByCourse(course);
+                    ClassificationCounter classificationCounter = countClassified(students, termId);
+                    if (classificationCounter != null) {
+                        CourseClassification courseClassification = CourseClassification.builder()
+                                .course(course)
+                                .term(term)
+                                .excellent(classificationCounter.getExcellent())
+                                .good(classificationCounter.getGood())
+                                .fair(classificationCounter.getFair())
+                                .medium(classificationCounter.getMedium())
+                                .weak(classificationCounter.getWeak())
+                                .worst(classificationCounter.getWorst())
+                                .build();
+                        courseClassificationRepository.saveAndFlush(courseClassification);
+                    }
                 }
             }
         }
-//        }
     }
 
     @Override
     @Scheduled(cron = "0 0 0 2 1,6 ?")
     public void createMajorClassificationPeriodic() {
-//        List<Term> terms = termRepository.findAll();
-//        for (Term term :
-//                terms) {
-        Term term = termRepository.findFirstByOrderByIdDesc();
-        if (majorClassificationRepository.findByTermId(term.getId()) == null) {
-            String termId = term.getId();
-            List<Major> majors = majorRepository.findAll();
-            for (Major major :
-                    majors) {
-                List<Student> students = studentRepository.findAllByMajor(major);
-                ClassificationCounter classificationCounter = countClassified(students, termId);
-                if (classificationCounter != null) {
-                    MajorClassification majorClassification = MajorClassification.builder()
-                            .major(major)
-                            .term(term)
-                            .excellent(classificationCounter.getExcellent())
-                            .good(classificationCounter.getGood())
-                            .fair(classificationCounter.getFair())
-                            .medium(classificationCounter.getMedium())
-                            .weak(classificationCounter.getWeak())
-                            .worst(classificationCounter.getWorst())
-                            .build();
-                    majorClassificationRepository.saveAndFlush(majorClassification);
+        List<Term> terms = termRepository.findAll();
+        for (Term term :
+                terms) {
+//        Term term = termRepository.findFirstByOrderByIdDesc();
+            if (majorClassificationRepository.findByTermId(term.getId()) == null) {
+                String termId = term.getId();
+                List<Major> majors = majorRepository.findAll();
+                for (Major major :
+                        majors) {
+                    List<Student> students = studentRepository.findAllByMajor(major);
+                    ClassificationCounter classificationCounter = countClassified(students, termId);
+                    if (classificationCounter != null) {
+                        MajorClassification majorClassification = MajorClassification.builder()
+                                .major(major)
+                                .term(term)
+                                .excellent(classificationCounter.getExcellent())
+                                .good(classificationCounter.getGood())
+                                .fair(classificationCounter.getFair())
+                                .medium(classificationCounter.getMedium())
+                                .weak(classificationCounter.getWeak())
+                                .worst(classificationCounter.getWorst())
+                                .build();
+                        majorClassificationRepository.saveAndFlush(majorClassification);
+                    }
                 }
             }
         }
-//        }
     }
 
     @Override
@@ -207,33 +204,93 @@ public class StatisticService implements IStatisticService {
     }
 
     @Override
-    public List<ClassClassification> getClassClassification(String classId, GetStatisticRequest request) {
+    public List<ClassChart> getClassClassification(String classId, GetStatisticRequest request) {
         Specification<ClassClassification> specification = CustomClassClassificationRepository.filterClassClassificationList(
                 classId,
                 request.getStart(),
                 request.getEnd()
         );
-        return classClassificationRepository.findAll(specification, Sort.by("term.id").ascending());
+        List<ClassClassification> classClassifications = classClassificationRepository.findAll(specification, Sort.by("term.id").ascending());
+
+        List<ClassChart> classCharts = new ArrayList<>();
+        for (ClassClassification classClassification :
+                classClassifications) {
+            ClassChart classChart = new ClassChart();
+            classChart.setAclass(classClassification.getAclass());
+            classChart.setTerm(classClassification.getTerm());
+            classChart.setChart(createClassChart(
+                    classClassification.getExcellent(),
+                    classClassification.getGood(),
+                    classClassification.getFair(),
+                    classClassification.getMedium(),
+                    classClassification.getWeak(),
+                    classClassification.getWorst()
+            ));
+
+            classCharts.add(classChart);
+        }
+
+        return classCharts;
     }
 
     @Override
-    public List<CourseClassification> getCourseClassification(String courseId, GetStatisticRequest request) {
+    public List<CourseChart> getCourseClassification(String courseId, GetStatisticRequest request) {
         Specification<CourseClassification> specification = CustomCourseClassificationRepository.filterCourseClassificationList(
                 courseId,
                 request.getStart(),
                 request.getEnd()
         );
-        return courseClassificationRepository.findAll(specification, Sort.by("term.id").ascending());
+        List<CourseClassification> courseClassifications = courseClassificationRepository.findAll(specification, Sort.by("term.id").ascending());
+
+        List<CourseChart> courseCharts = new ArrayList<>();
+        for (CourseClassification courseClassification :
+                courseClassifications) {
+            CourseChart courseChart = new CourseChart();
+            courseChart.setCourse(courseClassification.getCourse());
+            courseChart.setTerm(courseClassification.getTerm());
+            courseChart.setChart(createClassChart(
+                    courseClassification.getExcellent(),
+                    courseClassification.getGood(),
+                    courseClassification.getFair(),
+                    courseClassification.getMedium(),
+                    courseClassification.getWeak(),
+                    courseClassification.getWorst()
+            ));
+
+            courseCharts.add(courseChart);
+        }
+
+        return courseCharts;
     }
 
     @Override
-    public List<MajorClassification> getMajorClassification(String majorId, GetStatisticRequest request) {
+    public List<MajorChart> getMajorClassification(String majorId, GetStatisticRequest request) {
         Specification<MajorClassification> specification = CustomMajorClassificationRepository.filterMajorClassificationList(
                 majorId,
                 request.getStart(),
                 request.getEnd()
         );
-        return majorClassificationRepository.findAll(specification, Sort.by("term.id").ascending());
+        List<MajorClassification> majorClassifications = majorClassificationRepository.findAll(specification, Sort.by("term.id").ascending());
+
+        List<MajorChart> majorCharts = new ArrayList<>();
+        for (MajorClassification majorClassification :
+                majorClassifications) {
+            MajorChart majorChart = new MajorChart();
+            majorChart.setMajor(majorClassification.getMajor());
+            majorChart.setTerm(majorClassification.getTerm());
+            majorChart.setChart(createClassChart(
+                    majorClassification.getExcellent(),
+                    majorClassification.getGood(),
+                    majorClassification.getFair(),
+                    majorClassification.getMedium(),
+                    majorClassification.getWeak(),
+                    majorClassification.getWorst()
+            ));
+
+            majorCharts.add(majorChart);
+        }
+
+        return majorCharts;
     }
 
     @Override
@@ -274,7 +331,7 @@ public class StatisticService implements IStatisticService {
             }
         }
 
-        if (excellent == 0 && good == 0 && fair == 0 && medium == 0 && weak == 0 && worse == 0){
+        if (excellent == 0 && good == 0 && fair == 0 && medium == 0 && weak == 0 && worse == 0) {
             return null;
         } else {
             return ClassificationCounter.builder()
@@ -286,5 +343,45 @@ public class StatisticService implements IStatisticService {
                     .worst(worse)
                     .build();
         }
+    }
+
+    private List<CircleChart> createClassChart(Integer excellent,
+                                               Integer good,
+                                               Integer fair,
+                                               Integer medium,
+                                               Integer weak,
+                                               Integer worst) {
+        List<CircleChart> charts = new ArrayList<>();
+        CircleChart chart1 = CircleChart.builder()
+                .type("excellent")
+                .value(excellent)
+                .build();
+        CircleChart chart2 = CircleChart.builder()
+                .type("good")
+                .value(good)
+                .build();
+        CircleChart chart3 = CircleChart.builder()
+                .type("fair")
+                .value(fair)
+                .build();
+        CircleChart chart4 = CircleChart.builder()
+                .type("medium")
+                .value(medium)
+                .build();
+        CircleChart chart5 = CircleChart.builder()
+                .type("weak")
+                .value(weak)
+                .build();
+        CircleChart chart6 = CircleChart.builder()
+                .type("worse")
+                .value(worst)
+                .build();
+        charts.add(chart1);
+        charts.add(chart2);
+        charts.add(chart3);
+        charts.add(chart4);
+        charts.add(chart5);
+        charts.add(chart6);
+        return charts;
     }
 }

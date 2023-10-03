@@ -12,6 +12,7 @@ import vn.edu.vnua.fita.student.model.dto.AdminDTO;
 import vn.edu.vnua.fita.student.model.dto.TrashAdminDTO;
 import vn.edu.vnua.fita.student.model.entity.TrashAdmin;
 import vn.edu.vnua.fita.student.model.entity.Admin;
+import vn.edu.vnua.fita.student.request.ChangePasswordRequest;
 import vn.edu.vnua.fita.student.request.admin.admin.*;
 import vn.edu.vnua.fita.student.service.admin.management.AdminManager;
 
@@ -76,6 +77,12 @@ public class AdminController extends BaseController {
     @PostMapping("avatar")
     public ResponseEntity<?> updateAvatar(@RequestBody MultipartFile file) throws IOException {
         AdminDTO response = modelMapper.map(adminManager.updateAvatar(file), AdminDTO.class);
+        return buildItemResponse(response);
+    }
+
+    @PostMapping("change-password")
+    public ResponseEntity<?> changePassword(@Valid @RequestBody ChangePasswordRequest request){
+        AdminDTO response = modelMapper.map(adminManager.changePassword(request), AdminDTO.class);
         return buildItemResponse(response);
     }
 }

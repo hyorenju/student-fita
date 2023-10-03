@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 import vn.edu.vnua.fita.student.model.entity.TrashAdmin;
 import vn.edu.vnua.fita.student.model.entity.Admin;
+import vn.edu.vnua.fita.student.request.ChangePasswordRequest;
 import vn.edu.vnua.fita.student.request.admin.admin.*;
 
 import java.io.IOException;
@@ -17,4 +18,5 @@ public interface IAdminService {
     TrashAdmin restoreAdmin(Long id);
     Page<TrashAdmin> getTrashAdminList(GetTrashAdminRequest request);
     Admin updateAvatar(MultipartFile file) throws IOException;
+    Admin changePassword(ChangePasswordRequest request);
 }

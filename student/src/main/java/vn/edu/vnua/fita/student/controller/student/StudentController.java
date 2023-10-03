@@ -7,7 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import vn.edu.vnua.fita.student.controller.BaseController;
+import vn.edu.vnua.fita.student.model.dto.AdminDTO;
 import vn.edu.vnua.fita.student.model.dto.StudentDTO;
+import vn.edu.vnua.fita.student.request.ChangePasswordRequest;
 import vn.edu.vnua.fita.student.request.student.UpdateStudentProfileRequest;
 import vn.edu.vnua.fita.student.service.student.StudentServiceImpl;
 
@@ -29,6 +31,12 @@ public class StudentController extends BaseController {
     @PostMapping("update")
     public ResponseEntity<?> updateMyProfile(@Valid @RequestBody UpdateStudentProfileRequest request) {
         StudentDTO response = modelMapper.map(studentService.updateProfile(request), StudentDTO.class);
+        return buildItemResponse(response);
+    }
+
+    @PostMapping("change-password")
+    public ResponseEntity<?> changePassword(@Valid @RequestBody ChangePasswordRequest request){
+        StudentDTO response = modelMapper.map(studentService.changePassword(request), StudentDTO.class);
         return buildItemResponse(response);
     }
 }

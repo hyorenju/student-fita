@@ -23,6 +23,7 @@ import vn.edu.vnua.fita.student.repository.customrepo.CustomAdminRepository;
 import vn.edu.vnua.fita.student.repository.jparepo.AdminRepository;
 import vn.edu.vnua.fita.student.repository.jparepo.RoleRepository;
 import vn.edu.vnua.fita.student.repository.jparepo.TrashAdminRepository;
+import vn.edu.vnua.fita.student.request.ChangePasswordRequest;
 import vn.edu.vnua.fita.student.request.admin.admin.*;
 import vn.edu.vnua.fita.student.service.admin.file.FirebaseService;
 import vn.edu.vnua.fita.student.service.admin.iservice.IAdminService;
@@ -31,6 +32,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -103,9 +105,11 @@ public class AdminManager implements IAdminService {
 
     @Override
     public Admin updateProfile(UpdateProfileRequest request) {
-        Admin admin = adminRepository.findById(request.getId()).orElseThrow(() -> new RuntimeException(adminNotFound));
-        admin.setName(request.getInfo().getName());
-        admin.setEmail(request.getInfo().getEmail());
+        Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
+        Admin admin = adminRepository.findById(authentication.getPrincipal().toString()).orElseThrow(() -> new RuntimeException(adminNotFound));
+
+        admin.setName(request.getName());
+        admin.setEmail(request.getEmail());
         adminRepository.saveAndFlush(admin);
         return admin;
     }
@@ -150,6 +154,25 @@ public class AdminManager implements IAdminService {
                 .signUrl(FirebaseExpirationTimeConstant.EXPIRATION_TIME, TimeUnit.MILLISECONDS)
                 .toString());
 
+        return adminRepository.saveAndFlush(admin);
+    }
+
+    @Override
+    public Admin changePassword(ChangePasswordRequest request) {
+        Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
+        Admin admin = adminRepository.findById(authentication.getPrincipal().toString()).orElseThrow(() -> new RuntimeException(adminNotFound));
+
+        if(!encoder.matches(request.getCurrentPassword(), admin.getPassword())){
+            throw new RuntimeException("Mật khẩu hiện tại không chính xác");
+        }
+        if(encoder.matches(request.getNewPassword(), admin.getPassword())){
+            throw new RuntimeException("Mật khẩu mới không được trùng mật khẩu cũ");
+        }
+        if(!Objects.equals(request.getNewPassword(), request.getConfirmPassword())){
+            throw new RuntimeException("Xác nhận mật khẩu không trùng khớp");
+        }
+
+        admin.setPassword(encoder.encode(request.getNewPassword()));
         return adminRepository.saveAndFlush(admin);
     }
 

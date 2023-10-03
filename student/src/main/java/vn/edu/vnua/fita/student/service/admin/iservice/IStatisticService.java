@@ -1,6 +1,9 @@
 package vn.edu.vnua.fita.student.service.admin.iservice;
 
 import vn.edu.vnua.fita.student.model.entity.*;
+import vn.edu.vnua.fita.student.model.statistic.ClassChart;
+import vn.edu.vnua.fita.student.model.statistic.CourseChart;
+import vn.edu.vnua.fita.student.model.statistic.MajorChart;
 import vn.edu.vnua.fita.student.model.statistic.StudentStatistic;
 import vn.edu.vnua.fita.student.request.admin.statistic.GetStatisticRequest;
 
@@ -12,8 +15,8 @@ public interface IStatisticService {
     void createMajorClassificationPeriodic();
     void createFacultyClassificationPeriodic();
     StudentStatistic getStudentStatistic(String id);
-    List<ClassClassification> getClassClassification(String classId, GetStatisticRequest request);
-    List<CourseClassification> getCourseClassification(String courseId, GetStatisticRequest request);
-    List<MajorClassification> getMajorClassification(String majorId, GetStatisticRequest request);
+    List<ClassChart> getClassClassification(String classId, GetStatisticRequest request);
+    List<CourseChart> getCourseClassification(String courseId, GetStatisticRequest request);
+    List<MajorChart> getMajorClassification(String majorId, GetStatisticRequest request);
     List<FacultyClassification> getFacultyClassification(GetStatisticRequest request);
 }
