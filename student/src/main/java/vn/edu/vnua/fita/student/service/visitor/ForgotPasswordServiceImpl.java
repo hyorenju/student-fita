@@ -22,6 +22,7 @@ public class ForgotPasswordServiceImpl implements ForgotPasswordService {
     private final AdminRepository adminRepository;
     private final StudentRepository studentRepository;
     private final PasswordEncoder encoder;
+    private final String userError = "Tài khoải hoặc email không trùng khớp";
 
     @Override
     public void sendMessage(SendMailRequest request){
@@ -30,17 +31,17 @@ public class ForgotPasswordServiceImpl implements ForgotPasswordService {
 //            throw new EntityNotFoundException("Tài khoản hoặc email không trùng khớp");
 //        }
 
-        if(adminRepository.existsById(request.getValues().getId())){
-            Admin admin = adminRepository.findById(request.getValues().getId()).get();
-            if(admin.equals(request.getValues().getEmail())){
-                sendMimeEmail(request.getValues().getEmail(), request.getLink());
+        if(adminRepository.existsById(request.getUser().getId())){
+            Admin admin = adminRepository.findById(request.getUser().getId()).get();
+            if(admin.equals(request.getUser().getEmail())){
+                sendMimeEmail(request.getUser().getEmail(), request.getLink());
             } else {
                 throw new RuntimeException("Tài khoản hoặc email không trùng khớp");
             }
-        } else if(studentRepository.existsById(request.getValues().getId())){
-            Student student = studentRepository.findById(request.getValues().getId()).get();
-            if(student.getEmail().equals(request.getValues().getEmail())){
-                sendMimeEmail(request.getValues().getEmail(), request.getLink());
+        } else if(studentRepository.existsById(request.getUser().getId())){
+            Student student = studentRepository.findById(request.getUser().getId()).get();
+            if(student.getEmail().equals(request.getUser().getEmail())){
+                sendMimeEmail(request.getUser().getEmail(), request.getLink());
 //                student.setPassword("123");
 //                studentRepository.saveAndFlush(student);
             } else {
@@ -78,7 +79,7 @@ public class ForgotPasswordServiceImpl implements ForgotPasswordService {
         }
     }
 
-    private static void sendMimeEmail(String email, String link) {
+    private void sendMimeEmail(String email, String link) {
 
         final String username = "hyorenju@gmail.com";
         final String password = "yywetcrecogeyztq";
