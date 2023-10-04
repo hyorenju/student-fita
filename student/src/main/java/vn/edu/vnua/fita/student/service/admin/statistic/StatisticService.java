@@ -353,27 +353,27 @@ public class StatisticService implements IStatisticService {
                                                Integer worst) {
         List<CircleChart> charts = new ArrayList<>();
         CircleChart chart1 = CircleChart.builder()
-                .type("excellent")
+                .type("Xuất sắc")
                 .value(excellent)
                 .build();
         CircleChart chart2 = CircleChart.builder()
-                .type("good")
+                .type("Tốt")
                 .value(good)
                 .build();
         CircleChart chart3 = CircleChart.builder()
-                .type("fair")
+                .type("Khá")
                 .value(fair)
                 .build();
         CircleChart chart4 = CircleChart.builder()
-                .type("medium")
+                .type("Trung bình")
                 .value(medium)
                 .build();
         CircleChart chart5 = CircleChart.builder()
-                .type("weak")
+                .type("Yếu")
                 .value(weak)
                 .build();
         CircleChart chart6 = CircleChart.builder()
-                .type("worse")
+                .type("Kém")
                 .value(worst)
                 .build();
         charts.add(chart1);

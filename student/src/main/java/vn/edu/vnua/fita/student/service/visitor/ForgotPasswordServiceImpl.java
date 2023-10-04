@@ -1,6 +1,12 @@
 package vn.edu.vnua.fita.student.service.visitor;
 
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import jakarta.mail.*;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import vn.edu.vnua.fita.student.model.entity.Admin;
@@ -10,9 +16,8 @@ import vn.edu.vnua.fita.student.repository.jparepo.StudentRepository;
 import vn.edu.vnua.fita.student.request.visitor.ForgotPasswordRequest;
 import vn.edu.vnua.fita.student.request.visitor.SendMailRequest;
 
-import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Objects;
 import java.util.Properties;
 
@@ -22,33 +27,35 @@ public class ForgotPasswordServiceImpl implements ForgotPasswordService {
     private final AdminRepository adminRepository;
     private final StudentRepository studentRepository;
     private final PasswordEncoder encoder;
+    private final MailService mailService;
     private final String userError = "Tài khoải hoặc email không trùng khớp";
+    private final String userNotFound = "Không tìm thấy người dùng";
+
+    @Value("${spring.mail.properties.jwtSecret}")
+    private String jwtSecret;
+    @Value("${spring.mail.properties.jwtExpirationMs}")
+    private Long jwtExpirationMs;
 
     @Override
     public void sendMessage(SendMailRequest request){
-//        if(!adminRepository.existsById(request.getId())
-//        && !studentRepository.existsById(request.getId())){
-//            throw new EntityNotFoundException("Tài khoản hoặc email không trùng khớp");
-//        }
-
-        if(adminRepository.existsById(request.getUser().getId())){
-            Admin admin = adminRepository.findById(request.getUser().getId()).get();
-            if(admin.equals(request.getUser().getEmail())){
-                sendMimeEmail(request.getUser().getEmail(), request.getLink());
+        if(request.getUser().getId().matches("^[a-zA-Z][a-zA-Z0-9]*$")){
+            Admin admin = adminRepository.findById(request.getUser().getId()).orElseThrow(() -> new RuntimeException(userNotFound));
+            if(admin.getEmail().equals(request.getUser().getEmail())){
+                String verificationToken = generateVerificationToken(admin.getId());
+                mailService.sendEmailHtml(request.getUser().getEmail(), request.getLink(), verificationToken);
             } else {
-                throw new RuntimeException("Tài khoản hoặc email không trùng khớp");
+                throw new RuntimeException(userError);
             }
-        } else if(studentRepository.existsById(request.getUser().getId())){
-            Student student = studentRepository.findById(request.getUser().getId()).get();
+        } else if(request.getUser().getId().matches("^[0-9]+")){
+            Student student = studentRepository.findById(request.getUser().getId()).orElseThrow(() -> new RuntimeException(userNotFound));
             if(student.getEmail().equals(request.getUser().getEmail())){
-                sendMimeEmail(request.getUser().getEmail(), request.getLink());
-//                student.setPassword("123");
-//                studentRepository.saveAndFlush(student);
+                String verificationToken = generateVerificationToken(student.getId());
+                mailService.sendEmailHtml(request.getUser().getEmail(), request.getLink(), verificationToken);
             } else {
-                throw new RuntimeException("Tài khoản hoặc email không trùng khớp");
+                throw new RuntimeException(userError);
             }
         } else {
-            throw new RuntimeException("Tài khoản hoặc email không trùng khớp");
+            throw new RuntimeException(userError);
         }
     }
 
@@ -79,47 +86,15 @@ public class ForgotPasswordServiceImpl implements ForgotPasswordService {
         }
     }
 
-    private void sendMimeEmail(String email, String link) {
+    private String generateVerificationToken(String id) {
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + jwtExpirationMs);
 
-        final String username = "hyorenju@gmail.com";
-        final String password = "yywetcrecogeyztq";
+        return Jwts.builder()
+                .setSubject(id)
+                .setExpiration(expiryDate)
+                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .compact();
 
-        Properties props = new Properties();
-        props.put("mail.smtp.ssl.protocols", "TLSv1.2");
-        props.put("mail.smtp.auth", true);
-        props.put("mail.smtp.starttls.enable", true);
-        props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.smtp.port", 587);
-
-        Session session = Session.getInstance(props, new Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(username, password);
-            }
-        });
-
-        String subject = "Yêu cầu đồi mật khẩu";
-        String text = "Bạn đã gửi một yêu cầu đổi mật khẩu. Hãy truy cập đường dẫn sau để đổi mật khẩu:" +
-                "\n\n" + link +
-                "\n\nVui lòng không chia sẻ link này cho bất cứ ai nếu bạn không muốn người khác đổi mật khẩu của mình." +
-                "\n\nNếu bạn không yêu cầu đổi mật khẩu, vui lòng bỏ qua bước này.";
-
-        try {
-            Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(username));
-            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email));
-            message.setSubject(subject);
-            message.setText(text);
-
-            Transport.send(message);
-
-//            SimpleMailMessage message = new SimpleMailMessage();
-//            message.setTo(email);
-//            message.setSubject(subject);
-//            message.setText(text);
-//            mailSender.send(message);
-
-        } catch (MessagingException e) {
-            throw new RuntimeException(e);
-        }
     }
 }
