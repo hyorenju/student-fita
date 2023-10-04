@@ -40,8 +40,8 @@ public class StudentStatusManager implements IStudentStatusService {
         );
         return studentStatusRepository.findAll(
                 specification,
-                PageRequest.of(request.getPage() - 1, request.getSize(),
-                        Sort.by("time").ascending())
+                PageRequest.of(request.getPage() - 1, request.getSize()/*,
+                        Sort.by("time").ascending()*/)
         );
     }
 

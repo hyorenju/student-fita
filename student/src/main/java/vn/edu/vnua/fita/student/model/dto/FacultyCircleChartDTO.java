@@ -6,8 +6,7 @@ import vn.edu.vnua.fita.student.model.statistic.CircleChart;
 import java.util.List;
 
 @Data
-public class CourseClassificationDTO {
-    private CourseDTO course;
+public class FacultyCircleChartDTO {
     private TermDTO term;
     private List<CircleChart> chart;
 }

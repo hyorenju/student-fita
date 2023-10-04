@@ -218,7 +218,7 @@ public class StatisticService implements IStatisticService {
             ClassChart classChart = new ClassChart();
             classChart.setAclass(classClassification.getAclass());
             classChart.setTerm(classClassification.getTerm());
-            classChart.setChart(createClassChart(
+            classChart.setChart(createCircleChart(
                     classClassification.getExcellent(),
                     classClassification.getGood(),
                     classClassification.getFair(),
@@ -248,7 +248,7 @@ public class StatisticService implements IStatisticService {
             CourseChart courseChart = new CourseChart();
             courseChart.setCourse(courseClassification.getCourse());
             courseChart.setTerm(courseClassification.getTerm());
-            courseChart.setChart(createClassChart(
+            courseChart.setChart(createCircleChart(
                     courseClassification.getExcellent(),
                     courseClassification.getGood(),
                     courseClassification.getFair(),
@@ -278,7 +278,7 @@ public class StatisticService implements IStatisticService {
             MajorChart majorChart = new MajorChart();
             majorChart.setMajor(majorClassification.getMajor());
             majorChart.setTerm(majorClassification.getTerm());
-            majorChart.setChart(createClassChart(
+            majorChart.setChart(createCircleChart(
                     majorClassification.getExcellent(),
                     majorClassification.getGood(),
                     majorClassification.getFair(),
@@ -294,12 +294,40 @@ public class StatisticService implements IStatisticService {
     }
 
     @Override
-    public List<FacultyClassification> getFacultyClassification(GetStatisticRequest request) {
+    public List<FacultyClassification> getFacultyColumnChart(GetStatisticRequest request) {
         Specification<FacultyClassification> specification = CustomFacultyClassificationRepository.filterFacultyClassificationList(
                 request.getStart(),
                 request.getEnd()
         );
         return facultyClassificationRepository.findAll(specification, Sort.by("term.id").ascending());
+    }
+
+    @Override
+    public List<FacultyChart> getFacultyCircleChart(GetStatisticRequest request) {
+        Specification<FacultyClassification> specification = CustomFacultyClassificationRepository.filterFacultyClassificationList(
+                request.getStart(),
+                request.getEnd()
+        );
+        List<FacultyClassification> facultyClassifications = facultyClassificationRepository.findAll(specification, Sort.by("term.id").ascending());
+
+        List<FacultyChart> facultyCharts = new ArrayList<>();
+        for (FacultyClassification facultyClassification :
+                facultyClassifications) {
+            FacultyChart facultyChart = new FacultyChart();
+            facultyChart.setTerm(facultyClassification.getTerm());
+            facultyChart.setChart(createCircleChart(
+                    facultyClassification.getExcellent(),
+                    facultyClassification.getGood(),
+                    facultyClassification.getFair(),
+                    facultyClassification.getMedium(),
+                    facultyClassification.getWeak(),
+                    facultyClassification.getWorst()
+            ));
+
+            facultyCharts.add(facultyChart);
+        }
+
+        return facultyCharts;
     }
 
     private ClassificationCounter countClassified(List<Student> students, String termId) {
@@ -345,12 +373,12 @@ public class StatisticService implements IStatisticService {
         }
     }
 
-    private List<CircleChart> createClassChart(Integer excellent,
-                                               Integer good,
-                                               Integer fair,
-                                               Integer medium,
-                                               Integer weak,
-                                               Integer worst) {
+    private List<CircleChart> createCircleChart(Integer excellent,
+                                                Integer good,
+                                                Integer fair,
+                                                Integer medium,
+                                                Integer weak,
+                                                Integer worst) {
         List<CircleChart> charts = new ArrayList<>();
         CircleChart chart1 = CircleChart.builder()
                 .type("Xuất sắc")

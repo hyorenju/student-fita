@@ -6,11 +6,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.vnua.fita.student.controller.BaseController;
-import vn.edu.vnua.fita.student.model.dto.ClassClassificationDTO;
-import vn.edu.vnua.fita.student.model.dto.CourseClassificationDTO;
-import vn.edu.vnua.fita.student.model.dto.FacultyClassificationDTO;
-import vn.edu.vnua.fita.student.model.dto.MajorClassificationDTO;
-import vn.edu.vnua.fita.student.model.entity.FacultyClassification;
+import vn.edu.vnua.fita.student.model.dto.*;
 import vn.edu.vnua.fita.student.model.statistic.StudentStatistic;
 import vn.edu.vnua.fita.student.request.admin.statistic.GetStatisticRequest;
 import vn.edu.vnua.fita.student.service.admin.statistic.StatisticService;
@@ -32,32 +28,40 @@ public class StatisticController extends BaseController {
 
     @PostMapping("class/{id}")
     public ResponseEntity<?> getClassStatistic(@PathVariable String id, @Valid @RequestBody GetStatisticRequest request){
-        List<ClassClassificationDTO> response = statisticService.getClassClassification(id, request).stream().map(
-                classClassification -> modelMapper.map(classClassification, ClassClassificationDTO.class)
+        List<ClassChartDTO> response = statisticService.getClassClassification(id, request).stream().map(
+                classClassification -> modelMapper.map(classClassification, ClassChartDTO.class)
         ).toList();
         return buildListItemResponse(response, response.size());
     }
 
     @PostMapping("course/{id}")
     public ResponseEntity<?> getCourseStatistic(@PathVariable String id, @Valid @RequestBody GetStatisticRequest request){
-        List<CourseClassificationDTO> response = statisticService.getCourseClassification(id, request).stream().map(
-                courseClassification -> modelMapper.map(courseClassification, CourseClassificationDTO.class)
+        List<CourseChartDTO> response = statisticService.getCourseClassification(id, request).stream().map(
+                courseClassification -> modelMapper.map(courseClassification, CourseChartDTO.class)
         ).toList();
         return buildListItemResponse(response, response.size());
     }
 
     @PostMapping("major/{id}")
     public ResponseEntity<?> getMajorStatistic(@PathVariable String id, @Valid @RequestBody GetStatisticRequest request){
-        List<MajorClassificationDTO> response = statisticService.getMajorClassification(id, request).stream().map(
-                majorClassification -> modelMapper.map(majorClassification, MajorClassificationDTO.class)
+        List<MajorChartDTO> response = statisticService.getMajorClassification(id, request).stream().map(
+                majorClassification -> modelMapper.map(majorClassification, MajorChartDTO.class)
         ).toList();
         return buildListItemResponse(response, response.size());
     }
 
-    @PostMapping("faculty")
-    public ResponseEntity<?> getFacultyStatistic(@Valid @RequestBody GetStatisticRequest request){
-        List<FacultyClassificationDTO> response = statisticService.getFacultyClassification(request).stream().map(
-                facultyClassification -> modelMapper.map(facultyClassification, FacultyClassificationDTO.class)
+    @PostMapping("faculty/column")
+    public ResponseEntity<?> getFacultyColumnChart(@Valid @RequestBody GetStatisticRequest request){
+        List<FacultyColumnChartDTO> response = statisticService.getFacultyColumnChart(request).stream().map(
+                facultyClassification -> modelMapper.map(facultyClassification, FacultyColumnChartDTO.class)
+        ).toList();
+        return buildListItemResponse(response, response.size());
+    }
+
+    @PostMapping("faculty/circle")
+    public ResponseEntity<?> getFacultyCircleChart(@Valid @RequestBody GetStatisticRequest request){
+        List<FacultyCircleChartDTO> response = statisticService.getFacultyCircleChart(request).stream().map(
+                facultyClassification -> modelMapper.map(facultyClassification, FacultyCircleChartDTO.class)
         ).toList();
         return buildListItemResponse(response, response.size());
     }
