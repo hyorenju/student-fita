@@ -52,10 +52,8 @@ public class StatisticController extends BaseController {
 
     @PostMapping("faculty/column")
     public ResponseEntity<?> getFacultyColumnChart(@Valid @RequestBody GetStatisticRequest request){
-        List<FacultyColumnChartDTO> response = statisticService.getFacultyColumnChart(request).stream().map(
-                facultyClassification -> modelMapper.map(facultyClassification, FacultyColumnChartDTO.class)
-        ).toList();
-        return buildListItemResponse(response, response.size());
+        FacultyColumnChartDTO response = modelMapper.map(statisticService.getFacultyColumnChart(request), FacultyColumnChartDTO.class);
+        return buildItemResponse(response);
     }
 
     @PostMapping("faculty/circle")

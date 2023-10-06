@@ -1,4 +1,4 @@
-package vn.edu.vnua.fita.student.model.statistic;
+package vn.edu.vnua.fita.student.model.statistic.chartfrom;
 
 import lombok.Builder;
 import lombok.Data;

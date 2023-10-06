@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import vn.edu.vnua.fita.student.model.dto.StudentDTO;
 import vn.edu.vnua.fita.student.model.entity.*;
 import vn.edu.vnua.fita.student.model.statistic.*;
+import vn.edu.vnua.fita.student.model.statistic.chartfrom.CircleChart;
+import vn.edu.vnua.fita.student.model.statistic.chartfrom.GroupedColumnChart;
 import vn.edu.vnua.fita.student.repository.customrepo.*;
 import vn.edu.vnua.fita.student.repository.jparepo.*;
 import vn.edu.vnua.fita.student.request.admin.statistic.GetStatisticRequest;
@@ -136,32 +138,32 @@ public class StatisticService implements IStatisticService {
 //        List<Term> terms = termRepository.findAll();
 //        for (Term term :
 //                terms) {
-            FacultyClassification facultyClassification = new FacultyClassification();
-            Term term = termRepository.findFirstByOrderByIdDesc();
-            if (facultyClassificationRepository.findByTerm(term) == null) {
-                String termId = term.getId();
-                Integer dropoutWithoutPermission = studentStatusRepository
-                        .findAllByTermIdAndStatusId(termId, 2).size();
-                Integer dropoutWithPermission = studentStatusRepository
-                        .findAllByTermIdAndStatusId(termId, 3).size();
+        FacultyClassification facultyClassification = new FacultyClassification();
+        Term term = termRepository.findFirstByOrderByIdDesc();
+        if (facultyClassificationRepository.findByTerm(term) == null) {
+            String termId = term.getId();
+            Integer dropoutWithoutPermission = studentStatusRepository
+                    .findAllByTermIdAndStatusId(termId, 2).size();
+            Integer dropoutWithPermission = studentStatusRepository
+                    .findAllByTermIdAndStatusId(termId, 3).size();
 
-                facultyClassification.setTerm(term);
-                facultyClassification.setDropoutWithoutPermission(dropoutWithoutPermission);
-                facultyClassification.setDropoutWithPermission(dropoutWithPermission);
-            }
-            if (facultyClassificationRepository.findByTerm(term) == null) {
-                String termId = term.getId();
-                List<Student> students = studentRepository.findAllByTerms(term);
-                ClassificationCounter classificationCounter = countClassified(students, termId);
+            facultyClassification.setTerm(term);
+            facultyClassification.setDropoutWithoutPermission(dropoutWithoutPermission);
+            facultyClassification.setDropoutWithPermission(dropoutWithPermission);
+        }
+        if (facultyClassificationRepository.findByTerm(term) == null) {
+            String termId = term.getId();
+            List<Student> students = studentRepository.findAllByTerms(term);
+            ClassificationCounter classificationCounter = countClassified(students, termId);
 
-                facultyClassification.setExcellent(classificationCounter.getExcellent());
-                facultyClassification.setGood(classificationCounter.getGood());
-                facultyClassification.setFair(classificationCounter.getFair());
-                facultyClassification.setMedium(classificationCounter.getMedium());
-                facultyClassification.setWeak(classificationCounter.getWeak());
-                facultyClassification.setWorst(classificationCounter.getWorst());
-            }
-            facultyClassificationRepository.saveAndFlush(facultyClassification);
+            facultyClassification.setExcellent(classificationCounter.getExcellent());
+            facultyClassification.setGood(classificationCounter.getGood());
+            facultyClassification.setFair(classificationCounter.getFair());
+            facultyClassification.setMedium(classificationCounter.getMedium());
+            facultyClassification.setWeak(classificationCounter.getWeak());
+            facultyClassification.setWorst(classificationCounter.getWorst());
+        }
+        facultyClassificationRepository.saveAndFlush(facultyClassification);
 //        }
     }
 
@@ -294,28 +296,29 @@ public class StatisticService implements IStatisticService {
     }
 
     @Override
-    public List<FacultyClassification> getFacultyColumnChart(GetStatisticRequest request) {
+    public FacultyColumnChart getFacultyColumnChart(GetStatisticRequest request) {
         Specification<FacultyClassification> specification = CustomFacultyClassificationRepository.filterFacultyClassificationList(
                 request.getStart(),
                 request.getEnd()
         );
-        return facultyClassificationRepository.findAll(specification, Sort.by("term.id").ascending());
+        List<FacultyClassification> facultyClassifications = facultyClassificationRepository.findAll(specification, Sort.by("term.id").ascending());
+        return createColumnChart(facultyClassifications);
     }
 
     @Override
-    public List<FacultyChart> getFacultyCircleChart(GetStatisticRequest request) {
+    public List<FacultyCircleChart> getFacultyCircleChart(GetStatisticRequest request) {
         Specification<FacultyClassification> specification = CustomFacultyClassificationRepository.filterFacultyClassificationList(
                 request.getStart(),
                 request.getEnd()
         );
         List<FacultyClassification> facultyClassifications = facultyClassificationRepository.findAll(specification, Sort.by("term.id").ascending());
 
-        List<FacultyChart> facultyCharts = new ArrayList<>();
+        List<FacultyCircleChart> facultyCircleCharts = new ArrayList<>();
         for (FacultyClassification facultyClassification :
                 facultyClassifications) {
-            FacultyChart facultyChart = new FacultyChart();
-            facultyChart.setTerm(facultyClassification.getTerm());
-            facultyChart.setChart(createCircleChart(
+            FacultyCircleChart facultyCircleChart = new FacultyCircleChart();
+            facultyCircleChart.setTerm(facultyClassification.getTerm());
+            facultyCircleChart.setChart(createCircleChart(
                     facultyClassification.getExcellent(),
                     facultyClassification.getGood(),
                     facultyClassification.getFair(),
@@ -324,10 +327,10 @@ public class StatisticService implements IStatisticService {
                     facultyClassification.getWorst()
             ));
 
-            facultyCharts.add(facultyChart);
+            facultyCircleCharts.add(facultyCircleChart);
         }
 
-        return facultyCharts;
+        return facultyCircleCharts;
     }
 
     private ClassificationCounter countClassified(List<Student> students, String termId) {
@@ -411,5 +414,30 @@ public class StatisticService implements IStatisticService {
         charts.add(chart5);
         charts.add(chart6);
         return charts;
+    }
+
+    private FacultyColumnChart createColumnChart(List<FacultyClassification> facultyClassifications) {
+        List<GroupedColumnChart> charts = new ArrayList<>();
+        for (FacultyClassification facultyClassification :
+                facultyClassifications) {
+            GroupedColumnChart chart = GroupedColumnChart.builder()
+                    .name("Đã bỏ học")
+                    .termId(facultyClassification.getTerm().getId())
+                    .quantity(facultyClassification.getDropoutWithoutPermission())
+                    .build();
+            charts.add(chart);
+        }
+        for (FacultyClassification facultyClassification :
+                facultyClassifications) {
+            GroupedColumnChart chart = GroupedColumnChart.builder()
+                    .name("Đã xin thôi học")
+                    .termId(facultyClassification.getTerm().getId())
+                    .quantity(facultyClassification.getDropoutWithPermission())
+                    .build();
+            charts.add(chart);
+        }
+        return FacultyColumnChart.builder()
+                .chart(charts)
+                .build();
     }
 }

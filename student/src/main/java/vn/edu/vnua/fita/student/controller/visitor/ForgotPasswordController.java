@@ -18,7 +18,7 @@ public class ForgotPasswordController extends BaseController {
     @PostMapping("send-request")
     public ResponseEntity<?> sendRequest(@Valid @RequestBody SendMailRequest request) {
         forgotPasswordService.sendMessage(request);
-        String message = "Yêu cầu đổi mật khẩu đã được gửi tới địa chỉ " + request.getUser().getEmail();
+        String message = "Yêu cầu đổi mật khẩu đã được gửi tới địa chỉ " + request.getStudent().getEmail();
         return buildItemResponse(message);
     }
 

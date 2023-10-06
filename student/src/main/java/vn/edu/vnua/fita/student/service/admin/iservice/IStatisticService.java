@@ -15,6 +15,6 @@ public interface IStatisticService {
     List<ClassChart> getClassClassification(String classId, GetStatisticRequest request);
     List<CourseChart> getCourseClassification(String courseId, GetStatisticRequest request);
     List<MajorChart> getMajorClassification(String majorId, GetStatisticRequest request);
-    List<FacultyClassification> getFacultyColumnChart(GetStatisticRequest request);
-    List<FacultyChart> getFacultyCircleChart(GetStatisticRequest request);
+    FacultyColumnChart getFacultyColumnChart(GetStatisticRequest request);
+    List<FacultyCircleChart> getFacultyCircleChart(GetStatisticRequest request);
 }

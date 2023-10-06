@@ -7,8 +7,8 @@ import lombok.Data;
 
 @Data
 public class ForgotPasswordRequest {
-    @NotBlank(message = "Truyền mã user id vào nè")
-    private String id;
+    @NotBlank(message = "Truyền token vào")
+    private String token;
 
     private ChangePasswordValue values;
 
