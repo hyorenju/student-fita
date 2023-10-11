@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.vnua.fita.student.controller.BaseController;
 import vn.edu.vnua.fita.student.model.dto.CourseDTO;
@@ -23,6 +24,7 @@ public class CourseController extends BaseController {
     private final ModelMapper modelMapper;
 
     @PostMapping("list")
+    @PreAuthorize("hasAnyAuthority('SUPERADMIN')")
     public ResponseEntity<?> getCourseList(@Valid @RequestBody GetCourseListRequest request){
         Page<Course> page = courseManager.getCourseList(request);
         List<CourseDTO> response = page.getContent().stream().map(
@@ -32,12 +34,14 @@ public class CourseController extends BaseController {
     }
 
     @PostMapping("create")
+    @PreAuthorize("hasAnyAuthority('SUPERADMIN')")
     public ResponseEntity<?> createCourse(@Valid @RequestBody CreateCourseRequest request){
         CourseDTO response = modelMapper.map(courseManager.createCourse(request), CourseDTO.class);
         return buildItemResponse(response);
     }
 
     @PostMapping("delete/{id}")
+    @PreAuthorize("hasAnyAuthority('SUPERADMIN')")
     public ResponseEntity<?> deleteCourse(@PathVariable String id){
         CourseDTO response = modelMapper.map(courseManager.deleteCourse(id), CourseDTO.class);
         return buildItemResponse(response);

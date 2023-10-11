@@ -5,10 +5,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import vn.edu.vnua.fita.student.common.FirebaseExpirationTimeConstant;
 import vn.edu.vnua.fita.student.model.entity.Display;
+import vn.edu.vnua.fita.student.repository.customrepo.CustomDisplayRepository;
 import vn.edu.vnua.fita.student.repository.jparepo.DisplayRepository;
 import vn.edu.vnua.fita.student.request.admin.display.CreateDisplayRequest;
 import vn.edu.vnua.fita.student.request.admin.display.GetDisplayListRequest;
@@ -30,7 +32,10 @@ public class DisplayService implements IDisplayService {
 
     @Override
     public Page<Display> getDisplayList(GetDisplayListRequest request) {
-        return displayRepository.findAll(PageRequest.of(request.getPage() - 1, request.getSize()));
+        Specification<Display> specification = CustomDisplayRepository.filterDisplayList(
+                request.getLocation()
+        );
+        return displayRepository.findAll(specification, PageRequest.of(request.getPage() - 1, request.getSize()));
     }
 
     @Override

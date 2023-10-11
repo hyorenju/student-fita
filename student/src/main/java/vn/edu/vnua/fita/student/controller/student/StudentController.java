@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import vn.edu.vnua.fita.student.controller.BaseController;
@@ -23,18 +24,21 @@ public class StudentController extends BaseController {
     private final ModelMapper modelMapper;
 
     @PostMapping("avatar")
+    @PreAuthorize("hasAnyAuthority('STUDENT')")
     public ResponseEntity<?> updateMyAvatar(@RequestBody MultipartFile file) throws IOException {
         StudentDTO response = modelMapper.map(studentService.updateAvatar(file), StudentDTO.class);
         return buildItemResponse(response);
     }
 
     @PostMapping("update")
+    @PreAuthorize("hasAnyAuthority('UPDATE_STUDENT_PROFILE')")
     public ResponseEntity<?> updateMyProfile(@Valid @RequestBody UpdateStudentProfileRequest request) {
         StudentDTO response = modelMapper.map(studentService.updateProfile(request), StudentDTO.class);
         return buildItemResponse(response);
     }
 
     @PostMapping("change-password")
+    @PreAuthorize("hasAnyAuthority('STUDENT')")
     public ResponseEntity<?> changePassword(@Valid @RequestBody ChangePasswordRequest request){
         StudentDTO response = modelMapper.map(studentService.changePassword(request), StudentDTO.class);
         return buildItemResponse(response);

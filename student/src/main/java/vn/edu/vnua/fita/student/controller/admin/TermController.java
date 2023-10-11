@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.vnua.fita.student.controller.BaseController;
 import vn.edu.vnua.fita.student.model.dto.TermDTO;
@@ -23,6 +24,7 @@ public class TermController extends BaseController {
     private final TermManager termManager;
 
     @PostMapping("list")
+    @PreAuthorize("hasAnyAuthority('SUPERADMIN')")
     public ResponseEntity<?> getTermList(@RequestBody @Valid GetTermListRequest request){
         Page<Term> page = termManager.getTermList(request);
         List<TermDTO> response = page.getContent().stream().map(
@@ -32,12 +34,14 @@ public class TermController extends BaseController {
     }
 
     @PostMapping("create")
+    @PreAuthorize("hasAnyAuthority('SUPERADMIN')")
     public ResponseEntity<?> createTerm(@RequestBody @Valid CreateTermRequest request){
         TermDTO response = modelMapper.map(termManager.createTerm(request), TermDTO.class);
         return buildItemResponse(response);
     }
 
     @PostMapping("delete/{id}")
+    @PreAuthorize("hasAnyAuthority('SUPERADMIN')")
     public ResponseEntity<?> deleteTerm(@PathVariable String id){
         TermDTO response = modelMapper.map(termManager.deleteTerm(id), TermDTO.class);
         return buildItemResponse(response);

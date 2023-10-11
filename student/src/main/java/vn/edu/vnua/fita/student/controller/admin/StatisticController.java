@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.vnua.fita.student.controller.BaseController;
 import vn.edu.vnua.fita.student.model.dto.*;
@@ -21,12 +22,14 @@ public class StatisticController extends BaseController {
     private final ModelMapper modelMapper;
 
     @PostMapping("student/{id}")
+    @PreAuthorize("hasAnyAuthority('GET_STUDENT_STATISTIC', 'SUPERADMIN')")
     public ResponseEntity<?> getStudentStatistic(@PathVariable String id){
         StudentStatistic response = statisticService.getStudentStatistic(id);
         return buildItemResponse(response);
     }
 
     @PostMapping("class/{id}")
+    @PreAuthorize("hasAnyAuthority('GET_CLASS_STATISTIC', 'SUPERADMIN')")
     public ResponseEntity<?> getClassStatistic(@PathVariable String id, @Valid @RequestBody GetStatisticRequest request){
         List<ClassChartDTO> response = statisticService.getClassClassification(id, request).stream().map(
                 classClassification -> modelMapper.map(classClassification, ClassChartDTO.class)
@@ -35,6 +38,7 @@ public class StatisticController extends BaseController {
     }
 
     @PostMapping("course/{id}")
+    @PreAuthorize("hasAnyAuthority('GET_COURSE_STATISTIC', 'SUPERADMIN')")
     public ResponseEntity<?> getCourseStatistic(@PathVariable String id, @Valid @RequestBody GetStatisticRequest request){
         List<CourseChartDTO> response = statisticService.getCourseClassification(id, request).stream().map(
                 courseClassification -> modelMapper.map(courseClassification, CourseChartDTO.class)
@@ -43,6 +47,7 @@ public class StatisticController extends BaseController {
     }
 
     @PostMapping("major/{id}")
+    @PreAuthorize("hasAnyAuthority('GET_MAJOR_STATISTIC', 'SUPERADMIN')")
     public ResponseEntity<?> getMajorStatistic(@PathVariable String id, @Valid @RequestBody GetStatisticRequest request){
         List<MajorChartDTO> response = statisticService.getMajorClassification(id, request).stream().map(
                 majorClassification -> modelMapper.map(majorClassification, MajorChartDTO.class)
@@ -51,12 +56,14 @@ public class StatisticController extends BaseController {
     }
 
     @PostMapping("faculty/column")
+    @PreAuthorize("hasAnyAuthority('GET_FACULTY_STATISTIC', 'SUPERADMIN')")
     public ResponseEntity<?> getFacultyColumnChart(@Valid @RequestBody GetStatisticRequest request){
         FacultyColumnChartDTO response = modelMapper.map(statisticService.getFacultyColumnChart(request), FacultyColumnChartDTO.class);
         return buildItemResponse(response);
     }
 
     @PostMapping("faculty/circle")
+    @PreAuthorize("hasAnyAuthority('GET_FACULTY_STATISTIC', 'SUPERADMIN')")
     public ResponseEntity<?> getFacultyCircleChart(@Valid @RequestBody GetStatisticRequest request){
         List<FacultyCircleChartDTO> response = statisticService.getFacultyCircleChart(request).stream().map(
                 facultyClassification -> modelMapper.map(facultyClassification, FacultyCircleChartDTO.class)

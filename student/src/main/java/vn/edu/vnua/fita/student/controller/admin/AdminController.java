@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import vn.edu.vnua.fita.student.controller.BaseController;
@@ -27,6 +28,7 @@ public class AdminController extends BaseController {
     private final ModelMapper modelMapper;
 
     @PostMapping("list")
+    @PreAuthorize("hasAnyAuthority('SUPERADMIN')")
     public ResponseEntity<?> getAdminList(@Valid @RequestBody GetAdminListRequest request){
         Page<Admin> page = adminManager.getAdminList(request);
         List<AdminDTO> response = page.getContent().stream().map(
@@ -36,12 +38,14 @@ public class AdminController extends BaseController {
     }
 
     @PostMapping("create")
+    @PreAuthorize("hasAnyAuthority('SUPERADMIN')")
     public ResponseEntity<?> createAdmin(@Valid @RequestBody CreateAdminRequest request){
         AdminDTO response = modelMapper.map(adminManager.createAdmin(request), AdminDTO.class);
         return buildItemResponse(response);
     }
 
     @PostMapping("update")
+    @PreAuthorize("hasAnyAuthority('SUPERADMIN')")
     public ResponseEntity<?> updateAdmin(@Valid @RequestBody UpdateAdminRequest request){
         AdminDTO response = modelMapper.map(adminManager.updateAdmin(request), AdminDTO.class);
         return buildItemResponse(response);
@@ -54,18 +58,21 @@ public class AdminController extends BaseController {
     }
 
     @PostMapping("delete/{id}")
+    @PreAuthorize("hasAnyAuthority('SUPERADMIN')")
     public ResponseEntity<?> deleteAdmin(@PathVariable String id){
         TrashAdminDTO response = modelMapper.map(adminManager.deleteAdmin(id), TrashAdminDTO.class);
         return buildItemResponse(response);
     }
 
     @PostMapping("restore/{id}")
+    @PreAuthorize("hasAnyAuthority('SUPERADMIN')")
     public ResponseEntity<?> restoreAdmin(@PathVariable Long id){
         TrashAdminDTO response = modelMapper.map(adminManager.restoreAdmin(id), TrashAdminDTO.class);
         return buildItemResponse(response);
     }
 
     @PostMapping("trash")
+    @PreAuthorize("hasAnyAuthority('SUPERADMIN')")
     public ResponseEntity<?> getTrashAdmin(@Valid @RequestBody GetTrashAdminRequest request){
         Page<TrashAdmin> page = adminManager.getTrashAdminList(request);
         List<TrashAdminDTO> response = page.getContent().stream().map(
@@ -81,6 +88,7 @@ public class AdminController extends BaseController {
     }
 
     @PostMapping("change-password")
+    @PreAuthorize("hasAnyAuthority('SUPERADMIN')")
     public ResponseEntity<?> changePassword(@Valid @RequestBody ChangePasswordRequest request){
         AdminDTO response = modelMapper.map(adminManager.changePassword(request), AdminDTO.class);
         return buildItemResponse(response);

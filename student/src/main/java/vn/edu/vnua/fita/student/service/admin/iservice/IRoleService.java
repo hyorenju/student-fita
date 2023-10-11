@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface IRoleService {
     Role updateRole(String id, UpdateRoleRequest request);
-    PermissionChecker checkPermissions(String id);
+    List<PermissionChecker> checkPermissions(String id);
 }

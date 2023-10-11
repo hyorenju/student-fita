@@ -363,7 +363,7 @@ CREATE TABLE `permissions` (
 
 LOCK TABLES `permissions` WRITE;
 /*!40000 ALTER TABLE `permissions` DISABLE KEYS */;
-INSERT INTO `permissions` VALUES ('CREATE_POINT','Thêm điểm','ADMIN'),('CREATE_STUDENT','Thêm sinh viên','ADMIN'),('CREATE_STUDENT_STATUS','Thêm trạng thái cho sinh viên','ADMIN'),('DELETE_POINT','Xóa điểm','ADMIN'),('DELETE_STUDENT','Xóa sinh viên','ADMIN'),('DELETE_STUDENT_STATUS','Xoá trạng thái sinh viên','ADMIN'),('EXPORT_POINT','Xuất danh sách điểm','ADMIN'),('EXPORT_STUDENT','Xuất danh sách sinh viên','ADMIN'),('GET_CLASS_STATISTIC','Thống kê lớp','MOD'),('GET_COURSE_STATISTIC','Thống kê khoá','MOD'),('GET_DISPLAY_LIST','Lấy danh sách hiển thị','MOD'),('GET_FACULTY_STATISTIC','Thống kê số sinh viên bỏ học và xin thôi học','MOD'),('GET_MAJOR_STATISTIC','Thống kê ngành','MOD'),('GET_POINT_LIST','Lấy danh sách điểm','ADMIN'),('GET_STUDENT_LIST','Lấy danh sách sinh viên','ADMIN'),('GET_STUDENT_STATISTIC','Thống kê sinh viên','MOD'),('GET_STUDENT_STATUS_LIST','Lấy danh sách trạng thái sinh viên','ADMIN'),('IMPORT_POINT','Import điểm từ excel','ADMIN'),('IMPORT_STUDENT','Import sinh viên từ excel','ADMIN'),('RESTORE_POINT','Khôi phục điểm','ADMIN'),('RESTORE_STUDENT','Khôi phục sinh viên','ADMIN'),('UPDATE_DISPLAY','Cập nhật hiển thị','MOD'),('UPDATE_POINT','Sửa điểm','ADMIN'),('UPDATE_STUDENT','Sửa sinh viên','ADMIN'),('UPDATE_STUDENT_STATUS','Sửa trạng thái sinh viên','ADMIN');
+INSERT INTO `permissions` VALUES ('CREATE_POINT','Thêm điểm','ADMIN'),('CREATE_STUDENT','Thêm sinh viên','ADMIN'),('CREATE_STUDENT_STATUS','Thêm trạng thái cho sinh viên','ADMIN'),('DELETE_POINT','Xóa điểm','ADMIN'),('DELETE_STUDENT','Xóa sinh viên','ADMIN'),('DELETE_STUDENT_STATUS','Xoá trạng thái sinh viên','ADMIN'),('EXPORT_POINT','Xuất danh sách điểm','ADMIN'),('EXPORT_STUDENT','Xuất danh sách sinh viên','ADMIN'),('GET_CLASS_STATISTIC','Thống kê lớp','MOD'),('GET_COURSE_STATISTIC','Thống kê khoá','MOD'),('GET_DISPLAY_LIST','Lấy danh sách hiển thị','MOD'),('GET_FACULTY_STATISTIC','Thống kê số sinh viên bỏ học và xin thôi học','MOD'),('GET_MAJOR_STATISTIC','Thống kê ngành','MOD'),('GET_POINT_LIST','Lấy danh sách điểm','ADMIN'),('GET_STUDENT_LIST','Lấy danh sách sinh viên','ADMIN'),('GET_STUDENT_STATISTIC','Thống kê sinh viên','MOD'),('GET_STUDENT_STATUS_LIST','Lấy danh sách trạng thái sinh viên','ADMIN'),('IMPORT_POINT','Import điểm từ excel','ADMIN'),('IMPORT_STUDENT','Import sinh viên từ excel','ADMIN'),('RESTORE_POINT','Khôi phục điểm','ADMIN'),('RESTORE_STUDENT','Khôi phục sinh viên','ADMIN'),('UPDATE_DISPLAY','Cập nhật hiển thị','MOD'),('UPDATE_POINT','Sửa điểm','ADMIN'),('UPDATE_STUDENT','Sửa sinh viên','ADMIN'),('UPDATE_STUDENT_PROFILE','Cập nhật hồ sơ sinh viên','STUDENT'),('UPDATE_STUDENT_STATUS','Sửa trạng thái sinh viên','ADMIN');
 /*!40000 ALTER TABLE `permissions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -414,7 +414,7 @@ CREATE TABLE `roles_permissions` (
 
 LOCK TABLES `roles_permissions` WRITE;
 /*!40000 ALTER TABLE `roles_permissions` DISABLE KEYS */;
-INSERT INTO `roles_permissions` VALUES ('MOD','GET_CLASS_STATISTIC'),('MOD','GET_COURSE_STATISTIC'),('MOD','GET_DISPLAY_LIST'),('MOD','GET_FACULTY_STATISTIC'),('MOD','GET_MAJOR_STATISTIC'),('MOD','GET_STUDENT_STATISTIC'),('MOD','UPDATE_DISPLAY'),('ADMIN','CREATE_POINT'),('ADMIN','CREATE_STUDENT'),('ADMIN','CREATE_STUDENT_STATUS'),('ADMIN','DELETE_POINT'),('ADMIN','DELETE_STUDENT'),('ADMIN','DELETE_STUDENT_STATUS'),('ADMIN','EXPORT_POINT'),('ADMIN','EXPORT_STUDENT'),('ADMIN','GET_POINT_LIST'),('ADMIN','GET_STUDENT_LIST'),('ADMIN','GET_STUDENT_STATUS_LIST'),('ADMIN','IMPORT_POINT'),('ADMIN','IMPORT_STUDENT'),('ADMIN','RESTORE_POINT'),('ADMIN','RESTORE_STUDENT'),('ADMIN','UPDATE_POINT'),('ADMIN','UPDATE_STUDENT'),('ADMIN','UPDATE_STUDENT_STATUS');
+INSERT INTO `roles_permissions` VALUES ('MOD','GET_CLASS_STATISTIC'),('MOD','GET_COURSE_STATISTIC'),('MOD','GET_DISPLAY_LIST'),('MOD','GET_FACULTY_STATISTIC'),('MOD','GET_MAJOR_STATISTIC'),('MOD','GET_STUDENT_STATISTIC'),('MOD','UPDATE_DISPLAY'),('ADMIN','CREATE_STUDENT'),('ADMIN','EXPORT_POINT');
 /*!40000 ALTER TABLE `roles_permissions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -713,4 +713,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-10-11  9:41:29
+-- Dump completed on 2023-10-11 15:10:46
