@@ -7,4 +7,5 @@ import vn.edu.vnua.fita.student.request.GetPageBaseRequest;
 public class GetStudentStatusListRequest extends GetPageBaseRequest {
     private String studentId;
     private String statusId;
+    private String termId;
 }

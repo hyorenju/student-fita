@@ -12,7 +12,8 @@ import java.util.List;
 @Repository
 public class CustomStudentStatusRepository {
     public static Specification<StudentStatus> filterStudentStatusList(String studentId,
-                                                                       String statusId) {
+                                                                       String statusId,
+                                                                       String termId) {
         return ((root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
             if (StringUtils.hasText(studentId)) {
@@ -20,6 +21,9 @@ public class CustomStudentStatusRepository {
             }
             if(StringUtils.hasText(statusId)){
                 predicates.add(criteriaBuilder.like(root.get("status").get("id"), statusId + "%"));
+            }
+            if(StringUtils.hasText(termId)){
+                predicates.add(criteriaBuilder.like(root.get("termId"), termId));
             }
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         });
