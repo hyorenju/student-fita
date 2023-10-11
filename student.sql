@@ -33,7 +33,7 @@ CREATE TABLE `admins` (
   PRIMARY KEY (`id`),
   KEY `FK7h9x5fnfw47l8lkeas20rmsva` (`role_id`),
   CONSTRAINT `FK7h9x5fnfw47l8lkeas20rmsva` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -57,7 +57,7 @@ CREATE TABLE `classes` (
   `id` varchar(100) NOT NULL,
   `name` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -92,7 +92,7 @@ CREATE TABLE `classes_terms` (
   KEY `FKavgf24irera6o7mcksm25iull` (`term_id`),
   CONSTRAINT `FK70qpo5recj7ssibijbqp8a8p0` FOREIGN KEY (`class_id`) REFERENCES `classes` (`id`),
   CONSTRAINT `FKavgf24irera6o7mcksm25iull` FOREIGN KEY (`term_id`) REFERENCES `terms` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1862 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1862 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -116,7 +116,7 @@ CREATE TABLE `courses` (
   `id` varchar(100) NOT NULL,
   `name` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -151,7 +151,7 @@ CREATE TABLE `courses_terms` (
   KEY `FKce76at52ju06cdtskfy9yeqwb` (`term_id`),
   CONSTRAINT `FKce76at52ju06cdtskfy9yeqwb` FOREIGN KEY (`term_id`) REFERENCES `terms` (`id`),
   CONSTRAINT `FKtmxec2gsd9lesy45qqxex8c22` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=207 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=207 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -178,7 +178,7 @@ CREATE TABLE `displays` (
   `location` varchar(200) DEFAULT NULL,
   `title` varchar(500) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -209,7 +209,7 @@ CREATE TABLE `documents` (
   PRIMARY KEY (`id`),
   KEY `FK1men4i9k1s1t8bfm9clnsv9ko` (`student_id`),
   CONSTRAINT `FK1men4i9k1s1t8bfm9clnsv9ko` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -242,7 +242,7 @@ CREATE TABLE `faculty_term` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK_43qmvb6c7wcbtmygc45i2b8b4` (`term_id`),
   CONSTRAINT `FKtinbgubx7lth63b3s9fy15x7k` FOREIGN KEY (`term_id`) REFERENCES `terms` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -267,7 +267,7 @@ CREATE TABLE `majors` (
   `name` varchar(200) DEFAULT NULL,
   `total_credits` int DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -302,7 +302,7 @@ CREATE TABLE `majors_terms` (
   KEY `FKgd3ftt364x3civ12j87c8g4yb` (`term_id`),
   CONSTRAINT `FKd82auhh15s3g2gblsj8m5dl72` FOREIGN KEY (`major_id`) REFERENCES `majors` (`id`),
   CONSTRAINT `FKgd3ftt364x3civ12j87c8g4yb` FOREIGN KEY (`term_id`) REFERENCES `terms` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=90 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=90 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -330,7 +330,7 @@ CREATE TABLE `news` (
   `title` varchar(1000) DEFAULT NULL,
   `type` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -354,7 +354,7 @@ CREATE TABLE `permissions` (
   `name` varchar(100) DEFAULT NULL,
   `type` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -378,7 +378,7 @@ CREATE TABLE `roles` (
   `id` varchar(100) NOT NULL,
   `name` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -405,7 +405,7 @@ CREATE TABLE `roles_permissions` (
   KEY `FKqi9odri6c1o81vjox54eedwyh` (`role_id`),
   CONSTRAINT `FKbx9r9uw77p58gsq4mus0mec0o` FOREIGN KEY (`permission_id`) REFERENCES `permissions` (`id`),
   CONSTRAINT `FKqi9odri6c1o81vjox54eedwyh` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -429,7 +429,7 @@ CREATE TABLE `statuses` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -481,7 +481,7 @@ CREATE TABLE `students` (
   CONSTRAINT `FKhnslh0rm5bthlble8vjunbnwe` FOREIGN KEY (`class_id`) REFERENCES `classes` (`id`),
   CONSTRAINT `FKi04cc0278a1f49g0995mnuo63` FOREIGN KEY (`major_id`) REFERENCES `majors` (`id`),
   CONSTRAINT `FKs33errciqfkiwe8slr6y4jwm7` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -513,7 +513,7 @@ CREATE TABLE `students_statuses` (
   KEY `FK4b426dhs2jhe938uoatbl22tc` (`student_id`),
   CONSTRAINT `FK4b426dhs2jhe938uoatbl22tc` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`),
   CONSTRAINT `FKcpb78wae7peruuh9efi5gtt9b` FOREIGN KEY (`status_id`) REFERENCES `statuses` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=592 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=592 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -549,7 +549,7 @@ CREATE TABLE `students_terms` (
   KEY `FK6wmdb2tnhtda2sa46s7uo9qxj` (`term_id`),
   CONSTRAINT `FK6wmdb2tnhtda2sa46s7uo9qxj` FOREIGN KEY (`term_id`) REFERENCES `terms` (`id`),
   CONSTRAINT `FKcl2fw1k4vt8fn68w0j3250xnh` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=502 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=502 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -573,7 +573,7 @@ CREATE TABLE `terms` (
   `id` varchar(100) NOT NULL,
   `name` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -603,7 +603,7 @@ CREATE TABLE `trash_admins` (
   KEY `trash_admins_admins_id_fk` (`deleted_by`),
   CONSTRAINT `FKdet09043e55tj0f1hnv0q1u3g` FOREIGN KEY (`admin_id`) REFERENCES `admins` (`id`),
   CONSTRAINT `trash_admins_admins_id_fk` FOREIGN KEY (`deleted_by`) REFERENCES `admins` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -632,7 +632,7 @@ CREATE TABLE `trash_news` (
   KEY `trash_news_admins_id_fk` (`deleted_by`),
   CONSTRAINT `FKy4of20e3tkqirm298ev59vmn` FOREIGN KEY (`news_id`) REFERENCES `news` (`id`),
   CONSTRAINT `trash_news_admins_id_fk` FOREIGN KEY (`deleted_by`) REFERENCES `admins` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -661,7 +661,7 @@ CREATE TABLE `trash_points` (
   KEY `FKp2vginyxk8fbtys53dttka5j9` (`deleted_by`),
   CONSTRAINT `FKk0fmrmeky3qgnrefsnqpqjnle` FOREIGN KEY (`point_id`) REFERENCES `students_terms` (`id`),
   CONSTRAINT `FKp2vginyxk8fbtys53dttka5j9` FOREIGN KEY (`deleted_by`) REFERENCES `admins` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -691,7 +691,7 @@ CREATE TABLE `trash_students` (
   KEY `trash_students_admins_id_fk` (`deleted_by`),
   CONSTRAINT `FKnj6txl2v24mclaiwfu7ymqyuw` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`),
   CONSTRAINT `trash_students_admins_id_fk` FOREIGN KEY (`deleted_by`) REFERENCES `admins` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -713,4 +713,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-10-11 16:27:43
+-- Dump completed on 2023-10-11 16:37:38
