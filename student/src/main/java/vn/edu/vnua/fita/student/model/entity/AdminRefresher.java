@@ -13,8 +13,8 @@ import java.time.Instant;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "refresh_tokens")
-public class RefreshToken {
+@Table(name = "admin_refreshers")
+public class AdminRefresher {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,6 +26,6 @@ public class RefreshToken {
     private Instant expiryDate;
 
     @OneToOne
-    @JoinColumn(name = "student_id")
-    private Student student;
+    @JoinColumn(name = "admin_id")
+    private Admin admin;
 }

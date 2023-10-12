@@ -13,11 +13,13 @@ import vn.edu.vnua.fita.student.model.dto.ClassDTO;
 import vn.edu.vnua.fita.student.model.dto.CourseDTO;
 import vn.edu.vnua.fita.student.model.dto.MajorDTO;
 import vn.edu.vnua.fita.student.model.entity.Admin;
-import vn.edu.vnua.fita.student.model.entity.RefreshToken;
+import vn.edu.vnua.fita.student.model.entity.AdminRefresher;
+import vn.edu.vnua.fita.student.model.entity.StudentRefresher;
 import vn.edu.vnua.fita.student.model.entity.Student;
 import vn.edu.vnua.fita.student.model.authentication.UserDetailsImpl;
+import vn.edu.vnua.fita.student.repository.jparepo.AdminRefresherRepository;
 import vn.edu.vnua.fita.student.repository.jparepo.AdminRepository;
-import vn.edu.vnua.fita.student.repository.jparepo.RefreshTokenRepository;
+import vn.edu.vnua.fita.student.repository.jparepo.StudentRefresherRepository;
 import vn.edu.vnua.fita.student.repository.jparepo.StudentRepository;
 import vn.edu.vnua.fita.student.response.AdminLoginResponse;
 import vn.edu.vnua.fita.student.response.BaseLoginResponse;
@@ -26,7 +28,6 @@ import vn.edu.vnua.fita.student.security.JwtTokenProvider;
 
 import java.time.Instant;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -34,7 +35,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final StudentRepository studentRepository;
     private final AdminRepository adminRepository;
     private final AuthenticationManager authenticationManager;
-    private final RefreshTokenRepository refreshTokenRepository;
+    private final StudentRefresherRepository studentRefresherRepository;
+    private final AdminRefresherRepository adminRefresherRepository;
     private final JwtTokenProvider jwtUtils;
     private final PasswordEncoder encoder;
     private final ModelMapper modelMapper;
@@ -50,16 +52,16 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 throw new RuntimeException("Tài khoản hoặc mật khẩu không chính xác");
             }
 
-            RefreshToken refreshToken;
-            if(refreshTokenRepository.existsByStudent(student)) {
-                RefreshToken token = refreshTokenRepository.findByStudent(student);
+            StudentRefresher studentRefresher;
+            if(studentRefresherRepository.existsByStudent(student)) {
+                StudentRefresher token = studentRefresherRepository.findByStudent(student);
                 if(token.getExpiryDate().compareTo(Instant.now()) < 0) {
-                    refreshToken = refreshTokenRepository.saveAndFlush(jwtUtils.createRefreshToken(id));
+                    studentRefresher = studentRefresherRepository.saveAndFlush(jwtUtils.createStudentRefreshToken(id));
                 } else {
-                    refreshToken = token;
+                    studentRefresher = token;
                 }
             } else {
-                refreshToken =  refreshTokenRepository.saveAndFlush(jwtUtils.createRefreshToken(id));
+                studentRefresher =  studentRefresherRepository.saveAndFlush(jwtUtils.createStudentRefreshToken(id));
             }
 
             Authentication authentication = authenticate(id, password);
@@ -70,7 +72,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
             return new StudentLoginResponse(jwt,
                     userDetails.getRoleId(),
-                    refreshToken.getToken(),
+                    studentRefresher.getToken(),
                     userDetails.getId(),
                     userDetails.getSurname(),
                     userDetails.getLastName(),
@@ -94,6 +96,18 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 throw new RuntimeException("Tài khoản hoặc mật khẩu không chính xác");
             }
 
+            AdminRefresher adminRefresher;
+            if(adminRefresherRepository.existsByAdmin(admin)) {
+                AdminRefresher token = adminRefresherRepository.findByAdmin(admin);
+                if(token.getExpiryDate().compareTo(Instant.now()) < 0) {
+                    adminRefresher = adminRefresherRepository.saveAndFlush(jwtUtils.createAdminRefreshToken(id));
+                } else {
+                    adminRefresher = token;
+                }
+            } else {
+                adminRefresher =  adminRefresherRepository.saveAndFlush(jwtUtils.createAdminRefreshToken(id));
+            }
+
             Authentication authentication = authenticate(id, password);
 
             String jwt = jwtUtils.generateTokenWithAuthorities(authentication);
@@ -102,6 +116,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
             return new AdminLoginResponse(jwt,
                     userDetails.getRoleId(),
+                    adminRefresher.getToken(),
                     userDetails.getId(),
                     userDetails.getName(),
                     userDetails.getAvatar(),
@@ -113,17 +128,34 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public BaseLoginResponse verifyExpiration(String token) {
-        RefreshToken refreshToken = refreshTokenRepository.findByToken(token);
-        if(refreshToken.getExpiryDate().compareTo(Instant.now()) < 0) {
-            refreshTokenRepository.delete(refreshToken);
+        StudentRefresher studentRefresher = studentRefresherRepository.findByToken(token);
+        if(studentRefresher==null){
+            AdminRefresher adminRefresher = adminRefresherRepository.findByToken(token);
+            if(adminRefresher.getExpiryDate().compareTo(Instant.now()) < 0) {
+                adminRefresherRepository.delete(adminRefresher);
+                throw new RuntimeException("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
+            }
+            Admin admin = adminRepository.findById(adminRefresher.getAdmin().getId())
+                    .orElseThrow(() -> new RuntimeException("Quản trị viên không tồn tại."));
+            String accessToken = jwtUtils.generateToken(admin.getId());
+            return new AdminLoginResponse(accessToken,
+                    admin.getRole().getId(),
+                    adminRefresher.getToken(),
+                    admin.getId(),
+                    admin.getName(),
+                    admin.getAvatar(),
+                    admin.getEmail());
+        }
+        if(studentRefresher.getExpiryDate().compareTo(Instant.now()) < 0) {
+            studentRefresherRepository.delete(studentRefresher);
             throw new RuntimeException("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
         }
-        Student student = studentRepository.findById(refreshToken.getStudent().getId())
+        Student student = studentRepository.findById(studentRefresher.getStudent().getId())
                 .orElseThrow(() -> new RuntimeException("Sinh viên không tồn tại."));
         String accessToken = jwtUtils.generateToken(student.getId());
         return new StudentLoginResponse(accessToken,
                 RoleConstant.STUDENT,
-                refreshToken.getToken(),
+                studentRefresher.getToken(),
                 student.getId(),
                 student.getSurname(),
                 student.getLastName(),

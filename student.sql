@@ -16,6 +16,34 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `admin_refreshers`
+--
+
+DROP TABLE IF EXISTS `admin_refreshers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `admin_refreshers` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `expiry_date` datetime(6) DEFAULT NULL,
+  `token` varchar(200) DEFAULT NULL,
+  `admin_id` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UK_2n4w20rpbeg31lcv6usotjgve` (`admin_id`),
+  CONSTRAINT `FKc4v5qejb1au3yy10ah7cgwbji` FOREIGN KEY (`admin_id`) REFERENCES `admins` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `admin_refreshers`
+--
+
+LOCK TABLES `admin_refreshers` WRITE;
+/*!40000 ALTER TABLE `admin_refreshers` DISABLE KEYS */;
+INSERT INTO `admin_refreshers` VALUES (1,'2024-10-11 09:35:59.247059','bb588cac-6eb7-4dd5-b85d-e292ed7844a1','kiki123');
+/*!40000 ALTER TABLE `admin_refreshers` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `admins`
 --
 
@@ -368,34 +396,6 @@ INSERT INTO `permissions` VALUES ('CREATE_POINT','Thêm điểm','ADMIN'),('CREA
 UNLOCK TABLES;
 
 --
--- Table structure for table `refresh_tokens`
---
-
-DROP TABLE IF EXISTS `refresh_tokens`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `refresh_tokens` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `expiry_date` datetime(6) DEFAULT NULL,
-  `token` varchar(200) DEFAULT NULL,
-  `student_id` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `UK_ckmmp76wpkoe5bqk1a3pka1hl` (`student_id`),
-  CONSTRAINT `FKqa06v192ypjn8y93b7ixyw48c` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `refresh_tokens`
---
-
-LOCK TABLES `refresh_tokens` WRITE;
-/*!40000 ALTER TABLE `refresh_tokens` DISABLE KEYS */;
-INSERT INTO `refresh_tokens` VALUES (1,'2024-10-11 08:51:29.824926','22b2aebd-93a7-48e9-b752-ef89a007a620','654661'),(3,'2024-10-11 09:03:07.558219','4b5090e3-b9c9-4944-ae58-c7d0d3beb625','655201');
-/*!40000 ALTER TABLE `refresh_tokens` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `roles`
 --
 
@@ -468,6 +468,33 @@ LOCK TABLES `statuses` WRITE;
 /*!40000 ALTER TABLE `statuses` DISABLE KEYS */;
 INSERT INTO `statuses` VALUES (1,'Đã nhập học'),(2,'Đã bỏ học'),(3,'Đã xin thôi học'),(4,'Bị buộc thôi học'),(5,'Đã ra trường');
 /*!40000 ALTER TABLE `statuses` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `student_refreshers`
+--
+
+DROP TABLE IF EXISTS `student_refreshers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `student_refreshers` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `expiry_date` datetime(6) DEFAULT NULL,
+  `token` varchar(200) DEFAULT NULL,
+  `student_id` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UK_k7b8ruy1i7iq9ngu2dl9b9b7x` (`student_id`),
+  CONSTRAINT `FKlnw7dy9lmj7eln4bnbihd9wj3` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `student_refreshers`
+--
+
+LOCK TABLES `student_refreshers` WRITE;
+/*!40000 ALTER TABLE `student_refreshers` DISABLE KEYS */;
+/*!40000 ALTER TABLE `student_refreshers` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -741,4 +768,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-10-12 16:05:28
+-- Dump completed on 2023-10-12 16:41:44

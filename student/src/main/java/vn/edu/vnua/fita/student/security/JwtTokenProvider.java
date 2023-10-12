@@ -13,12 +13,13 @@ import org.springframework.stereotype.Component;
 import vn.edu.vnua.fita.student.common.ErrorCodeDefinitions;
 import vn.edu.vnua.fita.student.domain.exception.JwtTokenInvalid;
 import vn.edu.vnua.fita.student.model.authentication.UserDetailsImpl;
-import vn.edu.vnua.fita.student.model.entity.RefreshToken;
+import vn.edu.vnua.fita.student.model.entity.Admin;
+import vn.edu.vnua.fita.student.model.entity.AdminRefresher;
+import vn.edu.vnua.fita.student.model.entity.StudentRefresher;
 import vn.edu.vnua.fita.student.model.entity.Student;
-import vn.edu.vnua.fita.student.repository.jparepo.RefreshTokenRepository;
+import vn.edu.vnua.fita.student.repository.jparepo.StudentRefresherRepository;
 
 import javax.annotation.PostConstruct;
-import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -27,7 +28,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 public class JwtTokenProvider {
-    private final RefreshTokenRepository refreshTokenRepository;
+    private final StudentRefresherRepository studentRefresherRepository;
 
     @Value("${jwt.jwtSecret}")
     private String jwtSecret;
@@ -72,11 +73,19 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public RefreshToken createRefreshToken(String username) {
-        return RefreshToken.builder()
+    public StudentRefresher createStudentRefreshToken(String username) {
+        return StudentRefresher.builder()
                 .token(UUID.randomUUID().toString())
                 .expiryDate(Instant.now().plusMillis(refreshTokenDurationMs))
                 .student(Student.builder().id(username).build())
+                .build();
+    }
+
+    public AdminRefresher createAdminRefreshToken(String username) {
+        return AdminRefresher.builder()
+                .token(UUID.randomUUID().toString())
+                .expiryDate(Instant.now().plusMillis(refreshTokenDurationMs))
+                .admin(Admin.builder().id(username).build())
                 .build();
     }
 
