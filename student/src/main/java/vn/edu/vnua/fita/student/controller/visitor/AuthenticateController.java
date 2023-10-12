@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import vn.edu.vnua.fita.student.controller.BaseController;
+import vn.edu.vnua.fita.student.model.entity.RefreshToken;
 import vn.edu.vnua.fita.student.request.visitor.LoginRequest;
+import vn.edu.vnua.fita.student.request.visitor.RefreshTokenRequest;
 import vn.edu.vnua.fita.student.response.BaseLoginResponse;
 import vn.edu.vnua.fita.student.service.visitor.AuthenticationService;
 
@@ -22,6 +24,12 @@ public class AuthenticateController extends BaseController {
     @PostMapping("login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request){
         BaseLoginResponse response = authenticationService.authenticateUser(request.getId(), request.getPassword());
+        return buildItemResponse(response);
+    }
+
+    @PostMapping("refresh")
+    public ResponseEntity<?> refreshToken(@Valid @RequestBody RefreshTokenRequest request){
+        BaseLoginResponse response = authenticationService.verifyExpiration(request.getRefreshToken());
         return buildItemResponse(response);
     }
 }

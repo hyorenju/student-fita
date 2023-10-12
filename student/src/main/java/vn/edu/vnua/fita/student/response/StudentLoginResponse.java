@@ -11,6 +11,8 @@ import java.sql.Timestamp;
 
 @Data
 public class StudentLoginResponse extends BaseLoginResponse{
+    private String refreshToken;
+
     private String id;
 
     private String surname;
@@ -46,8 +48,9 @@ public class StudentLoginResponse extends BaseLoginResponse{
 
     private String motherPhoneNumber;
 
-    public StudentLoginResponse(String jwt, String roleId, String id, String surname, String lastName, String avatar, CourseDTO course, MajorDTO major, ClassDTO aclass, Timestamp dob, String gender, String phoneNumber, String email, String homeTown, String residence, String fatherName, String fatherPhoneNumber, String motherName, String motherPhoneNumber) {
+    public StudentLoginResponse(String jwt, String roleId, String refreshToken, String id, String surname, String lastName, String avatar, CourseDTO course, MajorDTO major, ClassDTO aclass, Timestamp dob, String gender, String phoneNumber, String email, String homeTown, String residence, String fatherName, String fatherPhoneNumber, String motherName, String motherPhoneNumber) {
         super(jwt, roleId);
+        this.refreshToken = refreshToken;
         this.id = id;
         this.surname = surname;
         this.lastName = lastName;

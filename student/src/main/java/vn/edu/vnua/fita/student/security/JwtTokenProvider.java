@@ -1,6 +1,7 @@
 package vn.edu.vnua.fita.student.security;
 
 import io.jsonwebtoken.*;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,14 +13,22 @@ import org.springframework.stereotype.Component;
 import vn.edu.vnua.fita.student.common.ErrorCodeDefinitions;
 import vn.edu.vnua.fita.student.domain.exception.JwtTokenInvalid;
 import vn.edu.vnua.fita.student.model.authentication.UserDetailsImpl;
+import vn.edu.vnua.fita.student.model.entity.RefreshToken;
+import vn.edu.vnua.fita.student.model.entity.Student;
+import vn.edu.vnua.fita.student.repository.jparepo.RefreshTokenRepository;
 
 import javax.annotation.PostConstruct;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class JwtTokenProvider {
+    private final RefreshTokenRepository refreshTokenRepository;
+
     @Value("${jwt.jwtSecret}")
     private String jwtSecret;
 
@@ -37,10 +46,9 @@ public class JwtTokenProvider {
         log.info("jwt secret: {}", jwtSecret);
     }
 
-    public String generateToken(Authentication authentication) {
-        UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+    public String generateToken(String username) {
         return Jwts.builder()
-                .setSubject((userPrincipal.getUsername()))
+                .setSubject(username)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
@@ -62,6 +70,14 @@ public class JwtTokenProvider {
                 .setExpiration(expiryDate)
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
+    }
+
+    public RefreshToken createRefreshToken(String username) {
+        return RefreshToken.builder()
+                .token(UUID.randomUUID().toString())
+                .expiryDate(Instant.now().plusMillis(refreshTokenDurationMs))
+                .student(Student.builder().id(username).build())
+                .build();
     }
 
     public String getUserNameFromJwtToken(String token) {
