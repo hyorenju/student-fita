@@ -1,5 +1,6 @@
 package vn.edu.vnua.fita.student.request.admin.student_status;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import vn.edu.vnua.fita.student.request.GetPageBaseRequest;
 
