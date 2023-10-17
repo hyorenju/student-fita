@@ -2,12 +2,13 @@ package vn.edu.vnua.fita.student.domain.validator;
 
 import jakarta.validation.ConstraintValidatorContext;
 import org.apache.poi.ss.formula.functions.T;
+import vn.edu.vnua.fita.student.common.UserIdentifyPatternConstant;
 
 import java.sql.Timestamp;
 
 public class ImportStudentValidator {
     public static boolean validateId(String id) {
-        return id.matches("^[0-9]+$");
+        return id.matches(UserIdentifyPatternConstant.STUDENT_ID_PATTERN);
     }
 
     public static boolean validateName(String name){

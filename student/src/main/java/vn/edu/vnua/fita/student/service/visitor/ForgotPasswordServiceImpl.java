@@ -7,7 +7,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import vn.edu.vnua.fita.student.common.ErrorCodeDefinitions;
+import vn.edu.vnua.fita.student.common.UserIdentifyPatternConstant;
+import vn.edu.vnua.fita.student.domain.exception.JwtTokenInvalid;
+import vn.edu.vnua.fita.student.entity.Admin;
 import vn.edu.vnua.fita.student.entity.Student;
+import vn.edu.vnua.fita.student.repository.jparepo.AdminRepository;
 import vn.edu.vnua.fita.student.repository.jparepo.StudentRepository;
 import vn.edu.vnua.fita.student.request.visitor.ForgotPasswordRequest;
 import vn.edu.vnua.fita.student.request.visitor.SendMailRequest;
@@ -20,19 +24,36 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class ForgotPasswordServiceImpl implements ForgotPasswordService {
     private final StudentRepository studentRepository;
+    private final AdminRepository adminRepository;
     private final PasswordEncoder encoder;
     private final MailService mailService;
     private final JwtTokenProvider jwtTokenProvider;
     private final String userError = "Tài khoải hoặc email không trùng khớp";
-    private final String userNotFound = "Không tìm thấy mã sinh viên %s";
+    private final String studentNotFound = "Không tìm thấy sinh viên %s trong hệ thống";
+    private final String adminNotFound = "Không tìm thấy quản trị viên %s trong hệ thống";
+    private final String notBeSame = "Mật khẩu mới không được trùng mật khẩu cũ";
+    private final String mustMatch = "Xác nhận mật khẩu không trùng khớp";
 
     @Override
     public void sendMessage(SendMailRequest request) {
-        String studentId = request.getStudent().getId();
-        Student student = studentRepository.findById(studentId).orElseThrow(() -> new RuntimeException(String.format(userNotFound, studentId)));
-        if (student.getEmail().equals(request.getStudent().getEmail())) {
-            String verificationToken = generateVerificationToken(student.getId());
-            mailService.sendEmailHtml(request.getStudent().getEmail(), request.getLink(), verificationToken);
+        String id = request.getUser().getId();
+        if(id.matches(UserIdentifyPatternConstant.STUDENT_ID_PATTERN)) {
+            Student student = studentRepository.findById(id).orElseThrow(() -> new RuntimeException(String.format(studentNotFound, id)));
+
+            if (student.getEmail().equals(request.getUser().getEmail())) {
+                String verificationToken = generateVerificationToken(student.getId());
+                mailService.sendEmailHtml(request.getUser().getEmail(), request.getLink(), verificationToken);
+            } else {
+                throw new RuntimeException(userError);
+            }
+        } else if(id.matches(UserIdentifyPatternConstant.ADMIN_ID_PATTERN)) {
+            Admin admin = adminRepository.findById(id).orElseThrow(() -> new RuntimeException(String.format(adminNotFound, id)));;
+            if(admin.getEmail().equals(request.getUser().getEmail())) {
+                String verificationToken = generateVerificationToken(admin.getId());
+                mailService.sendEmailHtml(request.getUser().getEmail(), request.getLink(), verificationToken);
+            } else {
+                throw new RuntimeException(userError);
+            }
         } else {
             throw new RuntimeException(userError);
         }
@@ -46,17 +67,32 @@ public class ForgotPasswordServiceImpl implements ForgotPasswordService {
     @Override
     public void changePassword(ForgotPasswordRequest request) {
         String token = request.getToken();
+        String id = decodeToken(token);
 
-        Student student = decodeToken(token);
-        if (student != null) {
+        if (id.matches(UserIdentifyPatternConstant.STUDENT_ID_PATTERN)) {
+            Student student = studentRepository.findById(id).orElseThrow(() -> new RuntimeException(String.format(studentNotFound, id)));
+
             if (encoder.matches(request.getValues().getNewPassword(), student.getPassword())) {
-                throw new RuntimeException("Mật khẩu mới không được trùng mật khẩu cũ");
+                throw new RuntimeException(notBeSame);
             }
             if (!Objects.equals(request.getValues().getNewPassword(), request.getValues().getConfirmPassword())) {
-                throw new RuntimeException("Xác nhận mật khẩu không trùng khớp");
+                throw new RuntimeException(mustMatch);
             }
             student.setPassword(encoder.encode(request.getValues().getNewPassword()));
             studentRepository.saveAndFlush(student);
+        } else if (id.matches(UserIdentifyPatternConstant.ADMIN_ID_PATTERN)) {
+            Admin admin = adminRepository.findById(id).orElseThrow(() -> new RuntimeException(String.format(adminNotFound, id)));
+
+            if (encoder.matches(request.getValues().getNewPassword(), admin.getPassword())) {
+                throw new RuntimeException(notBeSame);
+            }
+            if (!Objects.equals(request.getValues().getNewPassword(), request.getValues().getConfirmPassword())) {
+                throw new RuntimeException(mustMatch);
+            }
+            admin.setPassword(encoder.encode(request.getValues().getNewPassword()));
+            adminRepository.saveAndFlush(admin);
+        } else {
+            throw new JwtTokenInvalid(ErrorCodeDefinitions.getErrMsg(ErrorCodeDefinitions.TOKEN_INVALID));
         }
     }
 
@@ -71,15 +107,12 @@ public class ForgotPasswordServiceImpl implements ForgotPasswordService {
                 .compact();
     }
 
-    public Student decodeToken(String token) {
+    public String decodeToken(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(jwtTokenProvider.getJwtSecret())
                 .parseClaimsJws(token)
                 .getBody();
 
-        String studentId = claims.getSubject();
-        return studentRepository.findById(studentId).orElseThrow(
-                () -> new RuntimeException(ErrorCodeDefinitions.getErrMsg(ErrorCodeDefinitions.TOKEN_INVALID))
-        );
+        return claims.getSubject();
     }
 }
