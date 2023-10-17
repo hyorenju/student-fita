@@ -5,7 +5,7 @@ import lombok.Data;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
-import vn.edu.vnua.fita.student.model.entity.Point;
+import vn.edu.vnua.fita.student.entity.Point;
 import vn.edu.vnua.fita.student.model.file.PointExcelData;
 import vn.edu.vnua.fita.student.util.MyUtils;
 

@@ -1,9 +1,9 @@
 package vn.edu.vnua.fita.student.service.admin.file.thread;
 
 import lombok.AllArgsConstructor;
-import vn.edu.vnua.fita.student.model.entity.Point;
-import vn.edu.vnua.fita.student.model.entity.Student;
-import vn.edu.vnua.fita.student.model.entity.Term;
+import vn.edu.vnua.fita.student.entity.Point;
+import vn.edu.vnua.fita.student.entity.Student;
+import vn.edu.vnua.fita.student.entity.Term;
 import vn.edu.vnua.fita.student.model.file.PointExcelData;
 import vn.edu.vnua.fita.student.repository.jparepo.PointRepository;
 import vn.edu.vnua.fita.student.repository.jparepo.StudentRepository;
@@ -11,7 +11,6 @@ import vn.edu.vnua.fita.student.repository.jparepo.TermRepository;
 import vn.edu.vnua.fita.student.util.MyUtils;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CopyOnWriteArrayList;
 

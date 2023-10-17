@@ -1,15 +1,11 @@
 package vn.edu.vnua.fita.student.service.admin.management;
 
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
-import vn.edu.vnua.fita.student.common.PermissionGroupConstant;
 import vn.edu.vnua.fita.student.common.RoleConstant;
-import vn.edu.vnua.fita.student.model.entity.Permission;
+import vn.edu.vnua.fita.student.entity.Permission;
 import vn.edu.vnua.fita.student.model.authorization.PermissionChecker;
-import vn.edu.vnua.fita.student.model.entity.Role;
-import vn.edu.vnua.fita.student.repository.jparepo.AdminRepository;
+import vn.edu.vnua.fita.student.entity.Role;
 import vn.edu.vnua.fita.student.repository.jparepo.PermissionRepository;
 import vn.edu.vnua.fita.student.repository.jparepo.RoleRepository;
 import vn.edu.vnua.fita.student.request.admin.role.UpdateRoleRequest;

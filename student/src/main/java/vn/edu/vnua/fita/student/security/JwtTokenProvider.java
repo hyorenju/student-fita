@@ -1,6 +1,7 @@
 package vn.edu.vnua.fita.student.security;
 
 import io.jsonwebtoken.*;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
@@ -13,11 +14,10 @@ import org.springframework.stereotype.Component;
 import vn.edu.vnua.fita.student.common.ErrorCodeDefinitions;
 import vn.edu.vnua.fita.student.domain.exception.JwtTokenInvalid;
 import vn.edu.vnua.fita.student.model.authentication.UserDetailsImpl;
-import vn.edu.vnua.fita.student.model.entity.Admin;
-import vn.edu.vnua.fita.student.model.entity.AdminRefresher;
-import vn.edu.vnua.fita.student.model.entity.StudentRefresher;
-import vn.edu.vnua.fita.student.model.entity.Student;
-import vn.edu.vnua.fita.student.repository.jparepo.StudentRefresherRepository;
+import vn.edu.vnua.fita.student.entity.Admin;
+import vn.edu.vnua.fita.student.entity.AdminRefresher;
+import vn.edu.vnua.fita.student.entity.StudentRefresher;
+import vn.edu.vnua.fita.student.entity.Student;
 
 import javax.annotation.PostConstruct;
 import java.time.Instant;
@@ -27,9 +27,8 @@ import java.util.stream.Collectors;
 @Component
 @Slf4j
 @RequiredArgsConstructor
+@Data
 public class JwtTokenProvider {
-    private final StudentRefresherRepository studentRefresherRepository;
-
     @Value("${jwt.jwtSecret}")
     private String jwtSecret;
 
@@ -38,6 +37,9 @@ public class JwtTokenProvider {
 
     @Value("${jwt.jwtRefreshExpirationMs}")
     private Long refreshTokenDurationMs;
+
+    @Value("${jwt.mailTokenExpirationMs}")
+    private Long mailTokenExpirationMs;
 
     private static final String AUTHORITIES_KEY = "XAUTHOR";
 

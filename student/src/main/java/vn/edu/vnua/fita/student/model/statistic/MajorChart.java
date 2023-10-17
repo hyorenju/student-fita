@@ -1,9 +1,9 @@
 package vn.edu.vnua.fita.student.model.statistic;
 
 import lombok.Data;
-import vn.edu.vnua.fita.student.model.entity.Major;
-import vn.edu.vnua.fita.student.model.entity.Term;
-import vn.edu.vnua.fita.student.model.statistic.chartfrom.CircleChart;
+import vn.edu.vnua.fita.student.entity.Major;
+import vn.edu.vnua.fita.student.entity.Term;
+import vn.edu.vnua.fita.student.model.statistic.chartform.CircleChart;
 
 import java.util.List;
 

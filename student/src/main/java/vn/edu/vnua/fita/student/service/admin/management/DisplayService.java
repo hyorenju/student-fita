@@ -9,7 +9,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import vn.edu.vnua.fita.student.common.FirebaseExpirationTimeConstant;
-import vn.edu.vnua.fita.student.model.entity.Display;
+import vn.edu.vnua.fita.student.entity.Display;
 import vn.edu.vnua.fita.student.repository.customrepo.CustomDisplayRepository;
 import vn.edu.vnua.fita.student.repository.jparepo.DisplayRepository;
 import vn.edu.vnua.fita.student.request.admin.display.CreateDisplayRequest;

@@ -9,18 +9,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import vn.edu.vnua.fita.student.common.FirebaseExpirationTimeConstant;
-import vn.edu.vnua.fita.student.model.entity.Admin;
-import vn.edu.vnua.fita.student.model.entity.Point;
-import vn.edu.vnua.fita.student.model.entity.Student;
-import vn.edu.vnua.fita.student.repository.jparepo.PointRepository;
+import vn.edu.vnua.fita.student.entity.Student;
 import vn.edu.vnua.fita.student.repository.jparepo.StudentRepository;
-import vn.edu.vnua.fita.student.repository.jparepo.StudentStatusRepository;
 import vn.edu.vnua.fita.student.request.ChangePasswordRequest;
 import vn.edu.vnua.fita.student.request.student.UpdateStudentProfileRequest;
 import vn.edu.vnua.fita.student.service.admin.file.FirebaseService;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 

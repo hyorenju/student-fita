@@ -3,9 +3,7 @@ package vn.edu.vnua.fita.student.repository.customrepo;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.StringUtils;
-import vn.edu.vnua.fita.student.model.entity.FacultyClassification;
-import vn.edu.vnua.fita.student.model.entity.MajorClassification;
+import vn.edu.vnua.fita.student.entity.FacultyClassification;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.vnua.fita.student.controller.BaseController;
+import vn.edu.vnua.fita.student.request.visitor.CheckMailTokenRequest;
 import vn.edu.vnua.fita.student.request.visitor.ForgotPasswordRequest;
 import vn.edu.vnua.fita.student.request.visitor.SendMailRequest;
 import vn.edu.vnua.fita.student.service.visitor.ForgotPasswordService;
@@ -20,6 +21,11 @@ public class ForgotPasswordController extends BaseController {
         forgotPasswordService.sendMessage(request);
         String message = "Yêu cầu đổi mật khẩu đã được gửi tới địa chỉ " + request.getStudent().getEmail();
         return buildItemResponse(message);
+    }
+
+    @PostMapping("check-token")
+    public ResponseEntity<?> checkToken(@Valid @RequestBody CheckMailTokenRequest request){
+        return buildItemResponse(forgotPasswordService.checkToken(request.getToken()));
     }
 
     @PostMapping("change-password")

@@ -4,10 +4,8 @@ import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
-import vn.edu.vnua.fita.student.model.entity.Admin;
-import vn.edu.vnua.fita.student.model.entity.ClassClassification;
+import vn.edu.vnua.fita.student.entity.ClassClassification;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -10,7 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import vn.edu.vnua.fita.student.common.DateTimeConstant;
-import vn.edu.vnua.fita.student.model.entity.*;
+import vn.edu.vnua.fita.student.entity.*;
 import vn.edu.vnua.fita.student.repository.customrepo.CustomPointListRepository;
 import vn.edu.vnua.fita.student.repository.customrepo.CustomPointRepository;
 import vn.edu.vnua.fita.student.repository.jparepo.*;

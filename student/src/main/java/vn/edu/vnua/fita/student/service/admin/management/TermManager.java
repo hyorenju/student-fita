@@ -6,7 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import vn.edu.vnua.fita.student.model.entity.Term;
+import vn.edu.vnua.fita.student.entity.Term;
 import vn.edu.vnua.fita.student.repository.customrepo.CustomTermRepository;
 import vn.edu.vnua.fita.student.repository.jparepo.TermRepository;
 import vn.edu.vnua.fita.student.request.admin.term.CreateTermRequest;

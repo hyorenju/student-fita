@@ -1,6 +1,5 @@
 package vn.edu.vnua.fita.student.service.admin.iservice;
 
-import vn.edu.vnua.fita.student.model.entity.*;
 import vn.edu.vnua.fita.student.model.statistic.*;
 import vn.edu.vnua.fita.student.request.admin.statistic.GetStatisticRequest;
 

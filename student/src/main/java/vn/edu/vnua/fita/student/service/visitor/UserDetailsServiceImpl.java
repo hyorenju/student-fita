@@ -6,12 +6,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import vn.edu.vnua.fita.student.model.dto.ClassDTO;
-import vn.edu.vnua.fita.student.model.dto.CourseDTO;
-import vn.edu.vnua.fita.student.model.dto.MajorDTO;
+import vn.edu.vnua.fita.student.dto.ClassDTO;
+import vn.edu.vnua.fita.student.dto.CourseDTO;
+import vn.edu.vnua.fita.student.dto.MajorDTO;
 import vn.edu.vnua.fita.student.model.authentication.UserDetailsImpl;
-import vn.edu.vnua.fita.student.model.entity.Admin;
-import vn.edu.vnua.fita.student.model.entity.Student;
+import vn.edu.vnua.fita.student.entity.Admin;
+import vn.edu.vnua.fita.student.entity.Student;
 import vn.edu.vnua.fita.student.repository.jparepo.AdminRepository;
 import vn.edu.vnua.fita.student.repository.jparepo.StudentRepository;
 

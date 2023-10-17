@@ -3,7 +3,7 @@ package vn.edu.vnua.fita.student.service.admin.file.thread;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.apache.poi.ss.usermodel.Row;
-import vn.edu.vnua.fita.student.model.entity.Student;
+import vn.edu.vnua.fita.student.entity.Student;
 import vn.edu.vnua.fita.student.util.MyUtils;
 
 import java.util.concurrent.Callable;

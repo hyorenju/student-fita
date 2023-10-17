@@ -6,7 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import vn.edu.vnua.fita.student.model.entity.AClass;
+import vn.edu.vnua.fita.student.entity.AClass;
 import vn.edu.vnua.fita.student.repository.customrepo.CustomClassRepository;
 import vn.edu.vnua.fita.student.repository.jparepo.ClassRepository;
 import vn.edu.vnua.fita.student.request.admin.aclass.CreateClassRequest;

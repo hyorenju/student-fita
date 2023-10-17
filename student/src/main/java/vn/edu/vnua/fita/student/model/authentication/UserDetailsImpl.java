@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import vn.edu.vnua.fita.student.common.DateTimeConstant;
-import vn.edu.vnua.fita.student.model.dto.ClassDTO;
-import vn.edu.vnua.fita.student.model.dto.CourseDTO;
-import vn.edu.vnua.fita.student.model.dto.MajorDTO;
+import vn.edu.vnua.fita.student.dto.ClassDTO;
+import vn.edu.vnua.fita.student.dto.CourseDTO;
+import vn.edu.vnua.fita.student.dto.MajorDTO;
 
 import java.sql.Timestamp;
 import java.util.Collection;

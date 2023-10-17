@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import vn.edu.vnua.fita.student.model.entity.Status;
+import vn.edu.vnua.fita.student.entity.Status;
 import vn.edu.vnua.fita.student.repository.jparepo.StatusRepository;
 import vn.edu.vnua.fita.student.request.admin.status.CreateStatusRequest;
 import vn.edu.vnua.fita.student.request.admin.status.GetStatusListRequest;

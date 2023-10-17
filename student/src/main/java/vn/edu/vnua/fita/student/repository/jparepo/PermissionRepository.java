@@ -2,8 +2,7 @@ package vn.edu.vnua.fita.student.repository.jparepo;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import vn.edu.vnua.fita.student.model.entity.Permission;
-import vn.edu.vnua.fita.student.model.entity.Role;
+import vn.edu.vnua.fita.student.entity.Permission;
 
 import java.util.List;
 

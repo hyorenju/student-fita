@@ -3,8 +3,7 @@ package vn.edu.vnua.fita.student.repository.jparepo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
-import vn.edu.vnua.fita.student.model.entity.Point;
-import vn.edu.vnua.fita.student.model.entity.Student;
+import vn.edu.vnua.fita.student.entity.Point;
 
 import java.util.List;
 import java.util.Optional;

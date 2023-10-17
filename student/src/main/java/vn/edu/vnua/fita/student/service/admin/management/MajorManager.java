@@ -5,7 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import vn.edu.vnua.fita.student.model.entity.Major;
+import vn.edu.vnua.fita.student.entity.Major;
 import vn.edu.vnua.fita.student.repository.jparepo.MajorRepository;
 import vn.edu.vnua.fita.student.request.admin.major.CreateMajorRequest;
 import vn.edu.vnua.fita.student.request.admin.major.GetMajorListRequest;

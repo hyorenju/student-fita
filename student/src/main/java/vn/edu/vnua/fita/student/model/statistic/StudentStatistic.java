@@ -1,10 +1,8 @@
 package vn.edu.vnua.fita.student.model.statistic;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import vn.edu.vnua.fita.student.model.dto.StudentDTO;
+import vn.edu.vnua.fita.student.dto.StudentDTO;
 
 import java.util.List;
 

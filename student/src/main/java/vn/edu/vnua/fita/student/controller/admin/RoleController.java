@@ -8,7 +8,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.vnua.fita.student.controller.BaseController;
 import vn.edu.vnua.fita.student.model.authorization.PermissionChecker;
-import vn.edu.vnua.fita.student.model.dto.RoleDTO;
+import vn.edu.vnua.fita.student.dto.RoleDTO;
 import vn.edu.vnua.fita.student.request.admin.role.UpdateRoleRequest;
 import vn.edu.vnua.fita.student.service.admin.management.RoleManager;
 

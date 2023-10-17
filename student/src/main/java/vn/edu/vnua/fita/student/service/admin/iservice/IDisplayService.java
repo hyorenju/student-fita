@@ -2,7 +2,7 @@ package vn.edu.vnua.fita.student.service.admin.iservice;
 
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
-import vn.edu.vnua.fita.student.model.entity.Display;
+import vn.edu.vnua.fita.student.entity.Display;
 import vn.edu.vnua.fita.student.request.admin.display.CreateDisplayRequest;
 import vn.edu.vnua.fita.student.request.admin.display.GetDisplayListRequest;
 import vn.edu.vnua.fita.student.request.admin.display.UpdateDisplayRequest;

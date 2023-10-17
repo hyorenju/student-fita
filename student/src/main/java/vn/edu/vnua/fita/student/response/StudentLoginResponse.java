@@ -3,9 +3,9 @@ package vn.edu.vnua.fita.student.response;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import vn.edu.vnua.fita.student.common.DateTimeConstant;
-import vn.edu.vnua.fita.student.model.dto.ClassDTO;
-import vn.edu.vnua.fita.student.model.dto.CourseDTO;
-import vn.edu.vnua.fita.student.model.dto.MajorDTO;
+import vn.edu.vnua.fita.student.dto.ClassDTO;
+import vn.edu.vnua.fita.student.dto.CourseDTO;
+import vn.edu.vnua.fita.student.dto.MajorDTO;
 
 import java.sql.Timestamp;
 

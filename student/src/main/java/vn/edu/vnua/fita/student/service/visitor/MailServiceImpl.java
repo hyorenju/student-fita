@@ -57,7 +57,7 @@ public class MailServiceImpl implements MailService{
                 "    margin: 0 auto;" +
                 "}" +
                 ".button {" +
-                "    background-color: #FB9400;" +
+                "    background-color: #00984F;" +
                 "    border: none;" +
                 "    color: white;" +
                 "    padding: 15px 32px;" +
@@ -71,8 +71,7 @@ public class MailServiceImpl implements MailService{
                 "    transition: background-color 0.3s;" +
                 "}" +
                 ".button:hover {" +
-                "    background-color: #E56A00;" +
-                "    cursor: pointer;" +
+                "    background-color: #00532B;" +
                 "}" +
                 "h1 {" +
                 "    color: #333;" +
@@ -87,10 +86,11 @@ public class MailServiceImpl implements MailService{
                 "<div class='container'>" +
                 "<div class='content'>" +
                 "<h1>Xác minh yêu cầu đổi mật khẩu</h1>" +
-                "<p>Bạn vừa yêu cầu đổi mật khẩu. Vui lòng nhấn vào link sau để thực hiện:</p>" +
+                "<p>Bạn vừa cho biết mình đang quên mật khẩu. Vui lòng nhấn vào nút bên dưới để tiến hành đổi mật khẩu:</p>" +
                 "<p><a href='" + link + "?email-verification=" + token + "' style='text-decoration: none;'>" +
-                "<button class='button'>Đổi mật khẩu</button>" +
+                "<button class='button' style='cursor: pointer;'>Đổi mật khẩu</button>" +
                 "</a></p>" +
+                "<p>Nếu bạn không yêu cầu điều này, vui lòng bỏ qua tin nhắn.</p>" +
                 "</div>" +
                 "</div>" +
                 "</body>" +
