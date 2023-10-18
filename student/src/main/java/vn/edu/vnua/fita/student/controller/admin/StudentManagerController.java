@@ -73,6 +73,13 @@ public class StudentManagerController extends BaseController {
         return buildListItemResponse(response, response.size());
     }
 
+    @PostMapping("delete-permanently/{id}")
+    @PreAuthorize("hasAnyAuthority('DELETE_STUDENT', 'SUPERADMIN')")
+    public ResponseEntity<?> deleteStudentPermanently(@PathVariable Long id) {
+        TrashStudentDTO response = modelMapper.map(studentManager.deletePermanent(id), TrashStudentDTO.class);
+        return buildItemResponse(response);
+    }
+
     @PostMapping("restore/{id}")
     @PreAuthorize("hasAnyAuthority('RESTORE_STUDENT', 'SUPERADMIN')")
     public ResponseEntity<?> restoreStudent(@PathVariable Long id) {

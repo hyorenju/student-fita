@@ -1,6 +1,7 @@
 package vn.edu.vnua.fita.student.service.admin.management;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -22,7 +23,6 @@ public class ClassManager implements IClassService {
     private final String classNotFound = "Mã lớp %s không tồn tại trong hệ thống";
 
 
-
     @Override
     public Page<AClass> getClassList(GetClassListRequest request) {
         Specification<AClass> specification = CustomClassRepository.filterClassList(
@@ -34,7 +34,7 @@ public class ClassManager implements IClassService {
 
     @Override
     public AClass createClass(CreateClassRequest request) {
-        if(classRepository.existsById(request.getId())){
+        if (classRepository.existsById(request.getId())) {
             throw new RuntimeException(classHadExisted);
         }
         AClass aClass = AClass.builder()
@@ -55,7 +55,11 @@ public class ClassManager implements IClassService {
     @Override
     public AClass deleteClass(String id) {
         AClass aClass = classRepository.findById(id).orElseThrow(() -> new RuntimeException(String.format(classNotFound, id)));
-        classRepository.deleteById(id);
+        try {
+            classRepository.delete(aClass);
+        } catch (DataIntegrityViolationException e) {
+            e.printStackTrace();
+        }
         return aClass;
     }
 }

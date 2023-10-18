@@ -16,9 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import vn.edu.vnua.fita.student.common.DateTimeConstant;
 import vn.edu.vnua.fita.student.common.FirebaseExpirationTimeConstant;
 import vn.edu.vnua.fita.student.common.RoleConstant;
-import vn.edu.vnua.fita.student.entity.TrashAdmin;
-import vn.edu.vnua.fita.student.entity.Admin;
-import vn.edu.vnua.fita.student.entity.Role;
+import vn.edu.vnua.fita.student.entity.*;
 import vn.edu.vnua.fita.student.repository.customrepo.CustomAdminRepository;
 import vn.edu.vnua.fita.student.repository.jparepo.AdminRepository;
 import vn.edu.vnua.fita.student.repository.jparepo.RoleRepository;
@@ -49,7 +47,7 @@ public class AdminManager implements IAdminService {
     private final String validAdminId = "Mã quản trị viên phải bắt đầu bằng chữ cái";
     private final String adminNotFound = "Không tìm thấy quản trị viên";
     private final String byWhomNotFound = "Không thể xác định danh tính người xoá";
-    private final String trashNotFound = "Không tìm thấy rác muốn khôi phục";
+    private final String trashNotFound = "Không tìm thấy rác";
 
 
     @Value("${firebase.storage.bucket}")
@@ -126,6 +124,18 @@ public class AdminManager implements IAdminService {
             return trashAdmin;
         }
 
+    }
+
+    @Override
+    public TrashAdmin deletePermanent(Long id) {
+        TrashAdmin trashAdmin = trashAdminRepository.findById(id).orElseThrow(() -> new RuntimeException(trashNotFound));
+        Admin admin = trashAdmin.getAdmin();
+
+        trashAdminRepository.delete(trashAdmin);
+
+        adminRepository.delete(admin);
+
+        return trashAdmin;
     }
 
     @Override

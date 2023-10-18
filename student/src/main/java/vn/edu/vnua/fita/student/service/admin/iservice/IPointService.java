@@ -17,6 +17,7 @@ public interface IPointService {
     Point updatePoint(Long id, UpdatePointRequest request);
     TrashPoint deletePoint(Long id);
     List<TrashPoint> deleteManyPoint(DeletePointRequest request);
+    TrashPoint deletePermanent(Long id);
     TrashPoint restorePoint(Long id);
     List<TrashPoint> restoreManyPoint(RestorePointRequest request);
     Page<TrashPoint> getTrashPointList(GetTrashPointRequest request);

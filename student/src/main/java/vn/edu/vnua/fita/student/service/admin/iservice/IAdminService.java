@@ -15,6 +15,7 @@ public interface IAdminService {
     Admin updateAdmin(UpdateAdminRequest request);
     Admin updateProfile(UpdateProfileRequest request);
     TrashAdmin deleteAdmin(String id);
+    TrashAdmin deletePermanent(Long id);
     TrashAdmin restoreAdmin(Long id);
     Page<TrashAdmin> getTrashAdminList(GetTrashAdminRequest request);
     Admin updateAvatar(MultipartFile file) throws IOException;

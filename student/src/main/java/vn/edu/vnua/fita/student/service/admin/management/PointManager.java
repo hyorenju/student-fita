@@ -40,7 +40,7 @@ public class PointManager implements IPointService {
     private final String termNotFoundMsg = "Học kỳ %s không tồn tại trong hệ thống";
     private final String pointNotFoundMsg = "Không tìm thấy mã điểm %d";
     private final String byWhomNotFound = "Không thể xác định danh tính người xoá";
-
+    private final String trashNotFound = "Không tìm thấy rác";
 
     @Override
     public Page<Point> filterPointList(GetPointListRequest request) {
@@ -125,6 +125,18 @@ public class PointManager implements IPointService {
             trashPoints.add(moveToTrash(point));
         });
         return trashPoints;
+    }
+
+    @Override
+    public TrashPoint deletePermanent(Long id) {
+        TrashPoint trashPoint = trashPointRepository.findById(id).orElseThrow(() -> new RuntimeException(trashNotFound));
+        Point point = trashPoint.getPoint();
+
+        trashPointRepository.delete(trashPoint);
+
+        pointRepository.delete(point);
+
+        return trashPoint;
     }
 
     @Override

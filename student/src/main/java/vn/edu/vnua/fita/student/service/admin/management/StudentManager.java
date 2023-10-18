@@ -5,6 +5,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import vn.edu.vnua.fita.student.common.DateTimeConstant;
@@ -42,6 +43,7 @@ public class StudentManager implements IStudentService {
     private final MajorRepository majorRepository;
     private final StudentStatusRepository studentStatusRepository;
     private final TrashStudentRepository trashStudentRepository;
+    private final PointRepository pointRepository;
     private final PasswordEncoder encoder;
     private final FirebaseService firebaseService;
     private final ExcelService excelService;
@@ -51,6 +53,7 @@ public class StudentManager implements IStudentService {
     private final String classNotFound = "Không tìm thấy lớp %s";
     private final String majorNotFound = "Không tìm thấy chuyên ngành %s";
     private final String byWhomNotFound = "Không thể xác định danh tính người xoá";
+    private final String trashNotFound = "Không tìm thấy rác";
 
     @Value("${firebase.storage.bucket}")
     private String bucketName;
@@ -220,6 +223,30 @@ public class StudentManager implements IStudentService {
                                                 .and(Sort.by("surname").ascending())))));
 
         return excelService.writeStudentToExcel(students);
+    }
+
+    @Override
+    public TrashStudent deletePermanent(Long id) {
+        TrashStudent trashStudent = trashStudentRepository.findById(id).orElseThrow(() -> new RuntimeException(trashNotFound));
+        Student student = trashStudent.getStudent();
+//        String studentId = student.getId();
+
+        studentStatusRepository.deleteAllByStudent(student);
+//        for (StudentStatus studentStatus:
+//             studentStatuses) {
+//            studentStatusRepository.delete(studentStatus);
+//        }
+
+        pointRepository.deleteAllByStudent(student);
+//        for (Point point:
+//             points) {
+//            pointRepository.delete(point);
+//        }
+
+        trashStudentRepository.delete(trashStudent);
+        studentRepository.delete(student);
+
+        return trashStudent;
     }
 
     public void createStudentStatus(Student student) {

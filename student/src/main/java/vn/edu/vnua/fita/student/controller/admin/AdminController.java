@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import vn.edu.vnua.fita.student.controller.BaseController;
 import vn.edu.vnua.fita.student.dto.AdminDTO;
 import vn.edu.vnua.fita.student.dto.TrashAdminDTO;
+import vn.edu.vnua.fita.student.dto.TrashStudentDTO;
 import vn.edu.vnua.fita.student.entity.TrashAdmin;
 import vn.edu.vnua.fita.student.entity.Admin;
 import vn.edu.vnua.fita.student.request.ChangePasswordRequest;
@@ -61,6 +62,13 @@ public class AdminController extends BaseController {
     @PreAuthorize("hasAnyAuthority('SUPERADMIN')")
     public ResponseEntity<?> deleteAdmin(@PathVariable String id){
         TrashAdminDTO response = modelMapper.map(adminManager.deleteAdmin(id), TrashAdminDTO.class);
+        return buildItemResponse(response);
+    }
+
+    @PostMapping("delete-permanent/{id}")
+    @PreAuthorize("hasAnyAuthority('SUPERADMIN')")
+    public ResponseEntity<?> deleteAdminPermanently(@PathVariable Long id) {
+        TrashAdminDTO response = modelMapper.map(adminManager.deletePermanent(id), TrashAdminDTO.class);
         return buildItemResponse(response);
     }
 

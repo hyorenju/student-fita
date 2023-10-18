@@ -1,5 +1,7 @@
 package vn.edu.vnua.fita.student.repository.jparepo;
 
+import org.springframework.transaction.annotation.Transactional;
+import vn.edu.vnua.fita.student.entity.Student;
 import vn.edu.vnua.fita.student.entity.StudentStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -10,8 +12,6 @@ import java.util.List;
 @Repository
 public interface StudentStatusRepository extends JpaRepository<StudentStatus, Long>, JpaSpecificationExecutor<StudentStatus> {
     boolean existsByStudentIdAndStatusId(String studentId, Integer statusId);
-    List<StudentStatus> findAllByStudentId(String studentId);
-    List<StudentStatus> findAllByStatusId(Integer statusId);
     List<StudentStatus> findAllByTermIdAndStatusId(String termId, Integer statusId);
-    StudentStatus findByStudentIdAndTermId(String studentId, String termId);
+    void deleteAllByStudent(Student student);
 }

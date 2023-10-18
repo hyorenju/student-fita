@@ -18,6 +18,7 @@ public interface IStudentService {
     Student updateStudent(UpdateStudentRequest request) throws ParseException;
     TrashStudent deleteStudent(String id);
     List<TrashStudent> deleteManyStudent(DeleteStudentRequest request);
+    TrashStudent deletePermanent(Long id);
     TrashStudent restoreStudent(Long id);
     List<TrashStudent> restoreManyStudent(RestoreStudentRequest request);
     Page<TrashStudent> getTrashStudentList(GetTrashStudentRequest request);
