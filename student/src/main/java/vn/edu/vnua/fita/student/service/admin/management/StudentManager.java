@@ -240,17 +240,17 @@ public class StudentManager implements IStudentService {
         Student student = trashStudent.getStudent();
 //        String studentId = student.getId();
 
-        studentStatusRepository.deleteAllByStudent(student);
-//        for (StudentStatus studentStatus:
-//             studentStatuses) {
-//            studentStatusRepository.delete(studentStatus);
-//        }
+        List<StudentStatus> studentStatuses = studentStatusRepository.findAllByStudent(student);
+        for (StudentStatus studentStatus:
+             studentStatuses) {
+            studentStatusRepository.delete(studentStatus);
+        }
 
-        pointRepository.deleteAllByStudent(student);
-//        for (Point point:
-//             points) {
-//            pointRepository.delete(point);
-//        }
+        List<Point> points = pointRepository.findAllByStudent(student);
+        for (Point point:
+             points) {
+            pointRepository.delete(point);
+        }
 
         trashStudentRepository.delete(trashStudent);
         studentRepository.delete(student);

@@ -14,5 +14,5 @@ public interface PointRepository extends JpaRepository<Point, Long>, JpaSpecific
     boolean existsByStudentIdAndTermId(String studentId, String termId);
     Optional<Point> findByStudentIdAndTermId(String studentId, String termId);
     List<Point> findAllByStudentIdOrderByTermId(String studentId);
-    void deleteAllByStudent(Student student);
+    List<Point> findAllByStudent(Student student);
 }

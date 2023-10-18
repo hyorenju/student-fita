@@ -13,5 +13,5 @@ import java.util.List;
 public interface StudentStatusRepository extends JpaRepository<StudentStatus, Long>, JpaSpecificationExecutor<StudentStatus> {
     boolean existsByStudentIdAndStatusId(String studentId, Integer statusId);
     List<StudentStatus> findAllByTermIdAndStatusId(String termId, Integer statusId);
-    void deleteAllByStudent(Student student);
+    List<StudentStatus> findAllByStudent(Student student);
 }
