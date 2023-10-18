@@ -1,6 +1,7 @@
 package vn.edu.vnua.fita.student.service.admin.management;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -18,16 +19,17 @@ public class MajorManager implements IMajorService {
     private final MajorRepository majorRepository;
     private final String majorHadExisted = "Mã chuyên ngành đã tồn tại trong hệ thống";
     private final String majorNotFound = "Mã chuyên ngành %s không tồn tại trong hệ thống";
+    private final String cannotDelete = "Ngành này đang ràng buộc với bảng sinh viên, vui lòng xoá hết sinh viên trước khi tiến hành xoá ngành";
 
     @Override
     public Page<Major> getMajorList(GetMajorListRequest request) {
-        return majorRepository.findAll(PageRequest.of(request.getPage()-1, request.getSize(),
+        return majorRepository.findAll(PageRequest.of(request.getPage() - 1, request.getSize(),
                 Sort.by("id").ascending()));
     }
 
     @Override
     public Major createMajor(CreateMajorRequest request) {
-        if(majorRepository.existsById(request.getId())){
+        if (majorRepository.existsById(request.getId())) {
             throw new RuntimeException(majorHadExisted);
         }
         Major major = Major.builder()
@@ -48,8 +50,13 @@ public class MajorManager implements IMajorService {
 
     @Override
     public Major deleteMajor(String id) {
-        Major major = majorRepository.findById(id).orElseThrow(() -> new RuntimeException(String.format(majorNotFound, id)));
-        majorRepository.deleteById(id);
-        return major;
+        try {
+            Major major = majorRepository.findById(id).orElseThrow(() -> new RuntimeException(String.format(majorNotFound, id)));
+            majorRepository.deleteById(id);
+            return major;
+        } catch (
+                DataIntegrityViolationException e) {
+            throw new RuntimeException(cannotDelete);
+        }
     }
 }

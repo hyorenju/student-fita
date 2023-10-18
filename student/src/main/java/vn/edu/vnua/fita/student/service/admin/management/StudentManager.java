@@ -1,11 +1,11 @@
 package vn.edu.vnua.fita.student.service.admin.management;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import vn.edu.vnua.fita.student.common.DateTimeConstant;
@@ -54,6 +54,7 @@ public class StudentManager implements IStudentService {
     private final String majorNotFound = "Không tìm thấy chuyên ngành %s";
     private final String byWhomNotFound = "Không thể xác định danh tính người xoá";
     private final String trashNotFound = "Không tìm thấy rác";
+    private final String emailHasExisted = "Email %s đã tồn tại trong hệ thống, vui lòng sử dụng một email khác";
 
     @Value("${firebase.storage.bucket}")
     private String bucketName;
@@ -84,73 +85,81 @@ public class StudentManager implements IStudentService {
 
     @Override
     public Student createStudent(CreateStudentRequest request) {
-        if (studentRepository.existsById(request.getId())) {
-            throw new RuntimeException(String.format(studentHadExisted, request.getId()));
+        try {
+            if (studentRepository.existsById(request.getId())) {
+                throw new RuntimeException(String.format(studentHadExisted, request.getId()));
+            }
+            Course course = courseRepository.findById(request.getCourse().getId()).orElseThrow(() -> new RuntimeException(String.format(courseNotFound, request.getCourse().getId())));
+            AClass aClass = classRepository.findById(request.getAclass().getId()).orElseThrow(() -> new RuntimeException(String.format(classNotFound, request.getAclass().getId())));
+            Major major = majorRepository.findById(request.getMajor().getId()).orElseThrow(() -> new RuntimeException(String.format(majorNotFound, request.getMajor().getId())));
+
+            Student student = Student.builder()
+                    .id(request.getId())
+                    .surname(request.getSurname())
+                    .lastName(request.getLastName())
+                    .course(course)
+                    .major(major)
+                    .aclass(aClass)
+                    .dob(MyUtils.convertTimestampFromString(request.getDob()))
+                    .gender(request.getGender())
+                    .phoneNumber(request.getPhoneNumber())
+                    .email(request.getEmail())
+                    .homeTown(request.getHomeTown())
+                    .residence(request.getResidence())
+                    .fatherName(request.getFatherName())
+                    .fatherPhoneNumber(request.getFatherPhoneNumber())
+                    .motherName(request.getMotherName())
+                    .motherPhoneNumber(request.getMotherPhoneNumber())
+                    .isDeleted(false)
+                    .role(Role.builder().id(RoleConstant.STUDENT).build())
+                    .build();
+            if (StringUtils.hasText(request.getPassword())) {
+                student.setPassword(encoder.encode(request.getPassword()));
+            } else {
+                student.setPassword(encoder.encode(MyUtils.formatDobToPassword(request.getDob())));
+            }
+
+            studentRepository.saveAndFlush(student);
+            createStudentStatus(student);
+
+            return student;
+        } catch (DataIntegrityViolationException ex) {
+            throw new RuntimeException(String.format(emailHasExisted, request.getEmail()));
         }
-        Course course = courseRepository.findById(request.getCourse().getId()).orElseThrow(() -> new RuntimeException(String.format(courseNotFound, request.getCourse().getId())));
-        AClass aClass = classRepository.findById(request.getAclass().getId()).orElseThrow(() -> new RuntimeException(String.format(classNotFound, request.getAclass().getId())));
-        Major major = majorRepository.findById(request.getMajor().getId()).orElseThrow(() -> new RuntimeException(String.format(majorNotFound, request.getMajor().getId())));
-
-        Student student = Student.builder()
-                .id(request.getId())
-                .surname(request.getSurname())
-                .lastName(request.getLastName())
-                .course(course)
-                .major(major)
-                .aclass(aClass)
-                .dob(MyUtils.convertTimestampFromString(request.getDob()))
-                .gender(request.getGender())
-                .phoneNumber(request.getPhoneNumber())
-                .email(request.getEmail())
-                .homeTown(request.getHomeTown())
-                .residence(request.getResidence())
-                .fatherName(request.getFatherName())
-                .fatherPhoneNumber(request.getFatherPhoneNumber())
-                .motherName(request.getMotherName())
-                .motherPhoneNumber(request.getMotherPhoneNumber())
-                .isDeleted(false)
-                .role(Role.builder().id(RoleConstant.STUDENT).build())
-                .build();
-        if (StringUtils.hasText(request.getPassword())) {
-            student.setPassword(encoder.encode(request.getPassword()));
-        } else {
-            student.setPassword(encoder.encode(MyUtils.formatDobToPassword(request.getDob())));
-        }
-
-        studentRepository.saveAndFlush(student);
-        createStudentStatus(student);
-
-        return student;
     }
 
     @Override
     public Student updateStudent(UpdateStudentRequest request) {
-        Student student = studentRepository.findById(request.getId()).orElseThrow(() -> new RuntimeException(String.format(studentNotFound, request.getId())));
-        Course course = courseRepository.findById(request.getCourse().getId()).orElseThrow(() -> new RuntimeException(String.format(courseNotFound, request.getCourse().getId())));
-        AClass aClass = classRepository.findById(request.getAclass().getId()).orElseThrow(() -> new RuntimeException(String.format(classNotFound, request.getAclass().getId())));
-        Major major = majorRepository.findById(request.getMajor().getId()).orElseThrow(() -> new RuntimeException(String.format(majorNotFound, request.getMajor().getId())));
+        try {
+            Student student = studentRepository.findById(request.getId()).orElseThrow(() -> new RuntimeException(String.format(studentNotFound, request.getId())));
+            Course course = courseRepository.findById(request.getCourse().getId()).orElseThrow(() -> new RuntimeException(String.format(courseNotFound, request.getCourse().getId())));
+            AClass aClass = classRepository.findById(request.getAclass().getId()).orElseThrow(() -> new RuntimeException(String.format(classNotFound, request.getAclass().getId())));
+            Major major = majorRepository.findById(request.getMajor().getId()).orElseThrow(() -> new RuntimeException(String.format(majorNotFound, request.getMajor().getId())));
 
-        student.setSurname(request.getSurname());
-        student.setLastName(request.getLastName());
-        student.setCourse(course);
-        student.setMajor(major);
-        student.setAclass(aClass);
-        student.setDob(MyUtils.convertTimestampFromString(request.getDob()));
-        student.setGender(request.getGender());
-        student.setEmail(request.getEmail());
-        student.setPhoneNumber(request.getPhoneNumber());
-        student.setHomeTown(request.getHomeTown());
-        student.setResidence(request.getResidence());
-        student.setFatherName(request.getFatherName());
-        student.setFatherPhoneNumber(request.getFatherPhoneNumber());
-        student.setMotherName(request.getMotherName());
-        student.setMotherPhoneNumber(request.getMotherPhoneNumber());
-        if (StringUtils.hasText(request.getPassword())) {
-            student.setPassword(encoder.encode(request.getPassword()));
+            student.setSurname(request.getSurname());
+            student.setLastName(request.getLastName());
+            student.setCourse(course);
+            student.setMajor(major);
+            student.setAclass(aClass);
+            student.setDob(MyUtils.convertTimestampFromString(request.getDob()));
+            student.setGender(request.getGender());
+            student.setEmail(request.getEmail());
+            student.setPhoneNumber(request.getPhoneNumber());
+            student.setHomeTown(request.getHomeTown());
+            student.setResidence(request.getResidence());
+            student.setFatherName(request.getFatherName());
+            student.setFatherPhoneNumber(request.getFatherPhoneNumber());
+            student.setMotherName(request.getMotherName());
+            student.setMotherPhoneNumber(request.getMotherPhoneNumber());
+            if (StringUtils.hasText(request.getPassword())) {
+                student.setPassword(encoder.encode(request.getPassword()));
+            }
+            studentRepository.saveAndFlush(student);
+
+            return student;
+        } catch (DataIntegrityViolationException ex) {
+            throw new RuntimeException(String.format(emailHasExisted, request.getEmail()));
         }
-        studentRepository.saveAndFlush(student);
-
-        return student;
     }
 
     @Override

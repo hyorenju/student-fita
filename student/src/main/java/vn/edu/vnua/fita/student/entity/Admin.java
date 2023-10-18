@@ -27,7 +27,7 @@ public class Admin {
     @Column(length = 200)
     private String name;
 
-    @Column(length = 200)
+    @Column(length = 200, unique = true)
     private String email;
 
     @Column(length = 200)

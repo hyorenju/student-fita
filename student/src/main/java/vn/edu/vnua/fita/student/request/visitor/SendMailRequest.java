@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 public class SendMailRequest {
-    @NotBlank(message = "Front-end dev vui lòng truyền về đường dẫn đổi mật khẩu")
+    @NotBlank(message = "Front-end dev vui lòng truyền link trang đổi mật khẩu")
     private String link;
 
     private RequestBy user;

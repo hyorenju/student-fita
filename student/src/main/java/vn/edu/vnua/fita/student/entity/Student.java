@@ -61,7 +61,7 @@ public class Student {
     @Column(name = "is_verified")
     private Boolean isVerified;
 
-    @Column(length = 200)
+    @Column(length = 200, unique = true)
     private String email;
 
     @Column(name = "home_town", length = 200)

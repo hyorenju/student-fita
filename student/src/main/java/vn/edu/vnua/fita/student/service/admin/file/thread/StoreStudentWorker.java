@@ -83,6 +83,9 @@ public class StoreStudentWorker implements Callable<StudentExcelData> {
             if (!classRepository.existsById(classId)) {
                 errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(5).errorMsg("Lớp không tồn tại").build());
             }
+            if (studentRepository.existsByEmail(email)) {
+                errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(9).errorMsg("Email đã tồn tại").build());
+            }
 
             studentExcelData.setStudent(student);
             if (!errorDetailList.isEmpty()) {

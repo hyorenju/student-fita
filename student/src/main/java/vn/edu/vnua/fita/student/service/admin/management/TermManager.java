@@ -1,6 +1,7 @@
 package vn.edu.vnua.fita.student.service.admin.management;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
@@ -19,6 +20,8 @@ public class TermManager implements ITermService {
     private final TermRepository termRepository;
     private final String termHadExisted = "Mã học kỳ đã tồn tại trong hệ thống";
     private final String termNotFound = "Học kỳ %s không tồn tại trong hệ thống";
+    private final String cannotDelete = "Học kỳ này đang ràng buộc với bảng điểm, vui lòng xoá hết điểm trong học kỳ này trước khi tiến hành xoá học kỳ";
+
 
     @Override
     public Page<Term> getTermList(GetTermListRequest request) {
@@ -38,9 +41,14 @@ public class TermManager implements ITermService {
 
     @Override
     public Term deleteTerm(String id) {
-        Term term = termRepository.findById(id).orElseThrow(() -> new RuntimeException(String.format(termNotFound, id)));
-        termRepository.deleteById(id);
-        return term;
+        try {
+            Term term = termRepository.findById(id).orElseThrow(() -> new RuntimeException(String.format(termNotFound, id)));
+            termRepository.deleteById(id);
+            return term;
+        } catch (
+                DataIntegrityViolationException e) {
+            throw new RuntimeException(cannotDelete);
+        }
     }
 
     @Override

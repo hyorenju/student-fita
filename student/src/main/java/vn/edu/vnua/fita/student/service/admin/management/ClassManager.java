@@ -21,6 +21,7 @@ public class ClassManager implements IClassService {
     private final ClassRepository classRepository;
     private final String classHadExisted = "Mã lớp đã tồn tại trong hệ thống";
     private final String classNotFound = "Mã lớp %s không tồn tại trong hệ thống";
+    private final String cannotDelete = "Lớp này đang ràng buộc với bảng sinh viên, vui lòng xoá hết sinh viên thuộc lớp này trước khi tiến hành xoá lớp";
 
 
     @Override
@@ -54,12 +55,12 @@ public class ClassManager implements IClassService {
 
     @Override
     public AClass deleteClass(String id) {
-        AClass aClass = classRepository.findById(id).orElseThrow(() -> new RuntimeException(String.format(classNotFound, id)));
         try {
+            AClass aClass = classRepository.findById(id).orElseThrow(() -> new RuntimeException(String.format(classNotFound, id)));
             classRepository.delete(aClass);
+            return aClass;
         } catch (DataIntegrityViolationException e) {
-            e.printStackTrace();
+            throw new RuntimeException(cannotDelete);
         }
-        return aClass;
     }
 }

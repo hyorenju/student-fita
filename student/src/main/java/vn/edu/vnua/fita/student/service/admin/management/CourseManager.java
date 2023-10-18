@@ -1,6 +1,7 @@
 package vn.edu.vnua.fita.student.service.admin.management;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -20,6 +21,8 @@ public class CourseManager implements ICourseService {
     private final CourseRepository courseRepository;
     private final String courseHadExisted = "Mã khoá đã tồn tại trong hệ thống";
     private final String courseNotFound = "Mã khoá %s không tồn tại trong hệ thống";
+    private final String cannotDelete = "Khoá này đang ràng buộc với bảng sinh viên, vui lòng xoá hết sinh viên trước khi tiến hành xoá khoá";
+
 
     @Override
     public Page<Course> getCourseList(GetCourseListRequest request) {
@@ -40,9 +43,13 @@ public class CourseManager implements ICourseService {
 
     @Override
     public Course deleteCourse(String id) {
-        Course course = courseRepository.findById(id).orElseThrow(() -> new RuntimeException(String.format(courseNotFound, id)));
-        courseRepository.deleteById(id);
-        return course;
+        try {
+            Course course = courseRepository.findById(id).orElseThrow(() -> new RuntimeException(String.format(courseNotFound, id)));
+            courseRepository.deleteById(id);
+            return course;
+        } catch (DataIntegrityViolationException e) {
+            throw new RuntimeException(cannotDelete);
+        }
     }
 
     @Override

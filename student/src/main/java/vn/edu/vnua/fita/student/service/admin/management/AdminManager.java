@@ -3,6 +3,7 @@ package vn.edu.vnua.fita.student.service.admin.management;
 import com.google.cloud.storage.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -48,7 +49,7 @@ public class AdminManager implements IAdminService {
     private final String adminNotFound = "Không tìm thấy quản trị viên";
     private final String byWhomNotFound = "Không thể xác định danh tính người xoá";
     private final String trashNotFound = "Không tìm thấy rác";
-
+    private final String emailHasExisted = "Email %s đã tồn tại trong hệ thống, vui lòng sử dụng một email khác";
 
     @Value("${firebase.storage.bucket}")
     private String bucketName;
@@ -64,46 +65,54 @@ public class AdminManager implements IAdminService {
 
     @Override
     public Admin createAdmin(CreateAdminRequest request) {
-        if (adminRepository.existsById(request.getId())) {
-            throw new RuntimeException(adminHadExisted);
-        }else if (adminRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException(emailHadUsed);
-        } else if (!roleRepository.existsById(request.getRoleId())) {
-            throw new RuntimeException(roleNotFound);
-        } else if(request.getId().matches("^[0-9]+")){
-            throw new RuntimeException(validAdminId);
+        try {
+            if (adminRepository.existsById(request.getId())) {
+                throw new RuntimeException(adminHadExisted);
+            } else if (adminRepository.existsByEmail(request.getEmail())) {
+                throw new RuntimeException(emailHadUsed);
+            } else if (!roleRepository.existsById(request.getRoleId())) {
+                throw new RuntimeException(roleNotFound);
+            } else if (request.getId().matches("^[0-9]+")) {
+                throw new RuntimeException(validAdminId);
+            }
+            Admin admin = Admin.builder()
+                    .id(request.getId())
+                    .name(request.getName())
+                    .email(request.getEmail())
+                    .password(encoder.encode(request.getPassword()))
+                    .role(Role.builder().id(request.getRoleId()).build())
+                    .isDeleted(false)
+                    .build();
+            return adminRepository.saveAndFlush(admin);
+        } catch (DataIntegrityViolationException ex) {
+            throw new RuntimeException(String.format(emailHasExisted, request.getEmail()));
         }
-        Admin admin = Admin.builder()
-                .id(request.getId())
-                .name(request.getName())
-                .email(request.getEmail())
-                .password(encoder.encode(request.getPassword()))
-                .role(Role.builder().id(request.getRoleId()).build())
-                .isDeleted(false)
-                .build();
-        return adminRepository.saveAndFlush(admin);
     }
 
     @Override
     public Admin updateAdmin(UpdateAdminRequest request) {
-        Admin admin = adminRepository.findById(request.getId()).orElseThrow(() -> new RuntimeException(adminNotFound));
-        if (!roleRepository.existsById(request.getRoleId())) {
-            throw new RuntimeException(roleNotFound);
-        }
+        try {
+            Admin admin = adminRepository.findById(request.getId()).orElseThrow(() -> new RuntimeException(adminNotFound));
+            if (!roleRepository.existsById(request.getRoleId())) {
+                throw new RuntimeException(roleNotFound);
+            }
 
-        admin.setName(request.getName());
-        admin.setEmail(request.getEmail());
-        admin.setRole(Role.builder().id(request.getRoleId()).build());
-        if (StringUtils.hasText(request.getPassword())) {
-            admin.setPassword(encoder.encode(request.getPassword()));
-        }
+            admin.setName(request.getName());
+            admin.setEmail(request.getEmail());
+            admin.setRole(Role.builder().id(request.getRoleId()).build());
+            if (StringUtils.hasText(request.getPassword())) {
+                admin.setPassword(encoder.encode(request.getPassword()));
+            }
 
-        return admin;
+            return admin;
+        } catch (DataIntegrityViolationException ex) {
+            throw new RuntimeException(String.format(emailHasExisted, request.getEmail()));
+        }
     }
 
     @Override
     public Admin updateProfile(UpdateProfileRequest request) {
-        Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Admin admin = adminRepository.findById(authentication.getPrincipal().toString()).orElseThrow(() -> new RuntimeException(adminNotFound));
 
         admin.setName(request.getName());
@@ -115,7 +124,7 @@ public class AdminManager implements IAdminService {
     @Override
     public TrashAdmin deleteAdmin(String id) {
         Admin admin = adminRepository.findById(id).orElseThrow(() -> new RuntimeException(adminNotFound));
-        if(admin.getRole().getId().equals(RoleConstant.SUPERADMIN)){
+        if (admin.getRole().getId().equals(RoleConstant.SUPERADMIN)) {
             throw new RuntimeException("Không thể xoá SUPERADMIN");
         } else {
             admin.setIsDeleted(true);
@@ -150,12 +159,12 @@ public class AdminManager implements IAdminService {
 
     @Override
     public Page<TrashAdmin> getTrashAdminList(GetTrashAdminRequest request) {
-        return trashAdminRepository.findAll(PageRequest.of(request.getPage()-1, request.getSize(), Sort.by("id").descending()));
+        return trashAdminRepository.findAll(PageRequest.of(request.getPage() - 1, request.getSize(), Sort.by("id").descending()));
     }
 
     @Override
     public Admin updateAvatar(MultipartFile file) throws IOException {
-        Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Admin admin = adminRepository.findById(authentication.getPrincipal().toString()).orElseThrow(() -> new RuntimeException(adminNotFound));
 
         Blob blob = firebaseService.uploadImage(file, bucketName);
@@ -169,16 +178,16 @@ public class AdminManager implements IAdminService {
 
     @Override
     public Admin changePassword(ChangePasswordRequest request) {
-        Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Admin admin = adminRepository.findById(authentication.getPrincipal().toString()).orElseThrow(() -> new RuntimeException(adminNotFound));
 
-        if(!encoder.matches(request.getCurrentPassword(), admin.getPassword())){
+        if (!encoder.matches(request.getCurrentPassword(), admin.getPassword())) {
             throw new RuntimeException("Mật khẩu hiện tại không chính xác");
         }
-        if(encoder.matches(request.getNewPassword(), admin.getPassword())){
+        if (encoder.matches(request.getNewPassword(), admin.getPassword())) {
             throw new RuntimeException("Mật khẩu mới không được trùng mật khẩu cũ");
         }
-        if(!Objects.equals(request.getNewPassword(), request.getConfirmPassword())){
+        if (!Objects.equals(request.getNewPassword(), request.getConfirmPassword())) {
             throw new RuntimeException("Xác nhận mật khẩu không trùng khớp");
         }
 
@@ -204,7 +213,7 @@ public class AdminManager implements IAdminService {
     }
 
     private Admin findAdminDeletedIt() {
-        Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return adminRepository.findById(authentication.getPrincipal().toString()).orElseThrow(() -> new RuntimeException(byWhomNotFound));
     }
 

@@ -59,7 +59,7 @@ public class StudentController extends BaseController {
         return buildItemResponse(response);
     }
 
-    @PostMapping("list")
+    @PostMapping("status")
     @PreAuthorize("hasAnyAuthority('STUDENT')")
     public ResponseEntity<?> getStudentStatusList(){
         List<StudentStatusDTO> response = studentService.getStatus().stream().map(
