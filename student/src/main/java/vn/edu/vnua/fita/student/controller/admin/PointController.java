@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import vn.edu.vnua.fita.student.controller.BaseController;
 import vn.edu.vnua.fita.student.dto.PointDTO;
+import vn.edu.vnua.fita.student.dto.TrashAdminDTO;
 import vn.edu.vnua.fita.student.dto.TrashPointDTO;
 import vn.edu.vnua.fita.student.entity.TrashPoint;
 import vn.edu.vnua.fita.student.entity.Point;
@@ -65,6 +66,13 @@ public class PointController extends BaseController {
                 trashPoint -> modelMapper.map(trashPoint, TrashPointDTO.class)
         ).toList();
         return buildListItemResponse(response, response.size());
+    }
+
+    @PostMapping("delete-permanent/{id}")
+    @PreAuthorize("hasAnyAuthority('DELETE_POINT', 'SUPERADMIN')")
+    public ResponseEntity<?> deletePointPermanently(@PathVariable Long id){
+        TrashPointDTO response = modelMapper.map(pointManager.deletePermanent(id), TrashPointDTO.class);
+        return buildItemResponse(response);
     }
 
     @PostMapping("restore/{id}")
