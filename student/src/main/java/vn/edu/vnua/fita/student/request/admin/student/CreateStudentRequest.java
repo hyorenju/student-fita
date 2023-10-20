@@ -50,10 +50,11 @@ public class CreateStudentRequest {
 
     @NotBlank(message = "Email không được để trống")
     @EmailAnnotation(message = "Email không đúng định dạng")
+    @Size(max = 190,message = "Email quá dài")
     private String email;
 
     @NotBlank(message = "Quê quán không được để trống")
-    @Size(max = 200,message = "Quê quán không được quá dài")
+    @Size(max = 200,message = "Quê quán quá dài")
     private String homeTown;
 
     @Size(max = 200,message = "Nơi ở hiện tại không được quá dài")

@@ -16,30 +16,31 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `roles_permissions`
+-- Table structure for table `student_refreshers`
 --
 
-DROP TABLE IF EXISTS `roles_permissions`;
+DROP TABLE IF EXISTS `student_refreshers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `roles_permissions` (
-  `role_id` varchar(100) NOT NULL,
-  `permission_id` varchar(100) NOT NULL,
-  KEY `FKbx9r9uw77p58gsq4mus0mec0o` (`permission_id`),
-  KEY `FKqi9odri6c1o81vjox54eedwyh` (`role_id`),
-  CONSTRAINT `FKbx9r9uw77p58gsq4mus0mec0o` FOREIGN KEY (`permission_id`) REFERENCES `permissions` (`id`),
-  CONSTRAINT `FKqi9odri6c1o81vjox54eedwyh` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `student_refreshers` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `expiry_date` datetime(6) DEFAULT NULL,
+  `token` varchar(200) DEFAULT NULL,
+  `student_id` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UK_k7b8ruy1i7iq9ngu2dl9b9b7x` (`student_id`),
+  CONSTRAINT `FKlnw7dy9lmj7eln4bnbihd9wj3` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `roles_permissions`
+-- Dumping data for table `student_refreshers`
 --
 
-LOCK TABLES `roles_permissions` WRITE;
-/*!40000 ALTER TABLE `roles_permissions` DISABLE KEYS */;
-INSERT INTO `roles_permissions` VALUES ('MOD','GET_CLASS_STATISTIC'),('MOD','GET_COURSE_STATISTIC'),('MOD','GET_DISPLAY_LIST'),('MOD','GET_FACULTY_STATISTIC'),('MOD','GET_MAJOR_STATISTIC'),('MOD','GET_STUDENT_STATISTIC'),('MOD','UPDATE_DISPLAY'),('ADMIN','CREATE_STUDENT'),('ADMIN','EXPORT_POINT');
-/*!40000 ALTER TABLE `roles_permissions` ENABLE KEYS */;
+LOCK TABLES `student_refreshers` WRITE;
+/*!40000 ALTER TABLE `student_refreshers` DISABLE KEYS */;
+INSERT INTO `student_refreshers` VALUES (1,'2024-10-11 10:27:04.819886','1b7ffc21-c662-42f9-8684-c8be4b7a7cbb','654661'),(2,'2024-10-17 03:04:11.756301','6b3fa947-7b8f-4bf4-a80d-a0a24057164e','655201');
+/*!40000 ALTER TABLE `student_refreshers` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 

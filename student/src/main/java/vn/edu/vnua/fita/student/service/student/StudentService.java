@@ -5,6 +5,7 @@ import vn.edu.vnua.fita.student.entity.Student;
 import vn.edu.vnua.fita.student.entity.StudentStatus;
 import vn.edu.vnua.fita.student.model.statistic.StudentStatistic;
 import vn.edu.vnua.fita.student.request.ChangePasswordRequest;
+import vn.edu.vnua.fita.student.request.student.UpdateEmailRequest;
 import vn.edu.vnua.fita.student.request.student.UpdateStudentProfileRequest;
 
 import java.io.IOException;
@@ -16,4 +17,5 @@ public interface StudentService {
     Student changePassword(ChangePasswordRequest request);
     StudentStatistic getStatistic();
     List<StudentStatus> getStatus();
+    Student updateEmail(UpdateEmailRequest request);
 }

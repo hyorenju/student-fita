@@ -15,6 +15,7 @@ import vn.edu.vnua.fita.student.entity.StudentStatus;
 import vn.edu.vnua.fita.student.model.statistic.StudentStatistic;
 import vn.edu.vnua.fita.student.request.ChangePasswordRequest;
 import vn.edu.vnua.fita.student.request.admin.student_status.GetStudentStatusListRequest;
+import vn.edu.vnua.fita.student.request.student.UpdateEmailRequest;
 import vn.edu.vnua.fita.student.request.student.UpdateStudentProfileRequest;
 import vn.edu.vnua.fita.student.service.admin.management.StudentStatusManager;
 import vn.edu.vnua.fita.student.service.admin.statistic.StatisticService;
@@ -66,5 +67,12 @@ public class StudentController extends BaseController {
                 studentStatus -> modelMapper.map(studentStatus, StudentStatusDTO.class)
         ).toList();
         return buildListItemResponse(response, response.size());
+    }
+
+    @PostMapping("email")
+    @PreAuthorize("hasAnyAuthority('STUDENT')")
+    public ResponseEntity<?> updateEmail(@Valid @RequestBody UpdateEmailRequest request){
+        StudentDTO response = modelMapper.map(studentService.updateEmail(request), StudentDTO.class);
+        return buildItemResponse(response);
     }
 }

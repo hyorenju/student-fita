@@ -20,6 +20,7 @@ import vn.edu.vnua.fita.student.repository.jparepo.PointRepository;
 import vn.edu.vnua.fita.student.repository.jparepo.StudentRepository;
 import vn.edu.vnua.fita.student.request.ChangePasswordRequest;
 import vn.edu.vnua.fita.student.request.admin.student_status.GetStudentStatusListRequest;
+import vn.edu.vnua.fita.student.request.student.UpdateEmailRequest;
 import vn.edu.vnua.fita.student.request.student.UpdateStudentProfileRequest;
 import vn.edu.vnua.fita.student.service.admin.file.FirebaseService;
 import vn.edu.vnua.fita.student.service.admin.iservice.IStudentStatusService;
@@ -40,9 +41,8 @@ public class StudentServiceImpl implements StudentService {
     private final PasswordEncoder encoder;
     private final StatisticService statisticService;
     private final StudentStatusManager studentStatusService;
-
     private final String studentNotFound = "Không tìm thấy sinh viên";
-
+    private final String mustBeGmail = "Vui lòng sử dụng tài khoản gmail phục vụ cho việc lấy lại mật khẩu";
 
     @Value("${firebase.storage.bucket}")
     private String bucketName;
@@ -112,5 +112,20 @@ public class StudentServiceImpl implements StudentService {
 
         Page<StudentStatus> page = studentStatusService.getStudentStatusList(request);
         return page.getContent().stream().toList();
+    }
+
+    @Override
+    public Student updateEmail(UpdateEmailRequest request) {
+        if(!request.getEmail().contains("@gmail")) {
+            throw new RuntimeException(mustBeGmail);
+        }
+
+        Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
+        Student student = studentRepository.findById(authentication.getPrincipal().toString()).orElseThrow(() -> new RuntimeException(studentNotFound));
+
+        student.setEmail(request.getEmail());
+        studentRepository.saveAndFlush(student);
+
+        return student;
     }
 }

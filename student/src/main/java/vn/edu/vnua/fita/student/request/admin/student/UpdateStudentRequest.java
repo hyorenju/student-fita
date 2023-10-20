@@ -46,6 +46,7 @@ public class UpdateStudentRequest {
 
     @NotBlank(message = "Email không được để trống")
     @EmailAnnotation(message = "Email không đúng định dạng")
+    @Size(max = 190,message = "Email quá dài")
     private String email;
 
     @NotBlank(message = "Quê quán không được để trống")

@@ -25,14 +25,15 @@ DROP TABLE IF EXISTS `admins`;
 CREATE TABLE `admins` (
   `id` varchar(100) NOT NULL,
   `avatar` varchar(1000) DEFAULT NULL,
-  `email` varchar(200) DEFAULT NULL,
+  `email` varchar(190) DEFAULT NULL,
   `is_deleted` bit(1) DEFAULT NULL,
   `name` varchar(200) DEFAULT NULL,
   `password` varchar(200) DEFAULT NULL,
   `role_id` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `admins_email_uindex` (`email`),
   KEY `FK7h9x5fnfw47l8lkeas20rmsva` (`role_id`),
-  CONSTRAINT `FK7h9x5fnfw47l8lkeas20rmsva` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`)
+  CONSTRAINT `admins_roles_id_fk` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -55,4 +56,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-10-11 16:56:02
+-- Dump completed on 2023-10-20 13:25:17

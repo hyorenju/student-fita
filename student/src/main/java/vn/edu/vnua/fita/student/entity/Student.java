@@ -61,7 +61,7 @@ public class Student {
     @Column(name = "is_verified")
     private Boolean isVerified;
 
-    @Column(length = 200, unique = true)
+    @Column(length = 190, unique = true)
     private String email;
 
     @Column(name = "home_town", length = 200)
@@ -147,11 +147,11 @@ public class Student {
         if (!ImportStudentValidator.validatePhoneNumber(phoneNumber)) {
             errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(8).errorMsg("Sđt không hợp lệ").build());
         }
-        if (!ImportStudentValidator.validateEmail(email)) {
-            errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(9).errorMsg("Email không hợp lệ").build());
-        }
+//        if (!ImportStudentValidator.validateEmail(email)) {
+//            errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(9).errorMsg("Email không hợp lệ").build());
+//        }
         if (!ImportStudentValidator.validateHomeTown(homeTown)) {
-            errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(10).errorMsg("Quê quán không hợp lệ").build());
+            errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(9).errorMsg("Quê quán không hợp lệ").build());
         }
 
         return errorDetailList;

@@ -58,9 +58,7 @@ public class MyUtils {
         }
     }
 
-    public String test(String input){
-        String year = input.substring(0, input.length()-1);
-        String term = input.substring(input.length()-1);
-        return term;
+    public boolean test(String input){
+        return input.contains("@gmail");
     }
 }

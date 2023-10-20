@@ -7,6 +7,6 @@ import vn.edu.vnua.fita.student.util.MyUtils;
 public class Test {
     public static void main(String[] args) {
         MyUtils myUtils = new MyUtils();
-        System.out.println(myUtils.test("20201"));
+        System.out.println(myUtils.test("hieu@gmail.com"));
     }
 }

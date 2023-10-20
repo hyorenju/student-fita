@@ -32,7 +32,7 @@ CREATE TABLE `trash_students` (
   KEY `trash_students_admins_id_fk` (`deleted_by`),
   CONSTRAINT `FKnj6txl2v24mclaiwfu7ymqyuw` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`),
   CONSTRAINT `trash_students_admins_id_fk` FOREIGN KEY (`deleted_by`) REFERENCES `admins` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,7 +41,6 @@ CREATE TABLE `trash_students` (
 
 LOCK TABLES `trash_students` WRITE;
 /*!40000 ALTER TABLE `trash_students` DISABLE KEYS */;
-INSERT INTO `trash_students` VALUES (5,'2023-09-20 14:21:46.743185','611118','kiki123'),(6,'2023-09-20 14:21:46.807607','611112','kiki123');
 /*!40000 ALTER TABLE `trash_students` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -54,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-10-11 16:56:02
+-- Dump completed on 2023-10-20 13:25:19

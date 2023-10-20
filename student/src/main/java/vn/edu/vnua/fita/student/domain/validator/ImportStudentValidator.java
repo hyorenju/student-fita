@@ -39,9 +39,9 @@ public class ImportStudentValidator {
         return new PhoneNumberValidator().validatePhoneNumber(phoneNumber);
     }
 
-    public static boolean validateEmail(String email){
-        return new EmailValidator().validateEmail(email);
-    }
+//    public static boolean validateEmail(String email){
+//        return new EmailValidator().validateEmail(email);
+//    }
 
     public static boolean validateHomeTown(String homeTown){
         return homeTown.matches("^[\\p{L}[0-9] ,.-]+$");

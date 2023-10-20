@@ -51,8 +51,8 @@ public class StoreStudentWorker implements Callable<StudentExcelData> {
             String dob = infoList[6].strip();
             String gender = infoList[7].strip();
             String phoneNumber = infoList[8].strip();
-            String email = infoList[9].strip();
-            String homeTown = infoList[10].strip();
+//            String email = infoList[9].strip();
+            String homeTown = infoList[9].strip();
 
             Student student = Student.builder()
                     .id(id)
@@ -64,7 +64,7 @@ public class StoreStudentWorker implements Callable<StudentExcelData> {
                     .dob(MyUtils.convertTimestampFromString(dob))
                     .gender(gender)
                     .phoneNumber(phoneNumber)
-                    .email(email)
+//                    .email(email)
                     .homeTown(homeTown)
                     .isDeleted(false)
                     .role(Role.builder().id(RoleConstant.STUDENT).build())
@@ -83,9 +83,9 @@ public class StoreStudentWorker implements Callable<StudentExcelData> {
             if (!classRepository.existsById(classId)) {
                 errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(5).errorMsg("Lớp không tồn tại").build());
             }
-            if (studentRepository.existsByEmail(email)) {
-                errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(9).errorMsg("Email đã tồn tại").build());
-            }
+//            if (studentRepository.existsByEmail(email)) {
+//                errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(9).errorMsg("Email đã tồn tại").build());
+//            }
 
             studentExcelData.setStudent(student);
             if (!errorDetailList.isEmpty()) {
