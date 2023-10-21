@@ -6,6 +6,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import vn.edu.vnua.fita.student.common.DateTimeConstant;
@@ -43,9 +44,9 @@ public class StudentManager implements IStudentService {
     private final MajorRepository majorRepository;
     private final StudentStatusRepository studentStatusRepository;
     private final TrashStudentRepository trashStudentRepository;
+    private final StudentRefresherRepository studentRefresherRepository;
     private final PointRepository pointRepository;
     private final PasswordEncoder encoder;
-    private final FirebaseService firebaseService;
     private final ExcelService excelService;
     private final String studentHadExisted = "Sinh viên %s đã tồn tại trong hệ thống";
     private final String studentNotFound = "Không tìm thấy sinh viên %s";
@@ -53,11 +54,8 @@ public class StudentManager implements IStudentService {
     private final String classNotFound = "Không tìm thấy lớp %s";
     private final String majorNotFound = "Không tìm thấy chuyên ngành %s";
     private final String byWhomNotFound = "Không thể xác định danh tính người xoá";
-    private final String trashNotFound = "Không tìm thấy rác";
     private final String emailHasExisted = "Email %s đã tồn tại trong hệ thống, vui lòng sử dụng một email khác";
 
-    @Value("${firebase.storage.bucket}")
-    private String bucketName;
 
     @Override
     public Page<Student> getStudentList(GetStudentListRequest request) {
@@ -236,9 +234,8 @@ public class StudentManager implements IStudentService {
 
     @Override
     public TrashStudent deletePermanent(Long id) {
-        TrashStudent trashStudent = trashStudentRepository.findById(id).orElseThrow(() -> new RuntimeException(trashNotFound));
+        TrashStudent trashStudent = trashStudentRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy rác để xoá vĩnh viễn"));
         Student student = trashStudent.getStudent();
-//        String studentId = student.getId();
 
         List<StudentStatus> studentStatuses = studentStatusRepository.findAllByStudent(student);
         for (StudentStatus studentStatus:
@@ -250,6 +247,12 @@ public class StudentManager implements IStudentService {
         for (Point point:
              points) {
             pointRepository.delete(point);
+        }
+
+        List<StudentRefresher> studentRefreshers = studentRefresherRepository.findAllByStudent(student);
+        for (StudentRefresher studentRefresher:
+             studentRefreshers) {
+            studentRefresherRepository.delete(studentRefresher);
         }
 
         trashStudentRepository.delete(trashStudent);

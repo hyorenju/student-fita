@@ -19,6 +19,7 @@ public class StatusManager implements IStatusService {
     private final String statusHadExisted = "Mã trạng thái đã tồn tại trong hệ thống";
     private final String statusNotFound = "Mã trạng thái không tồn tại trong hệ thống";
     private final String cannotDeleteDefault = "Không thể xoá trạng thái mặc định, gồm: 'Đã nhập học', 'Đã bỏ học, 'Đã xin thôi học', 'Bị buộc thôi học' và 'Đã tốt nghiệp'";
+    private final String cannotUpdateDefault = "Không thể sửa trạng thái mặc định, gồm: 'Đã nhập học', 'Đã bỏ học, 'Đã xin thôi học', 'Bị buộc thôi học' và 'Đã tốt nghiệp'";
     private final String cannotDeleteAssigned = "Trạng thái này đang được gán cho sinh viên, vui lòng xoá hết các sinh viên có trạng thái này trước khi xoá trạng thái. Nếu không, có thể tiến hành cập nhật trạng thái thay vì xoá";
 
     @Override
@@ -36,6 +37,9 @@ public class StatusManager implements IStatusService {
 
     @Override
     public Status updateStatus(Integer id, UpdateStatusRequest request) {
+        if (id == 1 || id == 2 || id == 3 || id == 4 || id == 5) {
+            throw new RuntimeException(cannotUpdateDefault);
+        }
         Status status = statusRepository.findById(id).orElseThrow(() -> new RuntimeException(statusNotFound));
         status.setName(request.getName());
         return statusRepository.saveAndFlush(status);

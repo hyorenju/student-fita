@@ -19,6 +19,7 @@ import vn.edu.vnua.fita.student.common.FirebaseExpirationTimeConstant;
 import vn.edu.vnua.fita.student.common.RoleConstant;
 import vn.edu.vnua.fita.student.entity.*;
 import vn.edu.vnua.fita.student.repository.customrepo.CustomAdminRepository;
+import vn.edu.vnua.fita.student.repository.jparepo.AdminRefresherRepository;
 import vn.edu.vnua.fita.student.repository.jparepo.AdminRepository;
 import vn.edu.vnua.fita.student.repository.jparepo.RoleRepository;
 import vn.edu.vnua.fita.student.repository.jparepo.TrashAdminRepository;
@@ -31,6 +32,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -40,6 +42,7 @@ public class AdminManager implements IAdminService {
     private final AdminRepository adminRepository;
     private final RoleRepository roleRepository;
     private final TrashAdminRepository trashAdminRepository;
+    private final AdminRefresherRepository adminRefresherRepository;
     private final PasswordEncoder encoder;
     private final FirebaseService firebaseService;
     private final String adminHadExisted = "Mã quản trị viên đã tồn tại trong hệ thống";
@@ -140,8 +143,13 @@ public class AdminManager implements IAdminService {
         TrashAdmin trashAdmin = trashAdminRepository.findById(id).orElseThrow(() -> new RuntimeException(trashNotFound));
         Admin admin = trashAdmin.getAdmin();
 
-        trashAdminRepository.delete(trashAdmin);
+        List<AdminRefresher> adminRefreshers = adminRefresherRepository.findAllByAdmin(admin);
+        for (AdminRefresher adminRefresher:
+                adminRefreshers) {
+            adminRefresherRepository.delete(adminRefresher);
+        }
 
+        trashAdminRepository.delete(trashAdmin);
         adminRepository.delete(admin);
 
         return trashAdmin;

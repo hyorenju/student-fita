@@ -21,7 +21,7 @@ public class CourseManager implements ICourseService {
     private final CourseRepository courseRepository;
     private final String courseHadExisted = "Mã khoá đã tồn tại trong hệ thống";
     private final String courseNotFound = "Mã khoá %s không tồn tại trong hệ thống";
-    private final String cannotDelete = "Khoá này đang ràng buộc với bảng sinh viên, vui lòng xoá hết sinh viên trước khi tiến hành xoá khoá";
+    private final String cannotDelete = "Khoá này đang ràng buộc với bảng sinh viên, vui lòng xoá hết sinh viên thuộc khoá này trước khi tiến hành xoá khoá";
 
 
     @Override

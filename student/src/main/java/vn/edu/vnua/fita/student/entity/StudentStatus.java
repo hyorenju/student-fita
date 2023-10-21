@@ -24,7 +24,7 @@ public class StudentStatus {
     private Student student;
 
     @ManyToOne
-    @JoinColumn(name = "status_Id")
+    @JoinColumn(name = "status_id")
     private Status status;
 
     @Column

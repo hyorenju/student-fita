@@ -20,6 +20,7 @@ import vn.edu.vnua.fita.student.service.admin.iservice.IStudentStatusService;
 import vn.edu.vnua.fita.student.util.MyUtils;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -79,7 +80,7 @@ public class StudentStatusManager implements IStudentStatusService {
         return studentStatus;
     }
 
-    public String createTermId(Timestamp time) {
+    private String createTermId(Timestamp time) {
         int term = time.getMonth() >= 8 ? 2 : 1;
         int year = term == 1 ? time.getYear() + 1900 : time.getYear() + 1901;
         return "" + year + term;

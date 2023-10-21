@@ -8,6 +8,8 @@ import java.sql.Timestamp;
 
 @Data
 public class StudentStatusDTO {
+    private Long id;
+
     private StudentDTO student;
 
     private StatusDTO status;

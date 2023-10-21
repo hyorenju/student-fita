@@ -11,7 +11,4 @@ public class UpdateDisplayRequest {
     private String title;
 
     private String content;
-
-    @NotBlank(message = "Miêu tả nơi hiển thị không được để trống")
-    private String location;
 }

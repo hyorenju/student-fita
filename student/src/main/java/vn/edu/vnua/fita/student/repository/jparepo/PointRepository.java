@@ -15,4 +15,5 @@ public interface PointRepository extends JpaRepository<Point, Long>, JpaSpecific
     Optional<Point> findByStudentIdAndTermId(String studentId, String termId);
     List<Point> findAllByStudentIdOrderByTermId(String studentId);
     List<Point> findAllByStudent(Student student);
+    void deleteAllByStudent(Student student);
 }

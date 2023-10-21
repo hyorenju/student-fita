@@ -62,7 +62,6 @@ public class DisplayService implements IDisplayService {
         display.setImg(request.getImg());
         display.setTitle(request.getTitle());
         display.setContent(request.getContent());
-        display.setContent(request.getLocation());
 
         return displayRepository.saveAndFlush(display);
     }
