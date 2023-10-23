@@ -64,9 +64,10 @@ public class StudentStatusManager implements IStudentStatusService {
 
     @Override
     public StudentStatus updateStudentStatus(UpdateStudentStatusRequest request, Long id) throws ParseException {
-        StudentStatus studentStatus = studentStatusRepository.findById(id).orElseThrow(() -> new RuntimeException(studentNotFound));
+        StudentStatus studentStatus = studentStatusRepository.findById(id).orElseThrow(() -> new RuntimeException(studentStatusNotFound));
         studentStatus.setTime(MyUtils.convertTimestampFromString(request.getTime()));
         studentStatus.setNote(request.getNote());
+        studentStatus.setTermId(createTermId(studentStatus.getTime()));
         return studentStatusRepository.saveAndFlush(studentStatus);
     }
 

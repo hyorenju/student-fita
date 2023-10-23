@@ -20,7 +20,7 @@ public class CustomStudentStatusRepository {
                 predicates.add(criteriaBuilder.like(root.get("student").get("id"), studentId + "%"));
             }
             if(StringUtils.hasText(statusId)){
-                predicates.add(criteriaBuilder.like(root.get("status").get("id"), statusId + "%"));
+                predicates.add(criteriaBuilder.like(root.get("status").get("id"), statusId));
             }
             if(StringUtils.hasText(termId)){
                 predicates.add(criteriaBuilder.like(root.get("termId"), termId));

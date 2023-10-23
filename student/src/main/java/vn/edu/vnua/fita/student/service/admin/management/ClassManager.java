@@ -9,8 +9,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
+import vn.edu.vnua.fita.student.common.RoleConstant;
 import vn.edu.vnua.fita.student.dto.MajorDTO;
 import vn.edu.vnua.fita.student.entity.AClass;
+import vn.edu.vnua.fita.student.entity.Role;
 import vn.edu.vnua.fita.student.entity.Student;
 import vn.edu.vnua.fita.student.repository.customrepo.CustomClassRepository;
 import vn.edu.vnua.fita.student.repository.jparepo.ClassRepository;
@@ -54,7 +56,9 @@ public class ClassManager implements IClassService {
             }
             Student monitor = null;
             if(request.getStudentId()!=null) {
-                monitor = studentRepository.findById(request.getStudentId()).orElseThrow(() -> new RuntimeException(String.format(studentNotFound, request.getId())));
+                monitor = studentRepository.findById(request.getStudentId()).orElseThrow(() -> new RuntimeException(String.format(studentNotFound, request.getStudentId())));
+                monitor.setRole(Role.builder().id(RoleConstant.MONITOR).build());
+                studentRepository.saveAndFlush(monitor);
             }
 
             AClass aClass = AClass.builder()
@@ -73,12 +77,18 @@ public class ClassManager implements IClassService {
     public AClass updateClass(UpdateClassRequest request) {
         try {
             AClass aClass = classRepository.findById(request.getId()).orElseThrow(() -> new RuntimeException(String.format(classNotFound, request.getId())));
-            Student monitor = null;
+            Student newMonitor = null;
             if(request.getStudentId()!=null) {
-                monitor = studentRepository.findById(request.getStudentId()).orElseThrow(() -> new RuntimeException(String.format(studentNotFound, request.getId())));
+                newMonitor = studentRepository.findById(request.getStudentId()).orElseThrow(() -> new RuntimeException(String.format(studentNotFound, request.getStudentId())));
+                newMonitor.setRole(Role.builder().id(RoleConstant.MONITOR).build());
+                studentRepository.saveAndFlush(newMonitor);
+
+                Student oldMonitor = aClass.getMonitor();
+                oldMonitor.setRole(Role.builder().id(RoleConstant.STUDENT).build());
+                studentRepository.saveAndFlush(oldMonitor);
             }
             aClass.setName(request.getName());
-            aClass.setMonitor(monitor);
+            aClass.setMonitor(newMonitor);
             return classRepository.saveAndFlush(aClass);
         } catch (DataIntegrityViolationException e) {
             throw new RuntimeException(duplicateMonitor);
