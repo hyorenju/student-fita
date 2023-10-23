@@ -1,5 +1,6 @@
 package vn.edu.vnua.fita.student.repository.customrepo;
 
+import vn.edu.vnua.fita.student.common.FamilySituationConstant;
 import vn.edu.vnua.fita.student.entity.Student;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
@@ -14,7 +15,8 @@ public class CustomStudentRepository {
     public static Specification<Student> filterStudentList(String courseId,
                                                            String majorId,
                                                            String classId,
-                                                           String studentId) {
+                                                           String studentId,
+                                                           String familySituation) {
         return ((root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
             if (StringUtils.hasText(courseId)) {
@@ -28,6 +30,9 @@ public class CustomStudentRepository {
             }
             if (StringUtils.hasText(studentId)) {
                 predicates.add(criteriaBuilder.like(root.get("id"), studentId + "%"));
+            }
+            if (StringUtils.hasText(familySituation)) {
+                predicates.add(criteriaBuilder.like(root.get("familySituation"), FamilySituationConstant.getSituationValue(familySituation)));
             }
             query.orderBy(
                     criteriaBuilder.asc(root.get("course").get("id")),

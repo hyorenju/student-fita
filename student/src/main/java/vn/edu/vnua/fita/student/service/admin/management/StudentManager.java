@@ -65,7 +65,8 @@ public class StudentManager implements IStudentService {
                 request.getFilter().getCourseId(),
                 request.getFilter().getMajorId(),
                 request.getFilter().getClassId(),
-                request.getStudentId()
+                request.getStudentId(),
+                request.getFilter().getFamilySituation()
         );
         return studentRepository.findAll(specification, PageRequest.of(request.getPage() - 1, request.getSize()));
     }

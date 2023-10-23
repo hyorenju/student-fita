@@ -14,6 +14,7 @@ public class GetPointListRequest extends GetPageBaseRequest {
     @Data
     @RequiredArgsConstructor
     public static class FilterCondition {
+        //
         private String termId;
         private String classId;
         private int point;

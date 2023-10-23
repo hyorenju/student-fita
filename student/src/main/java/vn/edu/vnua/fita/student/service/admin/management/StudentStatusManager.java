@@ -38,8 +38,8 @@ public class StudentStatusManager implements IStudentStatusService {
     public Page<StudentStatus> getStudentStatusList(GetStudentStatusListRequest request) {
         Specification<StudentStatus> specification = CustomStudentStatusRepository.filterStudentStatusList(
                 request.getStudentId(),
-                request.getStatusId(),
-                request.getTermId()
+                request.getFilter().getStatusId(),
+                request.getFilter().getTermId()
         );
         return studentStatusRepository.findAll(specification, PageRequest.of(request.getPage() - 1, request.getSize()));
     }
