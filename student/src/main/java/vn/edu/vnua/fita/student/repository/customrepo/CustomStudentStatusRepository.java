@@ -25,6 +25,7 @@ public class CustomStudentStatusRepository {
             if(StringUtils.hasText(termId)){
                 predicates.add(criteriaBuilder.like(root.get("termId"), termId));
             }
+            query.orderBy(criteriaBuilder.asc(root.get("time")));
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         });
     }

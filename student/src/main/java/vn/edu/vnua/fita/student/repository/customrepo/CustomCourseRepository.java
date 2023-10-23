@@ -17,6 +17,7 @@ public class CustomCourseRepository {
             if (StringUtils.hasText(courseId)) {
                 predicates.add(criteriaBuilder.like(root.get("id"), courseId));
             }
+            query.orderBy(criteriaBuilder.desc(root.get("id")));
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         });
     }

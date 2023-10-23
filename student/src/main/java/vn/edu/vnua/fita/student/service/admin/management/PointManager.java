@@ -46,20 +46,15 @@ public class PointManager implements IPointService {
     public Page<Point> filterPointList(GetPointListRequest request) {
         Specification<Point> specification = CustomPointRepository.filterPointList(
                 request.getStudentId(),
-                request.getTermId(),
+                request.getFilter().getTermId(),
+                request.getFilter().getClassId(),
                 request.getFilter().getPoint(),
                 request.getFilter().getAccPoint(),
-                request.getFilter().getTrainingPoint()
+                request.getFilter().getTrainingPoint(),
+                request.getSort().getSortColumn(),
+                request.getSort().getSortType()
         );
-        return pointRepository.findAll(
-                specification,
-                PageRequest.of(request.getPage() - 1, request.getSize(),
-                        Sort.by("id").descending().and(
-                                Sort.by("termId").descending().and(
-                                        Sort.by("student.lastName").ascending().and(
-                                                Sort.by("student.surname").ascending()
-                                        ))))
-        );
+        return pointRepository.findAll(specification, PageRequest.of(request.getPage() - 1, request.getSize()));
     }
 
     @Override

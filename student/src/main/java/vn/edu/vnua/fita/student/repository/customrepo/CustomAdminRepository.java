@@ -17,6 +17,7 @@ public class CustomAdminRepository {
             if (StringUtils.hasText(id)) {
                 predicates.add(criteriaBuilder.like(root.get("id"), id + "%"));
             }
+            query.orderBy(criteriaBuilder.asc(root.get("name")));
             predicates.add(criteriaBuilder.isFalse(root.get("isDeleted")));
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         });

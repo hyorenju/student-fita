@@ -29,6 +29,13 @@ public class CustomStudentRepository {
             if (StringUtils.hasText(studentId)) {
                 predicates.add(criteriaBuilder.like(root.get("id"), studentId + "%"));
             }
+            query.orderBy(
+                    criteriaBuilder.asc(root.get("course").get("id")),
+                    criteriaBuilder.asc(root.get("major").get("id")),
+                    criteriaBuilder.asc(root.get("aclass").get("id")),
+                    criteriaBuilder.asc(root.get("lastName")),
+                    criteriaBuilder.asc(root.get("surname"))
+            );
             predicates.add(criteriaBuilder.isFalse(root.get("isDeleted")));
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         });

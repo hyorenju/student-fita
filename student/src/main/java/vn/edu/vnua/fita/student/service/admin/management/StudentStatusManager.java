@@ -41,11 +41,7 @@ public class StudentStatusManager implements IStudentStatusService {
                 request.getStatusId(),
                 request.getTermId()
         );
-        return studentStatusRepository.findAll(
-                specification,
-                PageRequest.of(request.getPage() - 1, request.getSize(),
-                        Sort.by("time").ascending())
-        );
+        return studentStatusRepository.findAll(specification, PageRequest.of(request.getPage() - 1, request.getSize()));
     }
 
     @Override

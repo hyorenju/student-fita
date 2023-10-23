@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,8 @@ import vn.edu.vnua.fita.student.repository.jparepo.TermRepository;
 import vn.edu.vnua.fita.student.request.admin.term.CreateTermRequest;
 import vn.edu.vnua.fita.student.request.admin.term.GetTermListRequest;
 import vn.edu.vnua.fita.student.service.admin.iservice.ITermService;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +32,11 @@ public class TermManager implements ITermService {
                 request.getId()
         );
         return termRepository.findAll(specification, PageRequest.of(request.getPage() - 1, request.getSize()));
+    }
+
+    @Override
+    public List<Term> getAllTerm() {
+        return termRepository.findAll(Sort.by("id").descending());
     }
 
     @Override

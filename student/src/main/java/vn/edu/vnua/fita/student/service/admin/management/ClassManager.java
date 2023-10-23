@@ -38,8 +38,7 @@ public class ClassManager implements IClassService {
         Specification<AClass> specification = CustomClassRepository.filterClassList(
                 request.getId()
         );
-        return classRepository.findAll(specification, PageRequest.of(request.getPage() - 1, request.getSize(),
-                Sort.by("id").descending()));
+        return classRepository.findAll(specification, PageRequest.of(request.getPage() - 1, request.getSize()));
     }
 
     @Override

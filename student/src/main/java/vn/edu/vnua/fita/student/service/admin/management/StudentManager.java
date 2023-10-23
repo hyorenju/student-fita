@@ -67,15 +67,7 @@ public class StudentManager implements IStudentService {
                 request.getFilter().getClassId(),
                 request.getStudentId()
         );
-        return studentRepository.findAll(
-                specification,
-                PageRequest.of(request.getPage() - 1, request.getSize(),
-                        Sort.by("course.id").ascending()
-                                .and(Sort.by("major.id").ascending()
-                                        .and(Sort.by("aclass.id").ascending()
-                                                .and(Sort.by("lastName").ascending()
-                                                        .and(Sort.by("surname").ascending())))))
-        );
+        return studentRepository.findAll(specification, PageRequest.of(request.getPage() - 1, request.getSize()));
     }
 
     @Override

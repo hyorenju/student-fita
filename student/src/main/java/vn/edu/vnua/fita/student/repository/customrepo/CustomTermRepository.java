@@ -17,6 +17,7 @@ public class CustomTermRepository {
             if (StringUtils.hasText(termId)) {
                 predicates.add(criteriaBuilder.like(root.get("id"), termId+"%"));
             }
+            query.orderBy(criteriaBuilder.desc(root.get("id")));
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         });
     }

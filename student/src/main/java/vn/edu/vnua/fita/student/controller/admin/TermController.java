@@ -33,6 +33,15 @@ public class TermController extends BaseController {
         return buildPageItemResponse(request.getPage(), response.size(), page.getTotalElements(), response);
     }
 
+    @PostMapping("selection")
+    @PreAuthorize("hasAnyAuthority('SUPERADMIN')")
+    public ResponseEntity<?> getAllTerm(){
+        List<TermDTO> response = termManager.getAllTerm().stream().map(
+                term -> modelMapper.map(term, TermDTO.class)
+        ).toList();
+        return buildListItemResponse(response, response.size());
+    }
+
     @PostMapping("create")
     @PreAuthorize("hasAnyAuthority('SUPERADMIN')")
     public ResponseEntity<?> createTerm(@RequestBody @Valid CreateTermRequest request){

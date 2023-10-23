@@ -29,8 +29,7 @@ public class CourseManager implements ICourseService {
         Specification<Course> specification = CustomCourseRepository.filterCourseList(
                 request.getId()
         );
-        return courseRepository.findAll(specification, PageRequest.of(request.getPage() - 1, request.getSize(),
-                Sort.by("id").descending()));
+        return courseRepository.findAll(specification, PageRequest.of(request.getPage() - 1, request.getSize()));
     }
 
     @Override
