@@ -15,5 +15,6 @@ public class ExportStudentListRequest{
         private String courseId;
         private String majorId;
         private String classId;
+        private String familySituation;
     }
 }

@@ -218,14 +218,10 @@ public class StudentManager implements IStudentService {
                 request.getFilter().getCourseId(),
                 request.getFilter().getMajorId(),
                 request.getFilter().getClassId(),
-                request.getStudentId()
+                request.getStudentId(),
+                request.getFilter().getFamilySituation()
         );
-        List<Student> students = studentRepository.findAll(specification,
-                Sort.by("course.id").ascending()
-                        .and(Sort.by("major.id").ascending()
-                                .and(Sort.by("aclass.id").ascending()
-                                        .and(Sort.by("lastName").ascending()
-                                                .and(Sort.by("surname").ascending())))));
+        List<Student> students = studentRepository.findAll(specification);
 
         return excelService.writeStudentToExcel(students);
     }
