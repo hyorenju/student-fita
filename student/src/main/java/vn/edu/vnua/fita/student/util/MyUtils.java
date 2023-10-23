@@ -1,4 +1,5 @@
 package vn.edu.vnua.fita.student.util;
+
 import vn.edu.vnua.fita.student.common.DateTimeConstant;
 
 import java.nio.file.Path;
@@ -8,28 +9,39 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class MyUtils {
 
-    public static Timestamp convertTimestampFromString(String inputDate) {
+    public static Timestamp convertTimestampFromString(String inputDate) throws ParseException {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DateTimeConstant.DATE_FORMAT);
+        simpleDateFormat.setLenient(false);
+        return new Timestamp(simpleDateFormat.parse(inputDate).getTime());
+    }
+
+    public static Timestamp convertTimestampFromExcel(String inputDate) {
         try {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DateTimeConstant.DATE_FORMAT);
             simpleDateFormat.setLenient(false);
             return new Timestamp(simpleDateFormat.parse(inputDate).getTime());
-        } catch(ParseException e) {
+        } catch (ParseException e) {
             return new Timestamp(0);
         }
     }
 
     public static String formatDobToPassword(String inputDob) {
-        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("d/M/yyyy");
-        LocalDate date = LocalDate.parse(inputDob, inputFormatter);
+        try {
+            DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("d/M/yyyy");
+            LocalDate date = LocalDate.parse(inputDob, inputFormatter);
 
-        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        return date.format(outputFormatter);
+            DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            return date.format(outputFormatter);
+        } catch (DateTimeParseException e) {
+            return ("00/00/0000");
+        }
     }
 
-    public static String convertTimestampToString(Timestamp inputDate){
+    public static String convertTimestampToString(Timestamp inputDate) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
         return simpleDateFormat.format(inputDate);
     }
@@ -37,7 +49,7 @@ public class MyUtils {
     public static String parseFloatToString(Float input) {
         try {
             return String.format("%.2f", input);
-        } catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             return null;
         }
     }
@@ -45,20 +57,26 @@ public class MyUtils {
     public static Float parseFloatFromString(String input) {
         try {
             return Float.parseFloat(input);
-        } catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             return null;
         }
     }
 
-    public static Integer parseIntegerFromString(String input){
+    public static Integer parseIntegerFromString(String input) {
         try {
             return Integer.parseInt(input);
-        } catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             return null;
         }
     }
 
-    public boolean test(String input){
-        return input.contains("@gmail");
+    public Timestamp test(String input) throws ParseException {
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DateTimeConstant.DATE_FORMAT);
+            simpleDateFormat.setLenient(false);
+            return new Timestamp(simpleDateFormat.parse(input).getTime());
+        } catch (ParseException | DateTimeParseException e) {
+            return new Timestamp(0);
+        }
     }
 }

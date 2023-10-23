@@ -55,11 +55,8 @@ public class Student {
     @Column(name = "phone_number", length = 200)
     private String phoneNumber;
 
-    @Column(name = "new_phone", length = 200)
-    private String newPhone;
-
-    @Column(name = "is_verified")
-    private Boolean isVerified;
+    @Column(name = "family_situation", length = 200)
+    private String familySituation;
 
     @Column(length = 190, unique = true)
     private String email;

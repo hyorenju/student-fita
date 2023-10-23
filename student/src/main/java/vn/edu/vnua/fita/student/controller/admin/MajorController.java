@@ -34,6 +34,14 @@ public class MajorController extends BaseController {
         return buildPageItemResponse(request.getPage(), response.size(), page.getTotalElements(), response);
     }
 
+    @PostMapping("selection")
+    public ResponseEntity<?> getAllMajor(){
+        List<MajorDTO> response = majorManager.getAllMajor().stream().map(
+                major -> modelMapper.map(major, MajorDTO.class)
+        ).toList();
+        return buildListItemResponse(response, response.size());
+    }
+
     @PostMapping("create")
     @PreAuthorize("hasAnyAuthority('SUPERADMIN')")
     public ResponseEntity<?> createMajor(@Valid @RequestBody CreateMajorRequest request){

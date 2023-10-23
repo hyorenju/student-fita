@@ -20,6 +20,7 @@ import vn.edu.vnua.fita.student.service.admin.iservice.IStudentStatusService;
 import vn.edu.vnua.fita.student.util.MyUtils;
 
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.util.List;
 
 @Service
@@ -48,7 +49,7 @@ public class StudentStatusManager implements IStudentStatusService {
     }
 
     @Override
-    public StudentStatus createStudentStatus(CreateStudentStatusRequest request) {
+    public StudentStatus createStudentStatus(CreateStudentStatusRequest request) throws ParseException {
         if(studentStatusRepository.existsByStudentIdAndStatusId(request.getStudentId(), request.getStatusId())){
             throw new RuntimeException(studentStatusHadExisted);
         }
@@ -66,7 +67,7 @@ public class StudentStatusManager implements IStudentStatusService {
     }
 
     @Override
-    public StudentStatus updateStudentStatus(UpdateStudentStatusRequest request, Long id) {
+    public StudentStatus updateStudentStatus(UpdateStudentStatusRequest request, Long id) throws ParseException {
         StudentStatus studentStatus = studentStatusRepository.findById(id).orElseThrow(() -> new RuntimeException(studentNotFound));
         studentStatus.setTime(MyUtils.convertTimestampFromString(request.getTime()));
         studentStatus.setNote(request.getNote());

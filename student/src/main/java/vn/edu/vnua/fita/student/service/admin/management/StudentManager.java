@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import vn.edu.vnua.fita.student.common.DateTimeConstant;
+import vn.edu.vnua.fita.student.common.FamilySituationConstant;
 import vn.edu.vnua.fita.student.common.RoleConstant;
 import vn.edu.vnua.fita.student.entity.*;
 import vn.edu.vnua.fita.student.repository.customrepo.CustomStudentRepository;
@@ -28,6 +29,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -103,6 +105,7 @@ public class StudentManager implements IStudentService {
                     .phoneNumber(request.getPhoneNumber())
                     .email(request.getEmail())
                     .homeTown(request.getHomeTown())
+                    .familySituation(FamilySituationConstant.getSituationValue(request.getFamilySituation()))
                     .residence(request.getResidence())
                     .fatherName(request.getFatherName())
                     .fatherPhoneNumber(request.getFatherPhoneNumber())
@@ -111,6 +114,7 @@ public class StudentManager implements IStudentService {
                     .isDeleted(false)
                     .role(Role.builder().id(RoleConstant.STUDENT).build())
                     .build();
+
             if (StringUtils.hasText(request.getPassword())) {
                 student.setPassword(encoder.encode(request.getPassword()));
             } else {
@@ -121,7 +125,7 @@ public class StudentManager implements IStudentService {
             createStudentStatus(student);
 
             return student;
-        } catch (DataIntegrityViolationException ex) {
+        } catch (DataIntegrityViolationException | ParseException ex) {
             throw new RuntimeException(String.format(emailHasExisted, request.getEmail()));
         }
     }
@@ -144,6 +148,7 @@ public class StudentManager implements IStudentService {
             student.setEmail(request.getEmail());
             student.setPhoneNumber(request.getPhoneNumber());
             student.setHomeTown(request.getHomeTown());
+            student.setFamilySituation(FamilySituationConstant.getSituationValue(request.getFamilySituation()));
             student.setResidence(request.getResidence());
             student.setFatherName(request.getFatherName());
             student.setFatherPhoneNumber(request.getFatherPhoneNumber());
@@ -155,7 +160,7 @@ public class StudentManager implements IStudentService {
             studentRepository.saveAndFlush(student);
 
             return student;
-        } catch (DataIntegrityViolationException ex) {
+        } catch (DataIntegrityViolationException | ParseException ex) {
             throw new RuntimeException(String.format(emailHasExisted, request.getEmail()));
         }
     }

@@ -53,6 +53,10 @@ public class UpdateStudentRequest {
     @Size(max = 200,message = "Quê quán không được quá dài")
     private String homeTown;
 
+    @NotBlank(message = "Vui lòng chọn hoàn cảnh gia đình sinh viên này")
+    @Size(max = 200,message = "Hoàn cảnh quá dài")
+    private String familySituation;
+
     @Size(max = 200,message = "Nơi ở hiện tại không được quá dài")
     private String residence;
 

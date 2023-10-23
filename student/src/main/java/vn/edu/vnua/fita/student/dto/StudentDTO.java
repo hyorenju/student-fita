@@ -33,6 +33,8 @@ public class StudentDTO {
 
     private String homeTown;
 
+    private String familySituation;
+
     private String residence;
 
     private String fatherName;

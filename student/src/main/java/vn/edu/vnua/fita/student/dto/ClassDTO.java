@@ -6,4 +6,5 @@ import lombok.Data;
 public class ClassDTO {
     private String id;
     private String name;
+    private StudentDTO monitor;
 }

@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.vnua.fita.student.controller.BaseController;
 import vn.edu.vnua.fita.student.dto.ClassDTO;
+import vn.edu.vnua.fita.student.dto.MajorDTO;
 import vn.edu.vnua.fita.student.request.admin.aclass.CreateClassRequest;
 import vn.edu.vnua.fita.student.request.admin.aclass.GetClassListRequest;
 import vn.edu.vnua.fita.student.request.admin.aclass.UpdateClassRequest;
@@ -34,6 +35,14 @@ public class ClassController extends BaseController {
                 aClass -> modelMapper.map(aClass, ClassDTO.class)
         ).toList();
         return buildPageItemResponse(request.getPage(), response.size(), page.getTotalElements(), response);
+    }
+
+    @PostMapping("selection")
+    public ResponseEntity<?> getAllClass(){
+        List<ClassDTO> response = classManager.getAllClass().stream().map(
+                aClass -> modelMapper.map(aClass, ClassDTO.class)
+        ).toList();
+        return buildListItemResponse(response, response.size());
     }
 
     @PostMapping("create")

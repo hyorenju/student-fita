@@ -1,10 +1,13 @@
 package vn.edu.vnua.fita.student.service.admin.file.thread;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import vn.edu.vnua.fita.student.common.FamilySituationConstant;
 import vn.edu.vnua.fita.student.common.RoleConstant;
 import vn.edu.vnua.fita.student.entity.Role;
 import vn.edu.vnua.fita.student.entity.AClass;
@@ -24,6 +27,7 @@ public class StoreStudentWorker implements Callable<StudentExcelData> {
     private final CourseRepository courseRepository;
     private final ClassRepository classRepository;
     private final MajorRepository majorRepository;
+    private final PasswordEncoder encoder;
     private final String studentStr;
     private final int row;
 
@@ -37,7 +41,7 @@ public class StoreStudentWorker implements Callable<StudentExcelData> {
 //    }
 
     @Override
-    public StudentExcelData call() {
+    public StudentExcelData call() throws ParseException {
         StudentExcelData studentExcelData = new StudentExcelData();
 
         if (!studentStr.isEmpty()) {
@@ -61,13 +65,15 @@ public class StoreStudentWorker implements Callable<StudentExcelData> {
                     .course(Course.builder().id(courseId).build())
                     .major(Major.builder().id(majorId).build())
                     .aclass(AClass.builder().id(classId).build())
-                    .dob(MyUtils.convertTimestampFromString(dob))
+                    .dob(MyUtils.convertTimestampFromExcel(dob))
                     .gender(gender)
                     .phoneNumber(phoneNumber)
 //                    .email(email)
                     .homeTown(homeTown)
                     .isDeleted(false)
                     .role(Role.builder().id(RoleConstant.STUDENT).build())
+                    .password(encoder.encode(MyUtils.formatDobToPassword(dob)))
+                    .familySituation(FamilySituationConstant.getSituationValue(FamilySituationConstant.NONE))
                     .build();
 
             List<StudentExcelData.ErrorDetail> errorDetailList = student.validateInformationDetailError(new CopyOnWriteArrayList<>());

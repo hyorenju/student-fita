@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import vn.edu.vnua.fita.student.common.FilePathConstant;
@@ -33,6 +34,7 @@ public class ExcelService implements IExcelService {
     private final TermRepository termRepository;
     private final FirebaseService firebaseService;
     private final ExecutorService executor;
+    private final PasswordEncoder encoder;
     private final String dataNotFound = "Không tìm thấy dữ liệu. Hãy chắc chắn rằng file excel được nhập từ ô A1";
 
     @Value("${firebase.storage.bucket}")
@@ -164,7 +166,7 @@ public class ExcelService implements IExcelService {
 
         for (int i = 0; i < studentStrList.size(); i++) {
             String studentStr = studentStrList.get(i);
-            Callable<StudentExcelData> callable = new StoreStudentWorker(studentRepository, courseRepository, classRepository, majorRepository, studentStr, i);
+            Callable<StudentExcelData> callable = new StoreStudentWorker(studentRepository, courseRepository, classRepository, majorRepository, encoder, studentStr, i);
             Future<StudentExcelData> future = executor.submit(callable);
             studentExcelDataList.add(future.get());
         }

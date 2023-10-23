@@ -22,6 +22,10 @@ public class AClass {
     @Column(length = 200)
     private String name;
 
+    @OneToOne
+    @JoinColumn(name = "monitor")
+    private Student monitor;
+
     @OneToMany(mappedBy = "aclass", cascade = CascadeType.ALL)
     private Collection<Student> students;
 

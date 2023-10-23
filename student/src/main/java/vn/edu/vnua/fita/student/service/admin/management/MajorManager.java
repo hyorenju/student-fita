@@ -13,6 +13,8 @@ import vn.edu.vnua.fita.student.request.admin.major.GetMajorListRequest;
 import vn.edu.vnua.fita.student.request.admin.major.UpdateMajorRequest;
 import vn.edu.vnua.fita.student.service.admin.iservice.IMajorService;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class MajorManager implements IMajorService {
@@ -25,6 +27,11 @@ public class MajorManager implements IMajorService {
     public Page<Major> getMajorList(GetMajorListRequest request) {
         return majorRepository.findAll(PageRequest.of(request.getPage() - 1, request.getSize(),
                 Sort.by("id").ascending()));
+    }
+
+    @Override
+    public List<Major> getAllMajor() {
+        return majorRepository.findAll(Sort.by("id").ascending());
     }
 
     @Override
