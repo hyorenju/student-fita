@@ -34,6 +34,15 @@ public class StatusController extends BaseController {
         return buildPageItemResponse(request.getPage(), response.size(), page.getTotalElements(), response);
     }
 
+    @PostMapping("selection")
+    @PreAuthorize("hasAnyAuthority('SUPERADMIN')")
+    public ResponseEntity<?> getAllStatus(){
+        List<StatusDTO> response = statusManager.getAllStatus().stream().map(
+                status -> modelMapper.map(status, StatusDTO.class)
+        ).toList();
+        return buildListItemResponse(response, response.size());
+    }
+
     @PostMapping("create")
     @PreAuthorize("hasAnyAuthority('SUPERADMIN')")
     public ResponseEntity<?> createStatus(@Valid @RequestBody CreateStatusRequest request){
