@@ -11,4 +11,5 @@ public interface AdminRefresherRepository extends JpaRepository<AdminRefresher, 
     AdminRefresher findByAdmin(Admin admin);
     AdminRefresher findByToken(String token);
     List<AdminRefresher> findAllByAdmin(Admin admin);
+    void deleteByAdmin(Admin admin);
 }

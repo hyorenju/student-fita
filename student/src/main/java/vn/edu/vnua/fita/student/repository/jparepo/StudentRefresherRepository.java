@@ -13,5 +13,5 @@ public interface StudentRefresherRepository extends JpaRepository<StudentRefresh
     StudentRefresher findByStudent(Student student);
     StudentRefresher findByToken(String token);
     List<StudentRefresher> findAllByStudent(Student student);
-    void deleteAllByStudent(Student student);
+    void deleteByStudent(Student student);
 }

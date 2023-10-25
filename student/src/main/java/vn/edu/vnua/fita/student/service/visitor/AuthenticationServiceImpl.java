@@ -2,6 +2,7 @@ package vn.edu.vnua.fita.student.service.visitor;
 
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -44,8 +45,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final String cannotLogin = "Tài khoản hoặc mật khẩu không chính xác";
     private final String cannotRefresh = "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại";
 
+    @Value("${jwt.jwtRefreshExpirationMs}")
+    private Long refreshTokenDurationMs;
+
     @Override
-    public BaseLoginResponse authenticateUser(String id, String password) {
+    public String authenticateUser(String id, String password) {
         if (id.matches(UserIdentifyPatternConstant.STUDENT_ID_PATTERN)) {
             Student student = studentRepository.findById(id).orElseThrow(() -> new RuntimeException(cannotLogin));
 
@@ -57,40 +61,41 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             if(studentRefresherRepository.existsByStudent(student)) {
                 StudentRefresher token = studentRefresherRepository.findByStudent(student);
                 if(token.getExpiryDate().compareTo(Instant.now()) < 0) {
-                    studentRefresher = studentRefresherRepository.saveAndFlush(jwtUtils.createStudentRefreshToken(id));
+                    token.setExpiryDate(Instant.now().plusMillis(refreshTokenDurationMs));
+                    studentRefresher = studentRefresherRepository.saveAndFlush(token);
                 } else {
                     studentRefresher = token;
                 }
             } else {
-                studentRefresher =  studentRefresherRepository.saveAndFlush(jwtUtils.createStudentRefreshToken(id));
+                studentRefresher =  studentRefresherRepository.saveAndFlush(jwtUtils.createStudentRefreshToken(student));
             }
 
-            Authentication authentication = authenticate(id, password);
+            return studentRefresher.getToken();
 
-            String jwt = jwtUtils.generateTokenWithAuthorities(authentication);
-
-            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-
-            return new StudentLoginResponse(jwt,
-                    userDetails.getRoleId(),
-                    studentRefresher.getToken(),
-                    userDetails.getId(),
-                    userDetails.getSurname(),
-                    userDetails.getLastName(),
-                    userDetails.getAvatar(),
-                    userDetails.getCourse(),
-                    userDetails.getMajor(),
-                    userDetails.getAclass(),
-                    userDetails.getDob(),
-                    userDetails.getGender(),
-                    userDetails.getPhoneNumber(),
-                    userDetails.getEmail(),
-                    userDetails.getHomeTown(),
-                    userDetails.getResidence(),
-                    userDetails.getFatherName(),
-                    userDetails.getFatherPhoneNumber(),
-                    userDetails.getMotherName(),
-                    userDetails.getMotherPhoneNumber());
+//            Authentication authentication = authenticate(id, password);
+//            String jwt = jwtUtils.generateTokenWithAuthorities(authentication);
+//            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+//
+//            return new StudentLoginResponse(jwt,
+//                    userDetails.getRoleId(),
+//                    studentRefresher.getToken(),
+//                    userDetails.getId(),
+//                    userDetails.getSurname(),
+//                    userDetails.getLastName(),
+//                    userDetails.getAvatar(),
+//                    userDetails.getCourse(),
+//                    userDetails.getMajor(),
+//                    userDetails.getAclass(),
+//                    userDetails.getDob(),
+//                    userDetails.getGender(),
+//                    userDetails.getPhoneNumber(),
+//                    userDetails.getEmail(),
+//                    userDetails.getHomeTown(),
+//                    userDetails.getResidence(),
+//                    userDetails.getFatherName(),
+//                    userDetails.getFatherPhoneNumber(),
+//                    userDetails.getMotherName(),
+//                    userDetails.getMotherPhoneNumber());
         } else if (id.matches(UserIdentifyPatternConstant.ADMIN_ID_PATTERN)) {
             Admin admin = adminRepository.findById(id).orElseThrow(() -> new RuntimeException(cannotLogin));
 
@@ -102,27 +107,28 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             if(adminRefresherRepository.existsByAdmin(admin)) {
                 AdminRefresher token = adminRefresherRepository.findByAdmin(admin);
                 if(token.getExpiryDate().compareTo(Instant.now()) < 0) {
-                    adminRefresher = adminRefresherRepository.saveAndFlush(jwtUtils.createAdminRefreshToken(id));
+                    token.setExpiryDate(Instant.now().plusMillis(refreshTokenDurationMs));
+                    adminRefresher = adminRefresherRepository.saveAndFlush(token);
                 } else {
                     adminRefresher = token;
                 }
             } else {
-                adminRefresher =  adminRefresherRepository.saveAndFlush(jwtUtils.createAdminRefreshToken(id));
+                adminRefresher =  adminRefresherRepository.saveAndFlush(jwtUtils.createAdminRefreshToken(admin));
             }
 
-            Authentication authentication = authenticate(id, password);
+            return adminRefresher.getToken();
 
-            String jwt = jwtUtils.generateTokenWithAuthorities(authentication);
-
-            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-
-            return new AdminLoginResponse(jwt,
-                    userDetails.getRoleId(),
-                    adminRefresher.getToken(),
-                    userDetails.getId(),
-                    userDetails.getName(),
-                    userDetails.getAvatar(),
-                    userDetails.getEmail());
+//            Authentication authentication = authenticate(id, password);
+//            String jwt = jwtUtils.generateTokenWithAuthorities(authentication);
+//            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+//
+//            return new AdminLoginResponse(jwt,
+//                    userDetails.getRoleId(),
+//                    adminRefresher.getToken(),
+//                    userDetails.getId(),
+//                    userDetails.getName(),
+//                    userDetails.getAvatar(),
+//                    userDetails.getEmail());
         } else {
             throw new RuntimeException(cannotLogin);
         }
@@ -131,15 +137,17 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public BaseLoginResponse verifyExpiration(String token) {
         StudentRefresher studentRefresher = studentRefresherRepository.findByToken(token);
-        if(studentRefresher==null){
+        if(studentRefresher==null) {
             AdminRefresher adminRefresher = adminRefresherRepository.findByToken(token);
-            if(adminRefresher.getExpiryDate().compareTo(Instant.now()) < 0) {
+            if(adminRefresher.getExpiryDate().isBefore(Instant.now())) {
                 adminRefresherRepository.delete(adminRefresher);
                 throw new RuntimeException(cannotRefresh);
             }
             Admin admin = adminRepository.findById(adminRefresher.getAdmin().getId())
                     .orElseThrow(() -> new RuntimeException("Quản trị viên không tồn tại"));
-            String accessToken = jwtUtils.generateToken(admin.getId());
+            String accessToken = jwtUtils.generateTokenForAdmin(admin);
+
+
             return new AdminLoginResponse(accessToken,
                     admin.getRole().getId(),
                     adminRefresher.getToken(),
@@ -147,34 +155,35 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                     admin.getName(),
                     admin.getAvatar(),
                     admin.getEmail());
+        } else {
+            if (studentRefresher.getExpiryDate().isBefore(Instant.now())) {
+                studentRefresherRepository.delete(studentRefresher);
+                throw new RuntimeException(cannotRefresh);
+            }
+            Student student = studentRepository.findById(studentRefresher.getStudent().getId())
+                    .orElseThrow(() -> new RuntimeException("Sinh viên không tồn tại"));
+            String accessToken = jwtUtils.generateTokenForStudent(student);
+            return new StudentLoginResponse(accessToken,
+                    RoleConstant.STUDENT,
+                    studentRefresher.getToken(),
+                    student.getId(),
+                    student.getSurname(),
+                    student.getLastName(),
+                    student.getAvatar(),
+                    modelMapper.map(student.getCourse(), CourseDTO.class),
+                    modelMapper.map(student.getMajor(), MajorDTO.class),
+                    modelMapper.map(student.getAclass(), ClassDTO.class),
+                    student.getDob(),
+                    student.getGender(),
+                    student.getPhoneNumber(),
+                    student.getEmail(),
+                    student.getHomeTown(),
+                    student.getResidence(),
+                    student.getFatherName(),
+                    student.getFatherPhoneNumber(),
+                    student.getMotherName(),
+                    student.getMotherPhoneNumber());
         }
-        if(studentRefresher.getExpiryDate().compareTo(Instant.now()) < 0) {
-            studentRefresherRepository.delete(studentRefresher);
-            throw new RuntimeException(cannotRefresh);
-        }
-        Student student = studentRepository.findById(studentRefresher.getStudent().getId())
-                .orElseThrow(() -> new RuntimeException("Sinh viên không tồn tại"));
-        String accessToken = jwtUtils.generateToken(student.getId());
-        return new StudentLoginResponse(accessToken,
-                RoleConstant.STUDENT,
-                studentRefresher.getToken(),
-                student.getId(),
-                student.getSurname(),
-                student.getLastName(),
-                student.getAvatar(),
-                modelMapper.map(student.getCourse(), CourseDTO.class),
-                modelMapper.map(student.getMajor(), MajorDTO.class),
-                modelMapper.map(student.getAclass(), ClassDTO.class),
-                student.getDob(),
-                student.getGender(),
-                student.getPhoneNumber(),
-                student.getEmail(),
-                student.getHomeTown(),
-                student.getResidence(),
-                student.getFatherName(),
-                student.getFatherPhoneNumber(),
-                student.getMotherName(),
-                student.getMotherPhoneNumber());
     }
 
     private Authentication authenticate(String id, String password){

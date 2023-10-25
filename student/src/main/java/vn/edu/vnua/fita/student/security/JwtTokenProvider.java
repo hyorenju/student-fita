@@ -20,6 +20,7 @@ import vn.edu.vnua.fita.student.entity.StudentRefresher;
 import vn.edu.vnua.fita.student.entity.Student;
 
 import javax.annotation.PostConstruct;
+import java.beans.Encoder;
 import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -49,11 +50,34 @@ public class JwtTokenProvider {
         log.info("jwt secret: {}", jwtSecret);
     }
 
-    public String generateToken(String username) {
+    public String generateTokenForStudent(Student student) {
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + jwtExpirationMs);
+        final String authorities = student.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
+
         return Jwts.builder()
-                .setSubject(username)
+                .setSubject(student.getId())
+                .claim(AUTHORITIES_KEY, authorities)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+                .setExpiration(expiryDate)
+                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .compact();
+    }
+
+    public String generateTokenForAdmin(Admin admin) {
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + jwtExpirationMs);
+        final String authorities = admin.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
+
+        return Jwts.builder()
+                .setSubject(admin.getId())
+                .claim(AUTHORITIES_KEY, authorities)
+                .setIssuedAt(new Date())
+                .setExpiration(expiryDate)
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
     }
@@ -75,19 +99,19 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public StudentRefresher createStudentRefreshToken(String username) {
+    public StudentRefresher createStudentRefreshToken(Student student) {
         return StudentRefresher.builder()
                 .token(UUID.randomUUID().toString())
                 .expiryDate(Instant.now().plusMillis(refreshTokenDurationMs))
-                .student(Student.builder().id(username).build())
+                .student(student)
                 .build();
     }
 
-    public AdminRefresher createAdminRefreshToken(String username) {
+    public AdminRefresher createAdminRefreshToken(Admin admin) {
         return AdminRefresher.builder()
                 .token(UUID.randomUUID().toString())
                 .expiryDate(Instant.now().plusMillis(refreshTokenDurationMs))
-                .admin(Admin.builder().id(username).build())
+                .admin(admin)
                 .build();
     }
 
