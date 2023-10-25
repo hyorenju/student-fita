@@ -50,11 +50,8 @@ public class PointManager implements IPointService {
                 request.getFilter().getPoint(),
                 request.getFilter().getAccPoint(),
                 request.getFilter().getTrainingPoint(),
-                request.getSort().getSortAvgPoint10(),
-                request.getSort().getSortAvgPoint4(),
-                request.getSort().getSortTrainingPoint(),
-                request.getSort().getSortPointAcc10(),
-                request.getSort().getSortPointAcc4()
+                request.getSort().getSortColumn(),
+                request.getSort().getSortType()
         );
         return pointRepository.findAll(specification, PageRequest.of(request.getPage() - 1, request.getSize()));
     }
@@ -177,11 +174,8 @@ public class PointManager implements IPointService {
                 request.getFilter().getPoint(),
                 request.getFilter().getAccPoint(),
                 request.getFilter().getTrainingPoint(),
-                request.getSort().getSortAvgPoint10(),
-                request.getSort().getSortAvgPoint4(),
-                request.getSort().getSortTrainingPoint(),
-                request.getSort().getSortPointAcc10(),
-                request.getSort().getSortPointAcc4()
+                request.getSort().getSortColumn(),
+                request.getSort().getSortType()
         );
         List<Point> points = pointRepository.findAll(specification);
         return excelService.writePointToExcel(points);

@@ -4,6 +4,7 @@ import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
+import vn.edu.vnua.fita.student.common.SortTypeConstant;
 import vn.edu.vnua.fita.student.entity.Point;
 
 import java.util.ArrayList;
@@ -17,11 +18,8 @@ public class CustomPointRepository {
                                                        Integer point,
                                                        Integer accPoint,
                                                        Integer trainingPoint,
-                                                       Boolean sortAvgPoint10,
-                                                       Boolean sortAvgPoint4,
-                                                       Boolean sortTrainingPoint,
-                                                       Boolean sortPointAcc10,
-                                                       Boolean sortPointAcc4) {
+                                                       String sortColumn,
+                                                       String sortType) {
         return ((root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
             if (StringUtils.hasText(studentId)) {
@@ -88,16 +86,12 @@ public class CustomPointRepository {
                     predicates.add(criteriaBuilder.lessThan(root.get("pointAcc4"), 1.0));
                 }
             }
-            if (sortAvgPoint10) {
-                query.orderBy(criteriaBuilder.desc(root.get("avgPoint10")));
-            } else if (sortAvgPoint4) {
-                query.orderBy(criteriaBuilder.desc(root.get("avgPoint4")));
-            }  else if (sortTrainingPoint) {
-                query.orderBy(criteriaBuilder.desc(root.get("trainingPoint")));
-            } else if (sortPointAcc10) {
-                query.orderBy(criteriaBuilder.desc(root.get("pointAcc10")));
-            } else if (sortPointAcc4) {
-                query.orderBy(criteriaBuilder.desc(root.get("pointAcc4")));
+            if (StringUtils.hasText(sortColumn) && StringUtils.hasText(sortType)) {
+                if(sortType.equals(SortTypeConstant.ASC)){
+                    query.orderBy(criteriaBuilder.asc(root.get(sortColumn)));
+                } else if (sortType.equals(SortTypeConstant.DESC)) {
+                    query.orderBy(criteriaBuilder.desc(root.get(sortColumn)));
+                } 
             } else {
                 query.orderBy(
                         criteriaBuilder.asc(root.get("term").get("id")),

@@ -7,9 +7,9 @@ import lombok.RequiredArgsConstructor;
 public class ExportPointListRequest {
     private String studentId;
 
-    private GetPointListRequest.FilterCondition filter;
+    private FilterCondition filter;
 
-    private GetPointListRequest.SortCondition sort;
+    private SortCondition sort;
 
     @Data
     @RequiredArgsConstructor
@@ -24,10 +24,7 @@ public class ExportPointListRequest {
     @Data
     @RequiredArgsConstructor
     public static class SortCondition {
-        private Boolean sortAvgPoint10;
-        private Boolean sortAvgPoint4;
-        private Boolean sortTrainingPoint;
-        private Boolean sortPointAcc10;
-        private Boolean sortPointAcc4;
+        private String sortColumn;
+        private String sortType;
     }
 }
