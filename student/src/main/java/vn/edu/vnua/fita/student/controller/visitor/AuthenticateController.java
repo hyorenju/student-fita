@@ -23,7 +23,7 @@ public class AuthenticateController extends BaseController {
 
     @PostMapping("login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request){
-        String response = authenticationService.authenticateUser(request.getId(), request.getPassword());
+        BaseLoginResponse response = authenticationService.authenticateUser(request.getId(), request.getPassword());
         return buildItemResponse(response);
     }
 

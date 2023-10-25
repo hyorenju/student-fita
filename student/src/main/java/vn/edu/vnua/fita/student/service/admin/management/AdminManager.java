@@ -58,6 +58,12 @@ public class AdminManager implements IAdminService {
     private String bucketName;
 
     @Override
+    public Admin getProfile() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return adminRepository.findById(authentication.getPrincipal().toString()).orElseThrow(() -> new RuntimeException(adminNotFound));
+    }
+
+    @Override
     public Page<Admin> getAdminList(GetAdminListRequest request) {
         Specification<Admin> specification = CustomAdminRepository.filterAdminList(
                 request.getId()

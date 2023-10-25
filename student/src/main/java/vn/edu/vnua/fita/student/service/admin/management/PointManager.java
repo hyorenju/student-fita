@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import vn.edu.vnua.fita.student.common.DateTimeConstant;
 import vn.edu.vnua.fita.student.entity.*;
-import vn.edu.vnua.fita.student.repository.customrepo.CustomPointListRepository;
 import vn.edu.vnua.fita.student.repository.customrepo.CustomPointRepository;
 import vn.edu.vnua.fita.student.repository.jparepo.*;
 import vn.edu.vnua.fita.student.request.admin.point.*;
@@ -51,8 +50,11 @@ public class PointManager implements IPointService {
                 request.getFilter().getPoint(),
                 request.getFilter().getAccPoint(),
                 request.getFilter().getTrainingPoint(),
-                request.getSort().getSortColumn(),
-                request.getSort().getSortType()
+                request.getSort().getSortAvgPoint10(),
+                request.getSort().getSortAvgPoint4(),
+                request.getSort().getSortTrainingPoint(),
+                request.getSort().getSortPointAcc10(),
+                request.getSort().getSortPointAcc4()
         );
         return pointRepository.findAll(specification, PageRequest.of(request.getPage() - 1, request.getSize()));
     }
@@ -168,14 +170,20 @@ public class PointManager implements IPointService {
 
     @Override
     public String exportToExcel(ExportPointListRequest request) {
-        Specification<Point> specification = CustomPointListRepository.filterPointList(
+        Specification<Point> specification = CustomPointRepository.filterPointList(
                 request.getStudentId(),
-                request.getTermId(),
+                request.getFilter().getTermId(),
+                request.getFilter().getClassId(),
                 request.getFilter().getPoint(),
                 request.getFilter().getAccPoint(),
-                request.getFilter().getTrainingPoint()
+                request.getFilter().getTrainingPoint(),
+                request.getSort().getSortAvgPoint10(),
+                request.getSort().getSortAvgPoint4(),
+                request.getSort().getSortTrainingPoint(),
+                request.getSort().getSortPointAcc10(),
+                request.getSort().getSortPointAcc4()
         );
-        List<Point> points = pointRepository.findAll(specification, Sort.by("student.lastName").ascending().and(Sort.by("student.surname").ascending()));
+        List<Point> points = pointRepository.findAll(specification);
         return excelService.writePointToExcel(points);
     }
 

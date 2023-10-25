@@ -49,7 +49,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private Long refreshTokenDurationMs;
 
     @Override
-    public String authenticateUser(String id, String password) {
+    public BaseLoginResponse authenticateUser(String id, String password) {
         if (id.matches(UserIdentifyPatternConstant.STUDENT_ID_PATTERN)) {
             Student student = studentRepository.findById(id).orElseThrow(() -> new RuntimeException(cannotLogin));
 
@@ -70,32 +70,16 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 studentRefresher =  studentRefresherRepository.saveAndFlush(jwtUtils.createStudentRefreshToken(student));
             }
 
-            return studentRefresher.getToken();
+//            return studentRefresher.getToken();
 
-//            Authentication authentication = authenticate(id, password);
-//            String jwt = jwtUtils.generateTokenWithAuthorities(authentication);
-//            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-//
-//            return new StudentLoginResponse(jwt,
-//                    userDetails.getRoleId(),
-//                    studentRefresher.getToken(),
-//                    userDetails.getId(),
-//                    userDetails.getSurname(),
-//                    userDetails.getLastName(),
-//                    userDetails.getAvatar(),
-//                    userDetails.getCourse(),
-//                    userDetails.getMajor(),
-//                    userDetails.getAclass(),
-//                    userDetails.getDob(),
-//                    userDetails.getGender(),
-//                    userDetails.getPhoneNumber(),
-//                    userDetails.getEmail(),
-//                    userDetails.getHomeTown(),
-//                    userDetails.getResidence(),
-//                    userDetails.getFatherName(),
-//                    userDetails.getFatherPhoneNumber(),
-//                    userDetails.getMotherName(),
-//                    userDetails.getMotherPhoneNumber());
+            Authentication authentication = authenticate(id, password);
+            String jwt = jwtUtils.generateTokenWithAuthorities(authentication);
+            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+
+            return new StudentLoginResponse(jwt,
+                    userDetails.getRoleId(),
+                    studentRefresher.getToken(),
+                    userDetails.getAvatar());
         } else if (id.matches(UserIdentifyPatternConstant.ADMIN_ID_PATTERN)) {
             Admin admin = adminRepository.findById(id).orElseThrow(() -> new RuntimeException(cannotLogin));
 
@@ -116,19 +100,16 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 adminRefresher =  adminRefresherRepository.saveAndFlush(jwtUtils.createAdminRefreshToken(admin));
             }
 
-            return adminRefresher.getToken();
+//            return adminRefresher.getToken();
 
-//            Authentication authentication = authenticate(id, password);
-//            String jwt = jwtUtils.generateTokenWithAuthorities(authentication);
-//            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-//
-//            return new AdminLoginResponse(jwt,
-//                    userDetails.getRoleId(),
-//                    adminRefresher.getToken(),
-//                    userDetails.getId(),
-//                    userDetails.getName(),
-//                    userDetails.getAvatar(),
-//                    userDetails.getEmail());
+            Authentication authentication = authenticate(id, password);
+            String jwt = jwtUtils.generateTokenWithAuthorities(authentication);
+            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+
+            return new AdminLoginResponse(jwt,
+                    userDetails.getRoleId(),
+                    adminRefresher.getToken(),
+                    userDetails.getAvatar());
         } else {
             throw new RuntimeException(cannotLogin);
         }
@@ -151,10 +132,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             return new AdminLoginResponse(accessToken,
                     admin.getRole().getId(),
                     adminRefresher.getToken(),
-                    admin.getId(),
-                    admin.getName(),
-                    admin.getAvatar(),
-                    admin.getEmail());
+                    admin.getAvatar());
         } else {
             if (studentRefresher.getExpiryDate().isBefore(Instant.now())) {
                 studentRefresherRepository.delete(studentRefresher);
@@ -164,25 +142,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                     .orElseThrow(() -> new RuntimeException("Sinh viên không tồn tại"));
             String accessToken = jwtUtils.generateTokenForStudent(student);
             return new StudentLoginResponse(accessToken,
-                    RoleConstant.STUDENT,
+                    student.getRole().getId(),
                     studentRefresher.getToken(),
-                    student.getId(),
-                    student.getSurname(),
-                    student.getLastName(),
-                    student.getAvatar(),
-                    modelMapper.map(student.getCourse(), CourseDTO.class),
-                    modelMapper.map(student.getMajor(), MajorDTO.class),
-                    modelMapper.map(student.getAclass(), ClassDTO.class),
-                    student.getDob(),
-                    student.getGender(),
-                    student.getPhoneNumber(),
-                    student.getEmail(),
-                    student.getHomeTown(),
-                    student.getResidence(),
-                    student.getFatherName(),
-                    student.getFatherPhoneNumber(),
-                    student.getMotherName(),
-                    student.getMotherPhoneNumber());
+                    student.getAvatar());
         }
     }
 

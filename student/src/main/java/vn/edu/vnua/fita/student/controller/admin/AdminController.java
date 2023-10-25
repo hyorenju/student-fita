@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import vn.edu.vnua.fita.student.controller.BaseController;
 import vn.edu.vnua.fita.student.dto.AdminDTO;
+import vn.edu.vnua.fita.student.dto.StudentDTO;
 import vn.edu.vnua.fita.student.dto.TrashAdminDTO;
 import vn.edu.vnua.fita.student.dto.TrashStudentDTO;
 import vn.edu.vnua.fita.student.entity.TrashAdmin;
@@ -27,6 +28,13 @@ import java.util.List;
 public class AdminController extends BaseController {
     private final AdminManager adminManager;
     private final ModelMapper modelMapper;
+
+    @PostMapping("profile")
+    @PreAuthorize("hasAnyAuthority('SUPERADMIN', 'ADMIN', 'MOD')")
+    public ResponseEntity<?> getMyProfile() {
+        AdminDTO response = modelMapper.map(adminManager.getProfile(), AdminDTO.class);
+        return buildItemResponse(response);
+    }
 
     @PostMapping("list")
     @PreAuthorize("hasAnyAuthority('SUPERADMIN')")

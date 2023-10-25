@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface StudentService {
+    Student getProfile();
     Student updateAvatar(MultipartFile file) throws IOException;
     Student updateProfile(UpdateStudentProfileRequest request);
     Student changePassword(ChangePasswordRequest request);

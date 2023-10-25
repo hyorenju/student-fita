@@ -22,6 +22,7 @@ public class CustomCourseClassificationRepository {
             if (start != null && end != null) {
                 predicates.add(criteriaBuilder.between(root.get("term").get("id"), start, end));
             }
+            query.orderBy(criteriaBuilder.asc(root.get("term").get("id")));
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         });
     }

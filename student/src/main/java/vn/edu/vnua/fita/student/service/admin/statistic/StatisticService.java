@@ -212,7 +212,7 @@ public class StatisticService implements IStatisticService {
                 request.getStart(),
                 request.getEnd()
         );
-        List<ClassClassification> classClassifications = classClassificationRepository.findAll(specification, Sort.by("term.id").ascending());
+        List<ClassClassification> classClassifications = classClassificationRepository.findAll(specification);
 
         List<ClassChart> classCharts = new ArrayList<>();
         for (ClassClassification classClassification :
@@ -242,7 +242,7 @@ public class StatisticService implements IStatisticService {
                 request.getStart(),
                 request.getEnd()
         );
-        List<CourseClassification> courseClassifications = courseClassificationRepository.findAll(specification, Sort.by("term.id").ascending());
+        List<CourseClassification> courseClassifications = courseClassificationRepository.findAll(specification);
 
         List<CourseChart> courseCharts = new ArrayList<>();
         for (CourseClassification courseClassification :
@@ -272,7 +272,7 @@ public class StatisticService implements IStatisticService {
                 request.getStart(),
                 request.getEnd()
         );
-        List<MajorClassification> majorClassifications = majorClassificationRepository.findAll(specification, Sort.by("term.id").ascending());
+        List<MajorClassification> majorClassifications = majorClassificationRepository.findAll(specification);
 
         List<MajorChart> majorCharts = new ArrayList<>();
         for (MajorClassification majorClassification :
@@ -301,7 +301,7 @@ public class StatisticService implements IStatisticService {
                 request.getStart(),
                 request.getEnd()
         );
-        List<FacultyClassification> facultyClassifications = facultyClassificationRepository.findAll(specification, Sort.by("term.id").ascending());
+        List<FacultyClassification> facultyClassifications = facultyClassificationRepository.findAll(specification);
         return createColumnChart(facultyClassifications);
     }
 
@@ -311,7 +311,7 @@ public class StatisticService implements IStatisticService {
                 request.getStart(),
                 request.getEnd()
         );
-        List<FacultyClassification> facultyClassifications = facultyClassificationRepository.findAll(specification, Sort.by("term.id").ascending());
+        List<FacultyClassification> facultyClassifications = facultyClassificationRepository.findAll(specification);
 
         List<FacultyCircleChart> facultyCircleCharts = new ArrayList<>();
         for (FacultyClassification facultyClassification :

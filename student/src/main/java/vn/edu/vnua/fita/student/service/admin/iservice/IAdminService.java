@@ -10,6 +10,7 @@ import vn.edu.vnua.fita.student.request.admin.admin.*;
 import java.io.IOException;
 
 public interface IAdminService {
+    Admin getProfile();
     Page<Admin> getAdminList(GetAdminListRequest request);
     Admin createAdmin(CreateAdminRequest request);
     Admin updateAdmin(UpdateAdminRequest request);

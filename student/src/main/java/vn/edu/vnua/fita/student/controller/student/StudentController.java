@@ -29,11 +29,17 @@ import java.util.List;
 @RestController
 public class StudentController extends BaseController {
     private final StudentServiceImpl studentService;
-    private final StudentStatusManager studentStatusManager;
     private final ModelMapper modelMapper;
 
+    @PostMapping("profile")
+    @PreAuthorize("hasAnyAuthority('STUDENT', 'MONITOR')")
+    public ResponseEntity<?> getMyProfile() {
+        StudentDTO response = modelMapper.map(studentService.getProfile(), StudentDTO.class);
+        return buildItemResponse(response);
+    }
+
     @PostMapping("avatar")
-    @PreAuthorize("hasAnyAuthority('STUDENT')")
+    @PreAuthorize("hasAnyAuthority('STUDENT', 'MONITOR')")
     public ResponseEntity<?> updateMyAvatar(@RequestBody MultipartFile file) throws IOException {
         StudentDTO response = modelMapper.map(studentService.updateAvatar(file), StudentDTO.class);
         return buildItemResponse(response);
@@ -47,21 +53,21 @@ public class StudentController extends BaseController {
     }
 
     @PostMapping("change-password")
-    @PreAuthorize("hasAnyAuthority('STUDENT')")
+    @PreAuthorize("hasAnyAuthority('STUDENT', 'MONITOR')")
     public ResponseEntity<?> changePassword(@Valid @RequestBody ChangePasswordRequest request){
         StudentDTO response = modelMapper.map(studentService.changePassword(request), StudentDTO.class);
         return buildItemResponse(response);
     }
 
     @PostMapping("statistic")
-    @PreAuthorize("hasAnyAuthority('STUDENT')")
+    @PreAuthorize("hasAnyAuthority('STUDENT', 'MONITOR')")
     public ResponseEntity<?> getStudentStatistic(){
         StudentStatistic response = studentService.getStatistic();
         return buildItemResponse(response);
     }
 
     @PostMapping("status")
-    @PreAuthorize("hasAnyAuthority('STUDENT')")
+    @PreAuthorize("hasAnyAuthority('STUDENT', 'MONITOR')")
     public ResponseEntity<?> getStudentStatusList(){
         List<StudentStatusDTO> response = studentService.getStatus().stream().map(
                 studentStatus -> modelMapper.map(studentStatus, StudentStatusDTO.class)
@@ -70,7 +76,7 @@ public class StudentController extends BaseController {
     }
 
     @PostMapping("email")
-    @PreAuthorize("hasAnyAuthority('STUDENT')")
+    @PreAuthorize("hasAnyAuthority('STUDENT', 'MONITOR')")
     public ResponseEntity<?> updateEmail(@Valid @RequestBody UpdateEmailRequest request){
         StudentDTO response = modelMapper.map(studentService.updateEmail(request), StudentDTO.class);
         return buildItemResponse(response);

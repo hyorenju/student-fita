@@ -48,6 +48,12 @@ public class StudentServiceImpl implements StudentService {
     private String bucketName;
 
     @Override
+    public Student getProfile() {
+        Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
+        return studentRepository.findById(authentication.getPrincipal().toString()).orElseThrow(() -> new RuntimeException(studentNotFound));
+    }
+
+    @Override
     public Student updateAvatar(MultipartFile file) throws IOException {
         Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
         Student student = studentRepository.findById(authentication.getPrincipal().toString()).orElseThrow(() -> new RuntimeException(studentNotFound));

@@ -7,7 +7,7 @@ public class AdminDTO {
     private String id;
     private String name;
     private String email;
-    private String roleId;
+    private RoleDTO role;
     private String avatar;
     private Boolean isDeleted;
 }

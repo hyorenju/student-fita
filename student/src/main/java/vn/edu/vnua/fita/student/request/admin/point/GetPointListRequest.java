@@ -9,6 +9,7 @@ public class GetPointListRequest extends GetPageBaseRequest {
     private String studentId;
 
     private FilterCondition filter;
+
     private SortCondition sort;
 
     @Data
@@ -24,7 +25,10 @@ public class GetPointListRequest extends GetPageBaseRequest {
     @Data
     @RequiredArgsConstructor
     public static class SortCondition {
-        private String sortColumn;
-        private String sortType;
+        private Boolean sortAvgPoint10;
+        private Boolean sortAvgPoint4;
+        private Boolean sortTrainingPoint;
+        private Boolean sortPointAcc10;
+        private Boolean sortPointAcc4;
     }
 }
