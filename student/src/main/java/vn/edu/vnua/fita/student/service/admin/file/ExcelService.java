@@ -307,12 +307,13 @@ public class ExcelService implements IExcelService {
         headerRow.createCell(7).setCellValue("Giới tính");
         headerRow.createCell(8).setCellValue("Số điện thoại");
         headerRow.createCell(9).setCellValue("Email");
-        headerRow.createCell(10).setCellValue("Quê quán");
-        headerRow.createCell(11).setCellValue("Nơi ở");
-        headerRow.createCell(12).setCellValue("Họ tên bố");
-        headerRow.createCell(13).setCellValue("Sđt bố");
-        headerRow.createCell(14).setCellValue("Họ tên mẹ");
-        headerRow.createCell(15).setCellValue("Sđt mẹ");
+        headerRow.createCell(10).setCellValue("Hoàn cảnh");
+        headerRow.createCell(11).setCellValue("Quê quán");
+        headerRow.createCell(12).setCellValue("Nơi ở");
+        headerRow.createCell(13).setCellValue("Họ tên bố");
+        headerRow.createCell(14).setCellValue("Sđt bố");
+        headerRow.createCell(15).setCellValue("Họ tên mẹ");
+        headerRow.createCell(16).setCellValue("Sđt mẹ");
     }
 
     private void createPointErrorHeader(Sheet sheet) {
@@ -333,12 +334,13 @@ public class ExcelService implements IExcelService {
         headerRow.createCell(0).setCellValue("Mã sinh viên");
         headerRow.createCell(1).setCellValue("Họ đệm");
         headerRow.createCell(2).setCellValue("Tên");
-        headerRow.createCell(3).setCellValue("Học kỳ");
-        headerRow.createCell(4).setCellValue("ĐTB hệ 10");
-        headerRow.createCell(5).setCellValue("ĐTB hệ 4");
-        headerRow.createCell(6).setCellValue("ĐRL");
-        headerRow.createCell(7).setCellValue("TC tích luỹ");
-        headerRow.createCell(8).setCellValue("ĐTBTL hệ 10");
-        headerRow.createCell(9).setCellValue("ĐTBTL hệ 4");
+        headerRow.createCell(3).setCellValue("Lớp");
+        headerRow.createCell(4).setCellValue("Học kỳ");
+        headerRow.createCell(5).setCellValue("ĐTB hệ 10");
+        headerRow.createCell(6).setCellValue("ĐTB hệ 4");
+        headerRow.createCell(7).setCellValue("ĐRL");
+        headerRow.createCell(8).setCellValue("TC tích luỹ");
+        headerRow.createCell(9).setCellValue("ĐTBTL hệ 10");
+        headerRow.createCell(10).setCellValue("ĐTBTL hệ 4");
     }
 }

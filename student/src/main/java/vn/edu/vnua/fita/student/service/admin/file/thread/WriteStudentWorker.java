@@ -26,12 +26,13 @@ public class WriteStudentWorker implements Callable<Void> {
         row.createCell(7).setCellValue(student.getGender());
         row.createCell(8).setCellValue(student.getPhoneNumber());
         row.createCell(9).setCellValue(student.getEmail());
-        row.createCell(10).setCellValue(student.getHomeTown());
-        row.createCell(11).setCellValue(student.getResidence());
-        row.createCell(12).setCellValue(student.getFatherName());
-        row.createCell(13).setCellValue(student.getFatherPhoneNumber());
-        row.createCell(14).setCellValue(student.getMotherName());
-        row.createCell(15).setCellValue(student.getMotherPhoneNumber());
+        row.createCell(10).setCellValue(student.getFamilySituation());
+        row.createCell(11).setCellValue(student.getHomeTown());
+        row.createCell(12).setCellValue(student.getResidence());
+        row.createCell(13).setCellValue(student.getFatherName());
+        row.createCell(14).setCellValue(student.getFatherPhoneNumber());
+        row.createCell(15).setCellValue(student.getMotherName());
+        row.createCell(16).setCellValue(student.getMotherPhoneNumber());
         return null;
     }
 
