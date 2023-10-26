@@ -45,8 +45,8 @@ public class PointManager implements IPointService {
     public Page<Point> filterPointList(GetPointListRequest request) {
         Specification<Point> specification = CustomPointRepository.filterPointList(
                 request.getStudentId(),
-                request.getFilter().getTermId(),
-                request.getFilter().getClassId(),
+                request.getTermId(),
+                request.getClassId(),
                 request.getFilter().getPoint(),
                 request.getFilter().getAccPoint(),
                 request.getFilter().getTrainingPoint(),
@@ -169,8 +169,8 @@ public class PointManager implements IPointService {
     public String exportToExcel(ExportPointListRequest request) {
         Specification<Point> specification = CustomPointRepository.filterPointList(
                 request.getStudentId(),
-                request.getFilter().getTermId(),
-                request.getFilter().getClassId(),
+                request.getTermId(),
+                request.getClassId(),
                 request.getFilter().getPoint(),
                 request.getFilter().getAccPoint(),
                 request.getFilter().getTrainingPoint(),

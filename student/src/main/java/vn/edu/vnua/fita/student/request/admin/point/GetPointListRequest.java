@@ -7,6 +7,8 @@ import vn.edu.vnua.fita.student.request.GetPageBaseRequest;
 @Data
 public class GetPointListRequest extends GetPageBaseRequest {
     private String studentId;
+    private String termId;
+    private String classId;
 
     private FilterCondition filter;
 
@@ -15,8 +17,6 @@ public class GetPointListRequest extends GetPageBaseRequest {
     @Data
     @RequiredArgsConstructor
     public static class FilterCondition {
-        private String termId;
-        private String classId;
         private int point;
         private int accPoint;
         private int trainingPoint;

@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 @Data
 public class ExportPointListRequest {
     private String studentId;
+    private String termId;
+    private String classId;
 
     private FilterCondition filter;
 
@@ -14,8 +16,6 @@ public class ExportPointListRequest {
     @Data
     @RequiredArgsConstructor
     public static class FilterCondition {
-        private String termId;
-        private String classId;
         private int point;
         private int accPoint;
         private int trainingPoint;
