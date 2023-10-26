@@ -8,7 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import vn.edu.vnua.fita.student.common.ErrorCodeDefinitions;
 import vn.edu.vnua.fita.student.common.UserIdentifyPatternConstant;
-import vn.edu.vnua.fita.student.domain.exception.JwtTokenInvalid;
+import vn.edu.vnua.fita.student.domain.exception.TokenInvalid;
 import vn.edu.vnua.fita.student.entity.Admin;
 import vn.edu.vnua.fita.student.entity.Student;
 import vn.edu.vnua.fita.student.repository.jparepo.AdminRepository;
@@ -92,7 +92,7 @@ public class ForgotPasswordServiceImpl implements ForgotPasswordService {
             admin.setPassword(encoder.encode(request.getValues().getNewPassword()));
             adminRepository.saveAndFlush(admin);
         } else {
-            throw new JwtTokenInvalid(ErrorCodeDefinitions.getErrMsg(ErrorCodeDefinitions.TOKEN_INVALID));
+            throw new TokenInvalid(ErrorCodeDefinitions.getErrMsg(ErrorCodeDefinitions.TOKEN_INVALID));
         }
     }
 

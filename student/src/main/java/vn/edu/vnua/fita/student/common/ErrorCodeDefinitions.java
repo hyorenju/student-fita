@@ -9,6 +9,7 @@ public class ErrorCodeDefinitions {
     public static final int TOKEN_INVALID = 4;
     public static final int TOKEN_REQUIRED = 5;
     public static final int TOKEN_EXPIRED = 6;
+    public static final int REFRESH_EXPIRED = 7;
 
     public static String getErrMsg(int code) {
         return switch (code) {
@@ -20,6 +21,7 @@ public class ErrorCodeDefinitions {
             case TOKEN_REQUIRED -> "Yêu cầu token";
             case TOKEN_INVALID -> "Token không hợp lệ";
             case TOKEN_EXPIRED -> "Token hết hạn";
+            case REFRESH_EXPIRED -> "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại";
             default -> "Các lỗi khác";
         };
     }

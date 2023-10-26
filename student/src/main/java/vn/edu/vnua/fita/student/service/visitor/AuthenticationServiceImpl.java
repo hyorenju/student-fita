@@ -1,5 +1,6 @@
 package vn.edu.vnua.fita.student.service.visitor;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,8 +10,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import vn.edu.vnua.fita.student.common.ErrorCodeDefinitions;
 import vn.edu.vnua.fita.student.common.RoleConstant;
 import vn.edu.vnua.fita.student.common.UserIdentifyPatternConstant;
+import vn.edu.vnua.fita.student.domain.exception.TokenExpired;
+import vn.edu.vnua.fita.student.domain.exception.TokenInvalid;
 import vn.edu.vnua.fita.student.dto.ClassDTO;
 import vn.edu.vnua.fita.student.dto.CourseDTO;
 import vn.edu.vnua.fita.student.dto.MajorDTO;
@@ -25,9 +29,12 @@ import vn.edu.vnua.fita.student.repository.jparepo.StudentRefresherRepository;
 import vn.edu.vnua.fita.student.repository.jparepo.StudentRepository;
 import vn.edu.vnua.fita.student.response.AdminLoginResponse;
 import vn.edu.vnua.fita.student.response.BaseLoginResponse;
+import vn.edu.vnua.fita.student.response.BaseResponse;
 import vn.edu.vnua.fita.student.response.StudentLoginResponse;
 import vn.edu.vnua.fita.student.security.JwtTokenProvider;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.time.Instant;
 import java.util.Optional;
 
@@ -43,7 +50,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final PasswordEncoder encoder;
     private final ModelMapper modelMapper;
     private final String cannotLogin = "Tài khoản hoặc mật khẩu không chính xác";
-    private final String cannotRefresh = "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại";
 
     @Value("${jwt.jwtRefreshExpirationMs}")
     private Long refreshTokenDurationMs;
@@ -116,13 +122,16 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public BaseLoginResponse verifyExpiration(String token) {
+    public BaseLoginResponse verifyExpiration(String token) throws IOException {
         StudentRefresher studentRefresher = studentRefresherRepository.findByToken(token);
         if(studentRefresher==null) {
             AdminRefresher adminRefresher = adminRefresherRepository.findByToken(token);
             if(adminRefresher.getExpiryDate().isBefore(Instant.now())) {
-                adminRefresherRepository.delete(adminRefresher);
-                throw new RuntimeException(cannotRefresh);
+//                adminRefresherRepository.delete(adminRefresher);
+                BaseResponse baseResponse = new BaseResponse();
+                baseResponse.setFailed(ErrorCodeDefinitions.REFRESH_EXPIRED, ErrorCodeDefinitions.getErrMsg(ErrorCodeDefinitions.REFRESH_EXPIRED));
+                return null;
+//                throw new TokenExpired(ErrorCodeDefinitions.getErrMsg(ErrorCodeDefinitions.REFRESH_EXPIRED));
             }
             Admin admin = adminRepository.findById(adminRefresher.getAdmin().getId())
                     .orElseThrow(() -> new RuntimeException("Quản trị viên không tồn tại"));
@@ -135,8 +144,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                     admin.getAvatar());
         } else {
             if (studentRefresher.getExpiryDate().isBefore(Instant.now())) {
-                studentRefresherRepository.delete(studentRefresher);
-                throw new RuntimeException(cannotRefresh);
+//                studentRefresherRepository.delete(studentRefresher);
+                BaseResponse baseResponse = new BaseResponse();
+                baseResponse.setFailed(ErrorCodeDefinitions.REFRESH_EXPIRED, ErrorCodeDefinitions.getErrMsg(ErrorCodeDefinitions.REFRESH_EXPIRED));
+                return null;
             }
             Student student = studentRepository.findById(studentRefresher.getStudent().getId())
                     .orElseThrow(() -> new RuntimeException("Sinh viên không tồn tại"));

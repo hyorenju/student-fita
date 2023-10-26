@@ -12,7 +12,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 import vn.edu.vnua.fita.student.common.ErrorCodeDefinitions;
-import vn.edu.vnua.fita.student.domain.exception.JwtTokenInvalid;
+import vn.edu.vnua.fita.student.domain.exception.TokenInvalid;
 import vn.edu.vnua.fita.student.model.authentication.UserDetailsImpl;
 import vn.edu.vnua.fita.student.entity.Admin;
 import vn.edu.vnua.fita.student.entity.AdminRefresher;
@@ -20,7 +20,6 @@ import vn.edu.vnua.fita.student.entity.StudentRefresher;
 import vn.edu.vnua.fita.student.entity.Student;
 
 import javax.annotation.PostConstruct;
-import java.beans.Encoder;
 import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -150,6 +149,6 @@ public class JwtTokenProvider {
         } catch (IllegalArgumentException e) {
             log.error("JWT claims string is empty: {}", e.getMessage());
         }
-        throw new JwtTokenInvalid(ErrorCodeDefinitions.getErrMsg(ErrorCodeDefinitions.TOKEN_INVALID));
+        throw new TokenInvalid(ErrorCodeDefinitions.getErrMsg(ErrorCodeDefinitions.TOKEN_INVALID));
     }
 }

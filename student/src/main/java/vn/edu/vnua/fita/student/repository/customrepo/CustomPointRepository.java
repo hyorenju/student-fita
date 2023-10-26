@@ -91,7 +91,7 @@ public class CustomPointRepository {
                     query.orderBy(criteriaBuilder.asc(root.get(sortColumn)));
                 } else if (sortType.equals(SortTypeConstant.DESC)) {
                     query.orderBy(criteriaBuilder.desc(root.get(sortColumn)));
-                } 
+                }
             } else {
                 query.orderBy(
                         criteriaBuilder.asc(root.get("term").get("id")),
