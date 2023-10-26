@@ -15,9 +15,7 @@ import vn.edu.vnua.fita.student.common.RoleConstant;
 import vn.edu.vnua.fita.student.common.UserIdentifyPatternConstant;
 import vn.edu.vnua.fita.student.domain.exception.TokenExpired;
 import vn.edu.vnua.fita.student.domain.exception.TokenInvalid;
-import vn.edu.vnua.fita.student.dto.ClassDTO;
-import vn.edu.vnua.fita.student.dto.CourseDTO;
-import vn.edu.vnua.fita.student.dto.MajorDTO;
+import vn.edu.vnua.fita.student.dto.*;
 import vn.edu.vnua.fita.student.entity.Admin;
 import vn.edu.vnua.fita.student.entity.AdminRefresher;
 import vn.edu.vnua.fita.student.entity.StudentRefresher;
@@ -59,51 +57,66 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         if (id.matches(UserIdentifyPatternConstant.STUDENT_ID_PATTERN)) {
             Student student = studentRepository.findById(id).orElseThrow(() -> new RuntimeException(cannotLogin));
 
-            if(!encoder.matches(password, student.getPassword())){
+            if (!encoder.matches(password, student.getPassword())) {
                 throw new RuntimeException(cannotLogin);
             }
 
             StudentRefresher studentRefresher;
-            if(studentRefresherRepository.existsByStudent(student)) {
+            if (studentRefresherRepository.existsByStudent(student)) {
                 StudentRefresher token = studentRefresherRepository.findByStudent(student);
-                if(token.getExpiryDate().compareTo(Instant.now()) < 0) {
+                if (token.getExpiryDate().compareTo(Instant.now()) < 0) {
                     token.setExpiryDate(Instant.now().plusMillis(refreshTokenDurationMs));
                     studentRefresher = studentRefresherRepository.saveAndFlush(token);
                 } else {
                     studentRefresher = token;
                 }
             } else {
-                studentRefresher =  studentRefresherRepository.saveAndFlush(jwtUtils.createStudentRefreshToken(student));
+                studentRefresher = studentRefresherRepository.saveAndFlush(jwtUtils.createStudentRefreshToken(student));
             }
-
-//            return studentRefresher.getToken();
 
             Authentication authentication = authenticate(id, password);
             String jwt = jwtUtils.generateTokenWithAuthorities(authentication);
             UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+            StudentDTO studentDTO = modelMapper.map(userDetails, StudentDTO.class);
 
             return new StudentLoginResponse(jwt,
                     userDetails.getRoleId(),
                     studentRefresher.getToken(),
-                    userDetails.getAvatar());
+                    studentDTO.getId(),
+                    studentDTO.getSurname(),
+                    studentDTO.getLastName(),
+                    studentDTO.getAvatar(),
+                    studentDTO.getCourse(),
+                    studentDTO.getMajor(),
+                    studentDTO.getAclass(),
+                    studentDTO.getDob(),
+                    studentDTO.getGender(),
+                    studentDTO.getPhoneNumber(),
+                    studentDTO.getEmail(),
+                    studentDTO.getHomeTown(),
+                    studentDTO.getResidence(),
+                    studentDTO.getFatherName(),
+                    studentDTO.getFatherPhoneNumber(),
+                    studentDTO.getMotherName(),
+                    studentDTO.getMotherPhoneNumber());
         } else if (id.matches(UserIdentifyPatternConstant.ADMIN_ID_PATTERN)) {
             Admin admin = adminRepository.findById(id).orElseThrow(() -> new RuntimeException(cannotLogin));
 
-            if(!encoder.matches(password, admin.getPassword())){
+            if (!encoder.matches(password, admin.getPassword())) {
                 throw new RuntimeException(cannotLogin);
             }
 
             AdminRefresher adminRefresher;
-            if(adminRefresherRepository.existsByAdmin(admin)) {
+            if (adminRefresherRepository.existsByAdmin(admin)) {
                 AdminRefresher token = adminRefresherRepository.findByAdmin(admin);
-                if(token.getExpiryDate().compareTo(Instant.now()) < 0) {
+                if (token.getExpiryDate().compareTo(Instant.now()) < 0) {
                     token.setExpiryDate(Instant.now().plusMillis(refreshTokenDurationMs));
                     adminRefresher = adminRefresherRepository.saveAndFlush(token);
                 } else {
                     adminRefresher = token;
                 }
             } else {
-                adminRefresher =  adminRefresherRepository.saveAndFlush(jwtUtils.createAdminRefreshToken(admin));
+                adminRefresher = adminRefresherRepository.saveAndFlush(jwtUtils.createAdminRefreshToken(admin));
             }
 
 //            return adminRefresher.getToken();
@@ -111,11 +124,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             Authentication authentication = authenticate(id, password);
             String jwt = jwtUtils.generateTokenWithAuthorities(authentication);
             UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+            AdminDTO adminDTO = modelMapper.map(userDetails, AdminDTO.class);
 
             return new AdminLoginResponse(jwt,
                     userDetails.getRoleId(),
                     adminRefresher.getToken(),
-                    userDetails.getAvatar());
+                    adminDTO.getId(),
+                    adminDTO.getName(),
+                    adminDTO.getAvatar(),
+                    adminDTO.getEmail());
         } else {
             throw new RuntimeException(cannotLogin);
         }
@@ -124,9 +141,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public BaseLoginResponse verifyExpiration(String token) throws IOException {
         StudentRefresher studentRefresher = studentRefresherRepository.findByToken(token);
-        if(studentRefresher==null) {
+        if (studentRefresher == null) {
             AdminRefresher adminRefresher = adminRefresherRepository.findByToken(token);
-            if(adminRefresher.getExpiryDate().isBefore(Instant.now())) {
+            if (adminRefresher.getExpiryDate().isBefore(Instant.now())) {
 //                adminRefresherRepository.delete(adminRefresher);
                 BaseResponse baseResponse = new BaseResponse();
                 baseResponse.setFailed(ErrorCodeDefinitions.REFRESH_EXPIRED, ErrorCodeDefinitions.getErrMsg(ErrorCodeDefinitions.REFRESH_EXPIRED));
@@ -135,13 +152,16 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             }
             Admin admin = adminRepository.findById(adminRefresher.getAdmin().getId())
                     .orElseThrow(() -> new RuntimeException("Quản trị viên không tồn tại"));
-            String accessToken = jwtUtils.generateTokenForAdmin(admin);
+            String jwt = jwtUtils.generateTokenForAdmin(admin);
+            AdminDTO adminDTO = modelMapper.map(admin, AdminDTO.class);
 
-
-            return new AdminLoginResponse(accessToken,
+            return new AdminLoginResponse(jwt,
                     admin.getRole().getId(),
                     adminRefresher.getToken(),
-                    admin.getAvatar());
+                    adminDTO.getId(),
+                    adminDTO.getName(),
+                    adminDTO.getAvatar(),
+                    adminDTO.getEmail());
         } else {
             if (studentRefresher.getExpiryDate().isBefore(Instant.now())) {
 //                studentRefresherRepository.delete(studentRefresher);
@@ -151,15 +171,33 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             }
             Student student = studentRepository.findById(studentRefresher.getStudent().getId())
                     .orElseThrow(() -> new RuntimeException("Sinh viên không tồn tại"));
-            String accessToken = jwtUtils.generateTokenForStudent(student);
-            return new StudentLoginResponse(accessToken,
+            String jwt = jwtUtils.generateTokenForStudent(student);
+            StudentDTO studentDTO = modelMapper.map(student, StudentDTO.class);
+
+            return new StudentLoginResponse(jwt,
                     student.getRole().getId(),
                     studentRefresher.getToken(),
-                    student.getAvatar());
+                    studentDTO.getId(),
+                    studentDTO.getSurname(),
+                    studentDTO.getLastName(),
+                    studentDTO.getAvatar(),
+                    studentDTO.getCourse(),
+                    studentDTO.getMajor(),
+                    studentDTO.getAclass(),
+                    studentDTO.getDob(),
+                    studentDTO.getGender(),
+                    studentDTO.getPhoneNumber(),
+                    studentDTO.getEmail(),
+                    studentDTO.getHomeTown(),
+                    studentDTO.getResidence(),
+                    studentDTO.getFatherName(),
+                    studentDTO.getFatherPhoneNumber(),
+                    studentDTO.getMotherName(),
+                    studentDTO.getMotherPhoneNumber());
         }
     }
 
-    private Authentication authenticate(String id, String password){
+    private Authentication authenticate(String id, String password) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(id, password));
 
