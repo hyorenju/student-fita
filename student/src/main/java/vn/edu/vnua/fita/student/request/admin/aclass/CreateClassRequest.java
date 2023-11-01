@@ -2,6 +2,7 @@ package vn.edu.vnua.fita.student.request.admin.aclass;
 
 import lombok.Data;
 import jakarta.validation.constraints.*;
+import vn.edu.vnua.fita.student.entity.Student;
 
 
 @Data
@@ -13,5 +14,10 @@ public class CreateClassRequest {
     @NotBlank(message = "Tên lớp không được để trống")
     private String name;
 
-    private String studentId;
+    private MonitorRequest monitor;
+
+    @Data
+    public class MonitorRequest{
+        private String id;
+    }
 }

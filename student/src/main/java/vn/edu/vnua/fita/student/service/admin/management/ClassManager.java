@@ -55,8 +55,9 @@ public class ClassManager implements IClassService {
                 throw new RuntimeException(classHadExisted);
             }
             Student monitor = null;
-            if(request.getStudentId()!=null) {
-                monitor = studentRepository.findById(request.getStudentId()).orElseThrow(() -> new RuntimeException(String.format(studentNotFound, request.getStudentId())));
+            String monitorId = request.getMonitor().getId();
+            if(monitorId!=null) {
+                monitor = studentRepository.findById(monitorId).orElseThrow(() -> new RuntimeException(String.format(studentNotFound, monitorId)));
                 monitor.setRole(Role.builder().id(RoleConstant.MONITOR).build());
 //                studentRepository.saveAndFlush(monitor);
             }
@@ -78,8 +79,9 @@ public class ClassManager implements IClassService {
         try {
             AClass aClass = classRepository.findById(request.getId()).orElseThrow(() -> new RuntimeException(String.format(classNotFound, request.getId())));
             Student newMonitor = null;
-            if(request.getStudentId()!=null) {
-                newMonitor = studentRepository.findById(request.getStudentId()).orElseThrow(() -> new RuntimeException(String.format(studentNotFound, request.getStudentId())));
+            String monitorId = request.getMonitor().getId();
+            if(monitorId!=null) {
+                newMonitor = studentRepository.findById(monitorId).orElseThrow(() -> new RuntimeException(String.format(studentNotFound, monitorId)));
                 newMonitor.setRole(Role.builder().id(RoleConstant.MONITOR).build());
 //                studentRepository.saveAndFlush(newMonitor);
 

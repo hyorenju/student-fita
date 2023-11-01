@@ -11,5 +11,10 @@ public class UpdateClassRequest {
     @NotBlank(message = "Tên lớp không được để trống")
     private String name;
 
-    private String studentId;
+    private MonitorRequest monitor;
+
+    @Data
+    public class MonitorRequest{
+        private String id;
+    }
 }
