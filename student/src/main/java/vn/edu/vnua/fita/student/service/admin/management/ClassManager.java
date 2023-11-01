@@ -63,8 +63,8 @@ public class ClassManager implements IClassService {
             }
 
             AClass aClass = AClass.builder()
-                    .id(request.getId())
-                    .name(request.getName().toUpperCase())
+                    .id(request.getId().toUpperCase())
+                    .name(request.getName())
                     .monitor(monitor)
                     .build();
 
@@ -91,7 +91,7 @@ public class ClassManager implements IClassService {
 //                    studentRepository.saveAndFlush(oldMonitor);
                 }
             }
-            aClass.setName(request.getName().toUpperCase());
+            aClass.setName(request.getName());
             aClass.setMonitor(newMonitor);
             return classRepository.saveAndFlush(aClass);
         } catch (DataIntegrityViolationException e) {

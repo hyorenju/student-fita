@@ -41,8 +41,8 @@ public class MajorManager implements IMajorService {
             throw new RuntimeException(majorHadExisted);
         }
         Major major = Major.builder()
-                .id(request.getId())
-                .name(request.getName().toUpperCase())
+                .id(request.getId().toUpperCase())
+                .name(request.getName())
                 .totalCredits(request.getTotalCredits())
                 .build();
         return majorRepository.saveAndFlush(major);
@@ -51,7 +51,7 @@ public class MajorManager implements IMajorService {
     @Override
     public Major updateMajor(UpdateMajorRequest request) {
         Major major = majorRepository.findById(request.getId()).orElseThrow(() -> new RuntimeException(String.format(majorNotFound, request.getId())));
-        major.setName(request.getName().toUpperCase());
+        major.setName(request.getName());
         major.setTotalCredits(request.getTotalCredits());
         return majorRepository.saveAndFlush(major);
     }
