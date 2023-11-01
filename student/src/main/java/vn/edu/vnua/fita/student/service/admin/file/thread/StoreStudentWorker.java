@@ -73,7 +73,7 @@ public class StoreStudentWorker implements Callable<StudentExcelData> {
                     .isDeleted(false)
                     .role(Role.builder().id(RoleConstant.STUDENT).build())
                     .password(encoder.encode(MyUtils.formatDobToPassword(dob)))
-                    .familySituation(FamilySituationConstant.getSituationValue(FamilySituationConstant.NONE))
+                    .familySituation(FamilySituationConstant.NONE)
                     .build();
 
             List<StudentExcelData.ErrorDetail> errorDetailList = student.validateInformationDetailError(new CopyOnWriteArrayList<>());

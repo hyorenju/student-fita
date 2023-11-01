@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import vn.edu.vnua.fita.student.common.DateTimeConstant;
-import vn.edu.vnua.fita.student.common.FamilySituationConstant;
 import vn.edu.vnua.fita.student.common.RoleConstant;
 import vn.edu.vnua.fita.student.entity.*;
 import vn.edu.vnua.fita.student.repository.customrepo.CustomStudentRepository;
@@ -98,7 +97,7 @@ public class StudentManager implements IStudentService {
                     .phoneNumber(request.getPhoneNumber())
                     .email(request.getEmail())
                     .homeTown(request.getHomeTown())
-                    .familySituation(FamilySituationConstant.getSituationValue(request.getFamilySituation()))
+                    .familySituation(request.getFamilySituation())
                     .residence(request.getResidence())
                     .fatherName(request.getFatherName())
                     .fatherPhoneNumber(request.getFatherPhoneNumber())
@@ -141,7 +140,7 @@ public class StudentManager implements IStudentService {
             student.setEmail(request.getEmail());
             student.setPhoneNumber(request.getPhoneNumber());
             student.setHomeTown(request.getHomeTown());
-            student.setFamilySituation(FamilySituationConstant.getSituationValue(request.getFamilySituation()));
+            student.setFamilySituation(request.getFamilySituation());
             student.setResidence(request.getResidence());
             student.setFatherName(request.getFatherName());
             student.setFatherPhoneNumber(request.getFatherPhoneNumber());
