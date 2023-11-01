@@ -136,9 +136,7 @@ public class AdminManager implements IAdminService {
             throw new RuntimeException("Không thể xoá SUPERADMIN");
         } else {
             admin.setIsDeleted(true);
-            TrashAdmin trashAdmin = moveToTrash(admin);
-            adminRepository.saveAndFlush(admin);
-            return trashAdmin;
+            return moveToTrash(admin);
         }
 
     }
@@ -166,7 +164,6 @@ public class AdminManager implements IAdminService {
         Admin admin = trashAdmin.getAdmin();
         admin.setIsDeleted(false);
         restoreFromTrash(admin);
-        adminRepository.saveAndFlush(admin);
         return trashAdmin;
     }
 

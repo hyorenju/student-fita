@@ -113,7 +113,7 @@ public class StudentManager implements IStudentService {
                 student.setPassword(encoder.encode(MyUtils.formatDobToPassword(request.getDob())));
             }
 
-            studentRepository.saveAndFlush(student);
+//            studentRepository.saveAndFlush(student);
             createStudentStatus(student);
 
             return student;
@@ -207,7 +207,7 @@ public class StudentManager implements IStudentService {
 
     @Override
     public void importFromExcel(MultipartFile file) throws IOException, ExecutionException, InterruptedException {
-        studentRepository.saveAllAndFlush(excelService.readStudentFromExcel(file))
+        /*studentRepository.saveAllAndFlush(*/excelService.readStudentFromExcel(file)/*)*/
                 .forEach(this::createStudentStatus);
     }
 

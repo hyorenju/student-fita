@@ -48,7 +48,9 @@ public class RoleManager implements IRoleService {
             return getPermissionChecker(role, permissionRepository.findAllByType(RoleConstant.MOD));
         } else if (id.equals(RoleConstant.ADMIN)) {
             return getPermissionChecker(role, permissionRepository.findAllByType(RoleConstant.ADMIN));
-        } else {
+        } else if (id.equals(RoleConstant.MONITOR)) {
+            return getPermissionChecker(role, permissionRepository.findAllByType(RoleConstant.MONITOR));
+        }else {
             return getPermissionChecker(role, permissionRepository.findAllByType(RoleConstant.SUPERADMIN));
         }
     }

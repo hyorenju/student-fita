@@ -58,7 +58,7 @@ public class ClassManager implements IClassService {
             if(request.getStudentId()!=null) {
                 monitor = studentRepository.findById(request.getStudentId()).orElseThrow(() -> new RuntimeException(String.format(studentNotFound, request.getStudentId())));
                 monitor.setRole(Role.builder().id(RoleConstant.MONITOR).build());
-                studentRepository.saveAndFlush(monitor);
+//                studentRepository.saveAndFlush(monitor);
             }
 
             AClass aClass = AClass.builder()
@@ -81,12 +81,12 @@ public class ClassManager implements IClassService {
             if(request.getStudentId()!=null) {
                 newMonitor = studentRepository.findById(request.getStudentId()).orElseThrow(() -> new RuntimeException(String.format(studentNotFound, request.getStudentId())));
                 newMonitor.setRole(Role.builder().id(RoleConstant.MONITOR).build());
-                studentRepository.saveAndFlush(newMonitor);
+//                studentRepository.saveAndFlush(newMonitor);
 
                 Student oldMonitor = aClass.getMonitor();
                 if(oldMonitor != null) {
                     oldMonitor.setRole(Role.builder().id(RoleConstant.STUDENT).build());
-                    studentRepository.saveAndFlush(oldMonitor);
+//                    studentRepository.saveAndFlush(oldMonitor);
                 }
             }
             aClass.setName(request.getName());

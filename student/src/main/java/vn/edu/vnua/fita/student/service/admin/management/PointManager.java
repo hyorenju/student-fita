@@ -105,7 +105,7 @@ public class PointManager implements IPointService {
         Point point = pointRepository.findById(id).orElseThrow(() -> new RuntimeException(String.format(pointNotFoundMsg, id)));
         point.setIsDeleted(true);
         TrashPoint trashPoint = moveToTrash(point);
-        pointRepository.saveAndFlush(point);
+//        pointRepository.saveAndFlush(point);
         return trashPoint;
     }
 
@@ -115,7 +115,7 @@ public class PointManager implements IPointService {
         List<TrashPoint> trashPoints = new ArrayList<>();
         points.forEach(point -> {
             point.setIsDeleted(true);
-            pointRepository.saveAndFlush(point);
+//            pointRepository.saveAndFlush(point);
             trashPoints.add(moveToTrash(point));
         });
         return trashPoints;
@@ -139,7 +139,7 @@ public class PointManager implements IPointService {
         Point point = trashPoint.getPoint();
         point.setIsDeleted(false);
         restoreFromTrash(point);
-        pointRepository.saveAndFlush(point);
+//        pointRepository.saveAndFlush(point);
         return trashPoint;
     }
 
@@ -150,7 +150,7 @@ public class PointManager implements IPointService {
             Point point = trashPoint.getPoint();
             point.setIsDeleted(false);
             restoreFromTrash(point);
-            pointRepository.saveAndFlush(point);
+//            pointRepository.saveAndFlush(point);
         });
         return trashPoints;
     }
