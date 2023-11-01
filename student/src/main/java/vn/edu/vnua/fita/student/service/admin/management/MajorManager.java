@@ -14,6 +14,7 @@ import vn.edu.vnua.fita.student.request.admin.major.UpdateMajorRequest;
 import vn.edu.vnua.fita.student.service.admin.iservice.IMajorService;
 
 import java.util.List;
+import java.util.Locale;
 
 @Service
 @RequiredArgsConstructor
@@ -41,7 +42,7 @@ public class MajorManager implements IMajorService {
         }
         Major major = Major.builder()
                 .id(request.getId())
-                .name(request.getName())
+                .name(request.getName().toUpperCase())
                 .totalCredits(request.getTotalCredits())
                 .build();
         return majorRepository.saveAndFlush(major);
@@ -50,7 +51,7 @@ public class MajorManager implements IMajorService {
     @Override
     public Major updateMajor(UpdateMajorRequest request) {
         Major major = majorRepository.findById(request.getId()).orElseThrow(() -> new RuntimeException(String.format(majorNotFound, request.getId())));
-        major.setName(request.getName());
+        major.setName(request.getName().toUpperCase());
         major.setTotalCredits(request.getTotalCredits());
         return majorRepository.saveAndFlush(major);
     }
