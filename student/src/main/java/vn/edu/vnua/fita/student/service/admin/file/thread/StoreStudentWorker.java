@@ -7,7 +7,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import vn.edu.vnua.fita.student.common.FamilySituationConstant;
 import vn.edu.vnua.fita.student.common.RoleConstant;
 import vn.edu.vnua.fita.student.entity.Role;
 import vn.edu.vnua.fita.student.entity.AClass;
@@ -73,7 +72,7 @@ public class StoreStudentWorker implements Callable<StudentExcelData> {
                     .isDeleted(false)
                     .role(Role.builder().id(RoleConstant.STUDENT).build())
                     .password(encoder.encode(MyUtils.formatDobToPassword(dob)))
-                    .familySituation(FamilySituationConstant.NONE)
+                    .familySituation("Không")
                     .build();
 
             List<StudentExcelData.ErrorDetail> errorDetailList = student.validateInformationDetailError(new CopyOnWriteArrayList<>());
