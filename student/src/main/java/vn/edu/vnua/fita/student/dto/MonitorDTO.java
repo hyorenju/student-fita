@@ -3,8 +3,10 @@ package vn.edu.vnua.fita.student.dto;
 import lombok.Data;
 
 @Data
-public class ClassDTO {
+public class MonitorDTO {
     private String id;
-    private String name;
-    private MonitorDTO monitor;
+
+    private String surname;
+
+    private String lastName;
 }
