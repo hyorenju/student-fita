@@ -84,8 +84,10 @@ public class ClassManager implements IClassService {
                 studentRepository.saveAndFlush(newMonitor);
 
                 Student oldMonitor = aClass.getMonitor();
-                oldMonitor.setRole(Role.builder().id(RoleConstant.STUDENT).build());
-                studentRepository.saveAndFlush(oldMonitor);
+                if(oldMonitor != null) {
+                    oldMonitor.setRole(Role.builder().id(RoleConstant.STUDENT).build());
+                    studentRepository.saveAndFlush(oldMonitor);
+                }
             }
             aClass.setName(request.getName());
             aClass.setMonitor(newMonitor);
