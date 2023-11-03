@@ -14,10 +14,10 @@ public class CreateClassRequest {
     @NotBlank(message = "Tên lớp không được để trống")
     private String name;
 
-    private MonitorRequest monitor;
+    private String monitorId;
 
-    @Data
-    public class MonitorRequest{
-        private String id;
-    }
+//    @Data
+//    public class MonitorRequest{
+//        private String id;
+//    }
 }

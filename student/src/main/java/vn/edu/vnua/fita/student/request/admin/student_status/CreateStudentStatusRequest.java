@@ -27,7 +27,7 @@ public class CreateStudentStatusRequest {
     }
 
     @Data
-    public static class ThisStatus {
+    public class ThisStatus {
         @NotNull(message = "Mã trạng thái không được để trống")
         private Integer id;
     }
