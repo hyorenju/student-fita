@@ -80,7 +80,7 @@ public class ClassManager implements IClassService {
             AClass aClass = classRepository.findById(request.getId()).orElseThrow(() -> new RuntimeException(String.format(classNotFound, request.getId())));
             Student newMonitor = null;
             String monitorId = request.getMonitor().getId();
-            if(monitorId!=null) {
+            if(request.getMonitor().getId()!=null) {
                 newMonitor = studentRepository.findById(monitorId).orElseThrow(() -> new RuntimeException(String.format(studentNotFound, monitorId)));
                 newMonitor.setRole(Role.builder().id(RoleConstant.MONITOR).build());
 //                studentRepository.saveAndFlush(newMonitor);

@@ -38,7 +38,7 @@ import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
-public class AdminManager implements IAdminService {
+public class    AdminManager implements IAdminService {
     private final AdminRepository adminRepository;
     private final RoleRepository roleRepository;
     private final TrashAdminRepository trashAdminRepository;
@@ -78,17 +78,16 @@ public class AdminManager implements IAdminService {
                 throw new RuntimeException(adminHadExisted);
             } else if (adminRepository.existsByEmail(request.getEmail())) {
                 throw new RuntimeException(emailHadUsed);
-            } else if (!roleRepository.existsById(request.getRoleId())) {
-                throw new RuntimeException(roleNotFound);
             } else if (request.getId().matches("^[0-9]+")) {
                 throw new RuntimeException(validAdminId);
             }
+            Role role = roleRepository.findById(request.getRoleId()).orElseThrow(() -> new RuntimeException(roleNotFound));
             Admin admin = Admin.builder()
                     .id(request.getId())
                     .name(request.getName())
                     .email(request.getEmail())
                     .password(encoder.encode(request.getPassword()))
-                    .role(Role.builder().id(request.getRoleId()).build())
+                    .role(role)
                     .isDeleted(false)
                     .build();
             return adminRepository.saveAndFlush(admin);
@@ -100,6 +99,7 @@ public class AdminManager implements IAdminService {
     @Override
     public Admin updateAdmin(UpdateAdminRequest request) {
         try {
+            Role role = roleRepository.findById(request.getRoleId()).orElseThrow(() -> new RuntimeException(roleNotFound));
             Admin admin = adminRepository.findById(request.getId()).orElseThrow(() -> new RuntimeException(adminNotFound));
             if (!roleRepository.existsById(request.getRoleId())) {
                 throw new RuntimeException(roleNotFound);
@@ -107,7 +107,7 @@ public class AdminManager implements IAdminService {
 
             admin.setName(request.getName());
             admin.setEmail(request.getEmail());
-            admin.setRole(Role.builder().id(request.getRoleId()).build());
+            admin.setRole(role);
             if (StringUtils.hasText(request.getPassword())) {
                 admin.setPassword(encoder.encode(request.getPassword()));
             }
