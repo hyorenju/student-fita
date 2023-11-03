@@ -53,6 +53,8 @@ public class    AdminManager implements IAdminService {
     private final String byWhomNotFound = "Không thể xác định danh tính người xoá";
     private final String trashNotFound = "Không tìm thấy rác";
     private final String emailHasExisted = "Email %s đã tồn tại trong hệ thống, vui lòng sử dụng một email khác";
+    private final String cannotUpdate = "Không thể cập nhật quản trị viên cấp cao";
+    private final String cannotDelete = "Không thể xoá quản trị viên cấp cao";
 
     @Value("${firebase.storage.bucket}")
     private String bucketName;
@@ -101,8 +103,8 @@ public class    AdminManager implements IAdminService {
         try {
             Role role = roleRepository.findById(request.getRoleId()).orElseThrow(() -> new RuntimeException(roleNotFound));
             Admin admin = adminRepository.findById(request.getId()).orElseThrow(() -> new RuntimeException(adminNotFound));
-            if (!roleRepository.existsById(request.getRoleId())) {
-                throw new RuntimeException(roleNotFound);
+            if(admin.getRole().getId().equals(RoleConstant.SUPERADMIN)) {
+                throw new RuntimeException(cannotUpdate);
             }
 
             admin.setName(request.getName());
@@ -133,7 +135,7 @@ public class    AdminManager implements IAdminService {
     public TrashAdmin deleteAdmin(String id) {
         Admin admin = adminRepository.findById(id).orElseThrow(() -> new RuntimeException(adminNotFound));
         if (admin.getRole().getId().equals(RoleConstant.SUPERADMIN)) {
-            throw new RuntimeException("Không thể xoá SUPERADMIN");
+            throw new RuntimeException(cannotDelete);
         } else {
             admin.setIsDeleted(true);
             return moveToTrash(admin);
