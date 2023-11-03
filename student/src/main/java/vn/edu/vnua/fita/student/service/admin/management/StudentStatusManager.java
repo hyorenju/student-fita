@@ -46,11 +46,13 @@ public class StudentStatusManager implements IStudentStatusService {
 
     @Override
     public StudentStatus createStudentStatus(CreateStudentStatusRequest request) throws ParseException {
-        if(studentStatusRepository.existsByStudentIdAndStatusId(request.getStudentId(), request.getStatusId())){
+        String studentId = request.getStudent().getId();
+        Integer statusId = request.getStatus().getId();
+        if(studentStatusRepository.existsByStudentIdAndStatusId(studentId, statusId)){
             throw new RuntimeException(studentStatusHadExisted);
         }
-        Student student = studentRepository.findById(request.getStudentId()).orElseThrow(() -> new RuntimeException(String.format(studentNotFound, request.getStudentId())));
-        Status status = statusRepository.findById(request.getStatusId()).orElseThrow(() -> new RuntimeException(statusNotFound));
+        Student student = studentRepository.findById(studentId).orElseThrow(() -> new RuntimeException(String.format(studentNotFound, studentId)));
+        Status status = statusRepository.findById(statusId).orElseThrow(() -> new RuntimeException(statusNotFound));
 
         StudentStatus studentStatus = StudentStatus.builder()
                 .student(student)

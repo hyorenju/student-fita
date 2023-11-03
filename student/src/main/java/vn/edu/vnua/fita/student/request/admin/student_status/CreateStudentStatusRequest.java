@@ -8,12 +8,9 @@ import vn.edu.vnua.fita.student.domain.validator.InputDate;
 
 @Data
 public class CreateStudentStatusRequest {
-    @NotBlank(message = "Mã sinh viên không được để trống")
-    @Size(max = 10, message = "Mã sinh viên quá dài")
-    private String studentId;
+    private ThisStudent student;
 
-    @NotNull(message = "Mã trạng thái không được để trống")
-    private Integer statusId;
+    private ThisStatus status;
 
     @NotBlank(message = "Thời gian không được để trống")
     @InputDate(message = "Thời gian phải đúng định dạng dd/MM/yyyy")
@@ -21,4 +18,17 @@ public class CreateStudentStatusRequest {
     private String time;
 
     private String note;
+
+    @Data
+    public static class ThisStudent{
+        @NotBlank(message = "Mã sinh viên không được để trống")
+        @Size(max = 10, message = "Mã sinh viên quá dài")
+        private String id;
+    }
+
+    @Data
+    public static class ThisStatus {
+        @NotNull(message = "Mã trạng thái không được để trống")
+        private Integer id;
+    }
 }
