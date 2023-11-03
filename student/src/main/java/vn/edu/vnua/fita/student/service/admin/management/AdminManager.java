@@ -114,7 +114,7 @@ public class    AdminManager implements IAdminService {
                 admin.setPassword(encoder.encode(request.getPassword()));
             }
 
-            return admin;
+            return adminRepository.saveAndFlush(admin);
         } catch (DataIntegrityViolationException ex) {
             throw new RuntimeException(String.format(emailHasExisted, request.getEmail()));
         }
