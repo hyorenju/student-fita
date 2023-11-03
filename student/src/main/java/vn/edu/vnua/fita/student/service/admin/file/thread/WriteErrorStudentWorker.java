@@ -30,9 +30,8 @@ public class WriteErrorStudentWorker implements Callable<Void> {
         row.createCell(6).setCellValue(MyUtils.convertTimestampToString(student.getDob()));
         row.createCell(7).setCellValue(student.getGender());
         row.createCell(8).setCellValue(student.getPhoneNumber());
-        row.createCell(9).setCellValue(student.getEmail());
-        row.createCell(10).setCellValue(student.getHomeTown());
-        row.createCell(11).setCellValue("");
+        row.createCell(9).setCellValue(student.getHomeTown());
+        row.createCell(10).setCellValue("");
 
         studentExcelData.getErrorDetailList().forEach(errorDetail -> {
             Cell cell = row.getCell(errorDetail.getColumnIndex());

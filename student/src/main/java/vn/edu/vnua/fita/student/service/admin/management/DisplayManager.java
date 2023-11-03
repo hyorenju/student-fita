@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
-public class DisplayService implements IDisplayService {
+public class DisplayManager implements IDisplayService {
     private final DisplayRepository displayRepository;
     private final FirebaseService firebaseService;
 

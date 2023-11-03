@@ -14,7 +14,7 @@ import vn.edu.vnua.fita.student.entity.Display;
 import vn.edu.vnua.fita.student.request.admin.display.CreateDisplayRequest;
 import vn.edu.vnua.fita.student.request.admin.display.GetDisplayListRequest;
 import vn.edu.vnua.fita.student.request.admin.display.UpdateDisplayRequest;
-import vn.edu.vnua.fita.student.service.admin.management.DisplayService;
+import vn.edu.vnua.fita.student.service.admin.management.DisplayManager;
 
 import java.io.IOException;
 import java.util.List;
@@ -22,14 +22,14 @@ import java.util.List;
 @RestController
 @RequestMapping("admin/display")
 @RequiredArgsConstructor
-public class DisplayController extends BaseController {
-    private final DisplayService displayService;
+public class DisplayManagerController extends BaseController {
+    private final DisplayManager displayManager;
     private final ModelMapper modelMapper;
 
     @PostMapping("list")
     @PreAuthorize("hasAnyAuthority('GET_DISPLAY_LIST', 'SUPERADMIN')")
     public ResponseEntity<?> getDisplayList(@Valid @RequestBody GetDisplayListRequest request){
-        Page<Display> page = displayService.getDisplayList(request);
+        Page<Display> page = displayManager.getDisplayList(request);
         List<DisplayDTO> response = page.getContent().stream().map(
                 display -> modelMapper.map(display, DisplayDTO.class)
         ).toList();
@@ -39,21 +39,21 @@ public class DisplayController extends BaseController {
     @PostMapping("{id}")
     @PreAuthorize("hasAnyAuthority('UPDATE_DISPLAY', 'SUPERADMIN')")
     public ResponseEntity<?> getDisplay(@PathVariable Long id){
-        DisplayDTO response = modelMapper.map(displayService.getDisplay(id), DisplayDTO.class);
+        DisplayDTO response = modelMapper.map(displayManager.getDisplay(id), DisplayDTO.class);
         return buildItemResponse(response);
     }
 
     @PostMapping("update/{id}")
     @PreAuthorize("hasAnyAuthority('UPDATE_DISPLAY', 'SUPERADMIN')")
     public ResponseEntity<?> updateDisplay(@PathVariable Long id, @RequestBody @Valid UpdateDisplayRequest request) {
-        DisplayDTO response = modelMapper.map(displayService.updateDisplay(id, request), DisplayDTO.class);
+        DisplayDTO response = modelMapper.map(displayManager.updateDisplay(id, request), DisplayDTO.class);
         return buildItemResponse(response);
     }
 
     @PostMapping("upload")
 //    @PreAuthorize("hasAnyAuthority('UPDATE_DISPLAY', 'SUPERADMIN')")
     public ResponseEntity<?> uploadImg(@RequestBody MultipartFile file) throws IOException {
-        String response = displayService.uploadImg(file);
+        String response = displayManager.uploadImg(file);
         return buildItemResponse(response);
     }
 
@@ -63,7 +63,7 @@ public class DisplayController extends BaseController {
     // Dưới đây là api for postman, đề nghị front-end dev không sử dụng dưới mọi hình thức
     @PostMapping("create")
     public ResponseEntity<?> createDisplay(@RequestBody @Valid CreateDisplayRequest request){
-        DisplayDTO response = modelMapper.map(displayService.createDisplay(request), DisplayDTO.class);
+        DisplayDTO response = modelMapper.map(displayManager.createDisplay(request), DisplayDTO.class);
         return buildItemResponse(response);
     }
 }

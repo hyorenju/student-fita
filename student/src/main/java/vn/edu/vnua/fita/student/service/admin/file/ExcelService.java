@@ -290,9 +290,8 @@ public class ExcelService implements IExcelService {
         headerRow.createCell(6).setCellValue("Ngày sinh");
         headerRow.createCell(7).setCellValue("Giới tính");
         headerRow.createCell(8).setCellValue("Số điện thoại");
-        headerRow.createCell(9).setCellValue("Email");
-        headerRow.createCell(10).setCellValue("Quê quán");
-        headerRow.createCell(11).setCellValue("Ghi chú");
+        headerRow.createCell(9).setCellValue("Quê quán");
+        headerRow.createCell(10).setCellValue("Ghi chú");
     }
 
     private void createStudentListHeader(Sheet sheet) {

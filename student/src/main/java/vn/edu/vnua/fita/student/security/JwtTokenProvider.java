@@ -41,7 +41,7 @@ public class JwtTokenProvider {
     @Value("${jwt.mailTokenExpirationMs}")
     private Long mailTokenExpirationMs;
 
-    private static final String AUTHORITIES_KEY = "XAUTHOR";
+    private static final String AUTHORITIES_KEY = "X_AUTHOR";
 
     @PostConstruct
     public void init() {
