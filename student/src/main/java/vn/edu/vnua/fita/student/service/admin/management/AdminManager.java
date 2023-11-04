@@ -127,8 +127,7 @@ public class    AdminManager implements IAdminService {
 
         admin.setName(request.getName());
         admin.setEmail(request.getEmail());
-        adminRepository.saveAndFlush(admin);
-        return admin;
+        return adminRepository.saveAndFlush(admin);
     }
 
     @Override
