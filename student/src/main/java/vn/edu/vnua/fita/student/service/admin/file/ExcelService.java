@@ -36,6 +36,7 @@ public class ExcelService implements IExcelService {
     private final ExecutorService executor;
     private final PasswordEncoder encoder;
     private final String dataNotFound = "Không tìm thấy dữ liệu. Hãy chắc chắn rằng file excel được nhập từ ô A1";
+    private final String noData = "Tệp excel không có dữ liệu";
 
     @Value("${firebase.storage.bucket}")
     private String bucketName;
@@ -152,9 +153,17 @@ public class ExcelService implements IExcelService {
                 Callable<String> callable = new ReadExcelWorker(row);
                 Future<String> future = executor.submit(callable);
                 stringList.add(future.get());
-            } else if (row == null) {
-                throw new RuntimeException(dataNotFound);
+            } else {
+                if (row == null) {
+                    throw new RuntimeException(dataNotFound);
+                } else if (row.getCell(0) == null) {
+                    throw new RuntimeException(dataNotFound);
+                }
             }
+        }
+
+        if(totalRows==1){
+            throw new RuntimeException(noData);
         }
 
         workbook.close();

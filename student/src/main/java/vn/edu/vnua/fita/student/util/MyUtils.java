@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Calendar;
 
 public class MyUtils {
 
@@ -70,13 +71,9 @@ public class MyUtils {
         }
     }
 
-    public Timestamp test(String input) throws ParseException {
-        try {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DateTimeConstant.DATE_FORMAT);
-            simpleDateFormat.setLenient(false);
-            return new Timestamp(simpleDateFormat.parse(input).getTime());
-        } catch (ParseException | DateTimeParseException e) {
-            return new Timestamp(0);
-        }
+    public String test(Timestamp time) throws ParseException {
+        int term = (time.getMonth() >= Calendar.AUGUST) ? 1 : 2;
+        int year = term == 1 ? time.getYear() + 1900 : time.getYear() + 1899;
+        return "" + year + term;
     }
 }
