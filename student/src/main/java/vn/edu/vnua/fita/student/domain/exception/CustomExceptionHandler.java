@@ -14,12 +14,12 @@ import vn.edu.vnua.fita.student.common.ErrorCodeDefinitions;
 import vn.edu.vnua.fita.student.response.BaseResponse;
 
 import javax.naming.AuthenticationException;
+import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.OK;
 
-//Custom Exception Handler
 @ControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class CustomExceptionHandler {
@@ -37,7 +37,6 @@ public class CustomExceptionHandler {
                 .build();
     }
 
-
     @ResponseStatus(OK)
     @ResponseBody
     @ExceptionHandler(HttpMessageNotReadableException.class)
@@ -48,18 +47,17 @@ public class CustomExceptionHandler {
                         .code(ErrorCodeDefinitions.VALIDATION_ERROR)
                         .message(ErrorCodeDefinitions.getErrMsg(ErrorCodeDefinitions.VALIDATION_ERROR))
                         .build()
-        )
-                .build();
+        ).build();
     }
 
-    @ResponseStatus(OK)
-    @ResponseBody
-    @ExceptionHandler(value = {Exception.class})
-    public BaseResponse methodArgumentNotValidException(Exception ex) {
-        BaseResponse response = new BaseResponse();
-        response.setFailed(ErrorCodeDefinitions.SERVER_ERROR, ex.getMessage());
-        return response;
-    }
+//    @ResponseStatus(OK)
+//    @ResponseBody
+//    @ExceptionHandler(value = {Exception.class})
+//    public BaseResponse methodArgumentNotValidException(Exception ex) {
+//        BaseResponse response = new BaseResponse();
+//        response.setFailed(ErrorCodeDefinitions.SERVER_ERROR, ex.getMessage());
+//        return response;
+//    }
 
     @ResponseStatus(OK)
     @ResponseBody

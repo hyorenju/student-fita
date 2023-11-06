@@ -1,9 +1,11 @@
 package vn.edu.vnua.fita.student.service.visitor;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponseWrapper;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -11,10 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import vn.edu.vnua.fita.student.common.ErrorCodeDefinitions;
-import vn.edu.vnua.fita.student.common.RoleConstant;
 import vn.edu.vnua.fita.student.common.UserIdentifyPatternConstant;
-import vn.edu.vnua.fita.student.domain.exception.TokenExpired;
-import vn.edu.vnua.fita.student.domain.exception.TokenInvalid;
 import vn.edu.vnua.fita.student.dto.*;
 import vn.edu.vnua.fita.student.entity.Admin;
 import vn.edu.vnua.fita.student.entity.AdminRefresher;

@@ -12,6 +12,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 import vn.edu.vnua.fita.student.common.ErrorCodeDefinitions;
+import vn.edu.vnua.fita.student.domain.exception.TokenExpired;
 import vn.edu.vnua.fita.student.domain.exception.TokenInvalid;
 import vn.edu.vnua.fita.student.model.authentication.UserDetailsImpl;
 import vn.edu.vnua.fita.student.entity.Admin;

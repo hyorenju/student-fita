@@ -33,7 +33,7 @@ public class BaseController {
     }
 
     protected <T> ResponseEntity<?> buildServerErrorResponse(int code, String message) {
-        ServerErrorResponse<T> response = new ServerErrorResponse();
+        ServerErrorResponse<T> response = new ServerErrorResponse<>();
         response.setFailed(code, message);
         return ResponseEntity.internalServerError().body(response);
     }

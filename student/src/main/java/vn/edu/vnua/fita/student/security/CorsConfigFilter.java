@@ -1,4 +1,4 @@
-package vn.edu.vnua.fita.student.config;
+package vn.edu.vnua.fita.student.security;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletResponse;
