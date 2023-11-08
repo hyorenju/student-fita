@@ -34,7 +34,7 @@ public class TermController extends BaseController {
     }
 
     @PostMapping("selection")
-    @PreAuthorize("hasAnyAuthority('SUPERADMIN')")
+    @PreAuthorize("hasAnyAuthority('SUPERADMIN', 'ADMIN', 'MOD')")
     public ResponseEntity<?> getAllTerm(){
         List<TermDTO> response = termManager.getAllTerm().stream().map(
                 term -> modelMapper.map(term, TermDTO.class)

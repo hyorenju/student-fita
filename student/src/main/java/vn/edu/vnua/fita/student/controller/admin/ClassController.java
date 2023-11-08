@@ -38,7 +38,7 @@ public class ClassController extends BaseController {
     }
 
     @PostMapping("selection")
-    @PreAuthorize("hasAnyAuthority('SUPERADMIN')")
+    @PreAuthorize("hasAnyAuthority('SUPERADMIN', 'ADMIN', 'MOD')")
     public ResponseEntity<?> getAllClass(){
         List<ClassDTO> response = classManager.getAllClass().stream().map(
                 aClass -> modelMapper.map(aClass, ClassDTO.class)

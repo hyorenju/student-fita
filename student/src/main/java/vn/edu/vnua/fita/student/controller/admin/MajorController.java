@@ -35,7 +35,7 @@ public class MajorController extends BaseController {
     }
 
     @PostMapping("selection")
-    @PreAuthorize("hasAnyAuthority('SUPERADMIN')")
+    @PreAuthorize("hasAnyAuthority('SUPERADMIN', 'ADMIN', 'MOD')")
     public ResponseEntity<?> getAllMajor(){
         List<MajorDTO> response = majorManager.getAllMajor().stream().map(
                 major -> modelMapper.map(major, MajorDTO.class)
