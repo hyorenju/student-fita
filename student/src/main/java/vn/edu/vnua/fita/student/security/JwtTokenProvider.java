@@ -8,10 +8,12 @@ import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 import vn.edu.vnua.fita.student.common.ErrorCodeDefinitions;
+import vn.edu.vnua.fita.student.domain.exception.TokenExpired;
 import vn.edu.vnua.fita.student.domain.exception.TokenInvalid;
 import vn.edu.vnua.fita.student.model.authentication.UserDetailsImpl;
 import vn.edu.vnua.fita.student.entity.Admin;
@@ -144,11 +146,13 @@ public class JwtTokenProvider {
             log.error("Invalid JWT token: {}", e.getMessage());
         } catch (ExpiredJwtException e) {
             log.error("JWT token is expired: {}", e.getMessage());
+//            throw new TokenExpired(ErrorCodeDefinitions.getErrMsg(ErrorCodeDefinitions.TOKEN_EXPIRED));
         } catch (UnsupportedJwtException e) {
             log.error("JWT token is unsupported: {}", e.getMessage());
         } catch (IllegalArgumentException e) {
             log.error("JWT claims string is empty: {}", e.getMessage());
         }
-        throw new TokenInvalid(ErrorCodeDefinitions.getErrMsg(ErrorCodeDefinitions.TOKEN_INVALID));
+        return false;
+//        throw new TokenInvalid(ErrorCodeDefinitions.getErrMsg(ErrorCodeDefinitions.TOKEN_INVALID));
     }
 }

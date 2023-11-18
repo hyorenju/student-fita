@@ -207,7 +207,7 @@ public class StudentManager implements IStudentService {
 
     @Override
     public void importFromExcel(MultipartFile file) throws IOException, ExecutionException, InterruptedException {
-        /*studentRepository.saveAllAndFlush(*/excelService.readStudentFromExcel(file)/*)*/
+        studentRepository.saveAllAndFlush(excelService.readStudentFromExcel(file))
                 .forEach(this::createStudentStatus);
     }
 

@@ -14,7 +14,6 @@ import vn.edu.vnua.fita.student.common.ErrorCodeDefinitions;
 import vn.edu.vnua.fita.student.response.BaseResponse;
 
 import javax.naming.AuthenticationException;
-import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,14 +49,14 @@ public class CustomExceptionHandler {
         ).build();
     }
 
-//    @ResponseStatus(OK)
-//    @ResponseBody
-//    @ExceptionHandler(value = {Exception.class})
-//    public BaseResponse methodArgumentNotValidException(Exception ex) {
-//        BaseResponse response = new BaseResponse();
-//        response.setFailed(ErrorCodeDefinitions.SERVER_ERROR, ex.getMessage());
-//        return response;
-//    }
+    @ResponseStatus(OK)
+    @ResponseBody
+    @ExceptionHandler(value = {Exception.class})
+    public BaseResponse methodArgumentNotValidException(Exception ex) {
+        BaseResponse response = new BaseResponse();
+        response.setFailed(ErrorCodeDefinitions.SERVER_ERROR, ex.getMessage());
+        return response;
+    }
 
     @ResponseStatus(OK)
     @ResponseBody

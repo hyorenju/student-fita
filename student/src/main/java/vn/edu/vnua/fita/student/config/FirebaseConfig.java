@@ -24,12 +24,12 @@ public class FirebaseConfig {
         return GoogleCredentials.fromStream(serviceAccountKey);
     }
 
-    @Bean
-    public void initializeFirebaseApp() throws IOException {
-        FileInputStream serviceAccount = new FileInputStream(firebaseConfigPath);
-        FirebaseOptions options = new FirebaseOptions.Builder()
-                .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                .build();
-        FirebaseApp.initializeApp(options);
-    }
+//    @Bean
+//    public void initializeFirebaseApp() throws IOException {
+//        FileInputStream serviceAccount = new FileInputStream(firebaseConfigPath);
+//        FirebaseOptions options = new FirebaseOptions.Builder()
+//                .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+//                .build();
+//        FirebaseApp.initializeApp(options);
+//    }
 }

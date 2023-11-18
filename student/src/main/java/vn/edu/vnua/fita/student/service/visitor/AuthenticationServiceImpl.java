@@ -143,11 +143,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         if (studentRefresher == null) {
             AdminRefresher adminRefresher = adminRefresherRepository.findByToken(token);
             if (adminRefresher.getExpiryDate().isBefore(Instant.now())) {
-//                adminRefresherRepository.delete(adminRefresher);
-                BaseResponse baseResponse = new BaseResponse();
-                baseResponse.setFailed(ErrorCodeDefinitions.REFRESH_EXPIRED, ErrorCodeDefinitions.getErrMsg(ErrorCodeDefinitions.REFRESH_EXPIRED));
                 return null;
-//                throw new TokenExpired(ErrorCodeDefinitions.getErrMsg(ErrorCodeDefinitions.REFRESH_EXPIRED));
             }
             Admin admin = adminRepository.findById(adminRefresher.getAdmin().getId())
                     .orElseThrow(() -> new RuntimeException("Quản trị viên không tồn tại"));
@@ -163,9 +159,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                     adminDTO.getEmail());
         } else {
             if (studentRefresher.getExpiryDate().isBefore(Instant.now())) {
-//                studentRefresherRepository.delete(studentRefresher);
-                BaseResponse baseResponse = new BaseResponse();
-                baseResponse.setFailed(ErrorCodeDefinitions.REFRESH_EXPIRED, ErrorCodeDefinitions.getErrMsg(ErrorCodeDefinitions.REFRESH_EXPIRED));
                 return null;
             }
             Student student = studentRepository.findById(studentRefresher.getStudent().getId())

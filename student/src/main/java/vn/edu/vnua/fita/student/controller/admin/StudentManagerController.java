@@ -108,7 +108,7 @@ public class StudentManagerController extends BaseController {
     }
 
     @PostMapping("import")
-    @PreAuthorize("hasAnyAuthority('IMPORT_STUDENT', 'SUPERADMIN')")
+    @PreAuthorize("hasAnyAuthority('SUPERADMIN')")
     public ResponseEntity<?> importStudentList(MultipartFile file) throws IOException, ExecutionException, InterruptedException {
         studentManager.importFromExcel(file);
         String response = "Nhập liệu thành công";

@@ -11,6 +11,7 @@ import vn.edu.vnua.fita.student.repository.jparepo.TermRepository;
 import vn.edu.vnua.fita.student.util.MyUtils;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -37,8 +38,14 @@ public class StorePointWorker implements Callable<PointExcelData> {
             String pointAcc10 = infoList[6].strip();
             String pointAcc4 = infoList[7].strip();
 
+            Optional<Student> studentOptional = studentRepository.findById(studentId);
+            Student student = null;
+            if (studentOptional.isPresent()) {
+                student = studentOptional.get();
+            }
+
             Point point = Point.builder()
-                    .student(Student.builder().id(studentId).build())
+                    .student(student)
                     .term(Term.builder().id(termId).build())
                     .avgPoint10(MyUtils.parseFloatFromString(avgPoint10))
                     .avgPoint4(MyUtils.parseFloatFromString(avgPoint4))
@@ -50,7 +57,7 @@ public class StorePointWorker implements Callable<PointExcelData> {
                     .build();
 
             List<PointExcelData.ErrorDetail> errorDetailList = point.validateInformationDetailError(new CopyOnWriteArrayList<>());
-            if(!studentRepository.existsById(studentId)){
+            if(studentOptional.isEmpty()){
                 errorDetailList.add(PointExcelData.ErrorDetail.builder().columnIndex(0).errorMsg("Mã sv không tồn tại").build());
             }
             if(!termRepository.existsById(termId)){
