@@ -113,7 +113,7 @@ public class StudentManager implements IStudentService {
                 student.setPassword(encoder.encode(MyUtils.formatDobToPassword(request.getDob())));
             }
 
-//            studentRepository.saveAndFlush(student);
+            studentRepository.saveAndFlush(student);
             createStudentStatus(student);
 
             return student;
@@ -246,6 +246,12 @@ public class StudentManager implements IStudentService {
         for (StudentRefresher studentRefresher:
              studentRefreshers) {
             studentRefresherRepository.delete(studentRefresher);
+        }
+
+        AClass aClass = classRepository.findByMonitor(student);
+        if(aClass!=null) {
+            aClass.setMonitor(null);
+            classRepository.saveAndFlush(aClass);
         }
 
         trashStudentRepository.delete(trashStudent);

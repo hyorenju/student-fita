@@ -46,6 +46,8 @@ public class UserDetailsImpl implements UserDetails {
 
     private String phoneNumber;
 
+    private String familySituation;
+
     private String email;
 
     private String homeTown;

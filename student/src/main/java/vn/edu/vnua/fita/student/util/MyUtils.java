@@ -71,9 +71,9 @@ public class MyUtils {
         }
     }
 
-    public String test(Timestamp time) throws ParseException {
-        int term = (time.getMonth() >= Calendar.AUGUST) ? 1 : 2;
-        int year = term == 1 ? time.getYear() + 1900 : time.getYear() + 1899;
-        return "" + year + term;
+    public Timestamp test(String inputDate) throws ParseException {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DateTimeConstant.DATE_FORMAT);
+        simpleDateFormat.setLenient(false);
+        return new Timestamp(simpleDateFormat.parse(inputDate).getTime());
     }
 }

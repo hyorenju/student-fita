@@ -11,6 +11,6 @@ import java.time.LocalDateTime;
 public class Test {
     public static void main(String[] args) throws ParseException {
         MyUtils myUtils = new MyUtils();
-        System.out.println(myUtils.test(MyUtils.convertTimestampFromString("12/8/2020")));
+        System.out.println(myUtils.test("06/12/2002"));
     }
 }
