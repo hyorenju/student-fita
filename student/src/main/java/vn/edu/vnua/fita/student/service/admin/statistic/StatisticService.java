@@ -193,7 +193,7 @@ public class StatisticService implements IStatisticService {
         Point lastPoint;
         Integer creditsAcc = 0;
         Float accPoint4 = (float) 0;
-        if(!points.isEmpty()) {
+        if (!points.isEmpty()) {
             lastPoint = points.get(points.size() - 1);
             creditsAcc = lastPoint.getCreditsAcc();
             accPoint4 = lastPoint.getPointAcc4();

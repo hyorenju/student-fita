@@ -49,14 +49,14 @@ public class CustomExceptionHandler {
         ).build();
     }
 
-    @ResponseStatus(OK)
-    @ResponseBody
-    @ExceptionHandler(value = {Exception.class})
-    public BaseResponse methodArgumentNotValidException(Exception ex) {
-        BaseResponse response = new BaseResponse();
-        response.setFailed(ErrorCodeDefinitions.SERVER_ERROR, ex.getMessage());
-        return response;
-    }
+//    @ResponseStatus(OK)
+//    @ResponseBody
+//    @ExceptionHandler(value = {Exception.class})
+//    public BaseResponse methodArgumentNotValidException(Exception ex) {
+//        BaseResponse response = new BaseResponse();
+//        response.setFailed(ErrorCodeDefinitions.SERVER_ERROR, ex.getMessage());
+//        return response;
+//    }
 
     @ResponseStatus(OK)
     @ResponseBody

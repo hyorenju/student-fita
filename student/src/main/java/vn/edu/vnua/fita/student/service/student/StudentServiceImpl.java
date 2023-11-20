@@ -104,10 +104,7 @@ public class StudentServiceImpl implements StudentService {
             Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
             Student student = studentRepository.findById(authentication.getPrincipal().toString()).orElseThrow(() -> new RuntimeException(studentNotFound));
 
-            return statisticService.getStudentStatistic(student.getId());
-        } catch (Exception e) {
-            return null;
-        }
+            return statisticService.getStudentStatistic(student.getId())
     }
 
     @Override
