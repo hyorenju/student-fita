@@ -28,7 +28,7 @@ public class StudentProfile {
 
     private ClassDTO aclass;
 
-    @JsonFormat(pattern = DateTimeConstant.DATE_FORMAT)
+    @JsonFormat(pattern = DateTimeConstant.DATE_FORMAT, timezone = DateTimeConstant.TIME_ZONE)
     private Timestamp dob;
 
     private String gender;
@@ -56,7 +56,7 @@ public class StudentProfile {
     public static class StudentStatusProfile {
         private String statusName;
 
-        @JsonFormat(pattern = DateTimeConstant.DATE_FORMAT)
+        @JsonFormat(pattern = DateTimeConstant.DATE_FORMAT, timezone = DateTimeConstant.TIME_ZONE)
         private Timestamp time;
 
         private String note;

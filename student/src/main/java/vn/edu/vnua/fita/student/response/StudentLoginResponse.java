@@ -19,7 +19,7 @@ public class StudentLoginResponse extends BaseLoginResponse{
     private CourseDTO course;
     private MajorDTO major;
     private ClassDTO aclass;
-    @JsonFormat(pattern = DateTimeConstant.DATE_FORMAT)
+    @JsonFormat(pattern = DateTimeConstant.DATE_FORMAT, timezone = DateTimeConstant.TIME_ZONE)
     private Timestamp dob;
     private String gender;
     private String phoneNumber;

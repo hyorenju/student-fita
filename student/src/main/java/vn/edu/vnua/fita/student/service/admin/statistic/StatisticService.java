@@ -190,10 +190,15 @@ public class StatisticService implements IStatisticService {
                     .point(point.getTrainingPoint())
                     .build());
         }
-        Point lastPoint = points.get(points.size() - 1);
-        Integer creditsAcc = lastPoint.getCreditsAcc();
+        Point lastPoint;
+        Integer creditsAcc = 0;
+        Float accPoint4 = (float) 0;
+        if(!points.isEmpty()) {
+            lastPoint = points.get(points.size() - 1);
+            creditsAcc = lastPoint.getCreditsAcc();
+            accPoint4 = lastPoint.getPointAcc4();
+        }
         Integer totalCredits = student.getMajor().getTotalCredits();
-        Float accPoint4 = lastPoint.getPointAcc4();
         return StudentStatistic.builder()
                 .student(studentDTO)
                 .avgPoint4List(avgPoint4List)
