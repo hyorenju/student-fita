@@ -22,7 +22,7 @@ public class StudentDTO {
 
     private ClassDTO aclass;
 
-    @JsonFormat(pattern = DateTimeConstant.DATE_FORMAT)
+    @JsonFormat(pattern = DateTimeConstant.DATE_FORMAT, timezone = DateTimeConstant.TIME_ZONE)
     private Timestamp dob;
 
     private String gender;

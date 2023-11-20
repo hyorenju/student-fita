@@ -12,7 +12,7 @@ public class TrashStudentDTO {
 
     private StudentDTO student;
 
-    @JsonFormat(pattern = DateTimeConstant.DATE_TIME_FORMAT)
+    @JsonFormat(pattern = DateTimeConstant.DATE_TIME_FORMAT, timezone = DateTimeConstant.TIME_ZONE)
     private Timestamp time;
 
     private AdminDTO deletedBy;
