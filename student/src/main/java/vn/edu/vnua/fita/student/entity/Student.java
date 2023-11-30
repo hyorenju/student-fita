@@ -92,6 +92,9 @@ public class Student {
     @OneToMany(mappedBy = "student")
     private Collection<Document> documents;
 
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+    private Collection<PointOfYear> pointOfYears;
+
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
     @JoinTable(name = "students_terms",
             joinColumns = @JoinColumn(name = "student_id"),

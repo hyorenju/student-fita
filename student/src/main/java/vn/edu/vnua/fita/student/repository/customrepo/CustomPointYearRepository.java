@@ -4,7 +4,6 @@ import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.StringUtils;
 import vn.edu.vnua.fita.student.common.SortTypeConstant;
-import vn.edu.vnua.fita.student.entity.Point;
 import vn.edu.vnua.fita.student.entity.PointOfYear;
 
 import java.util.ArrayList;

@@ -16,5 +16,4 @@ public class PointOfYearDTO {
     private Integer creditsPassed;
     private Integer creditsNotPassed;
     private Integer creditsAcc;
-    private Boolean isDeleted;
 }

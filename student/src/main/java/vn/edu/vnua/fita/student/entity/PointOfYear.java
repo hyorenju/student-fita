@@ -16,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "students_terms")
+@Table(name = "point_annual")
 public class PointOfYear{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,6 +26,7 @@ public class PointOfYear{
     @JoinColumn(name = "student_id")
     private Student student;
 
+    @Column(length = 200)
     private String year;
 
     @Column(name = "average_point_10")
