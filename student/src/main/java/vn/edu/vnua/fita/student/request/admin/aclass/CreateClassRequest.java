@@ -14,10 +14,13 @@ public class CreateClassRequest {
     @NotBlank(message = "Tên lớp không được để trống")
     private String name;
 
-    private String monitorId;
+    private ClassOfficers classOfficers;
 
-//    @Data
-//    public class MonitorRequest{
-//        private String id;
-//    }
+    @Data
+    public static class ClassOfficers{
+        private String monitor;
+        private String viceMonitor;
+        private String secretary;
+        private String deputySecretary;
+    }
 }

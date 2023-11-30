@@ -39,4 +39,16 @@ public class CreatePointRequest {
     @Min(value = 0, message = "Điểm trung bình tích lũy hệ 4 không được dưới 0")
     @Max(value = 4, message = "Điểm trung bình tích lũy hệ 4 không được quá 4")
     private Float pointAcc4;
+
+    @NotNull(message = "Số tín chỉ đăng ký không được để trống")
+    @Min(value = 0, message = "Số tín chỉ đăng ký không được dưới 0")
+    private Integer creditsRegistered;
+
+    @NotNull(message = "Số tín chỉ đạt không được để trống")
+    @Min(value = 0, message = "Số tín chỉ đạt không được dưới 0")
+    private Integer creditsPassed;
+
+    @NotNull(message = "Số tín chỉ không đạt không được để trống")
+    @Min(value = 0, message = "Số tín chỉ không đạt không được dưới 0")
+    private Integer creditsNotPassed;
 }

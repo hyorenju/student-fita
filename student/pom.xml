@@ -12,8 +12,7 @@
     <artifactId>student</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>student</name>
-<!--    <description>A student management system for FITA VNUA</description>-->
-    <description>Demo project for Spring Boot</description>
+    <description>A student management system for FITA VNUA</description>
     <properties>
         <java.version>17</java.version>
     </properties>

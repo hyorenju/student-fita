@@ -1,16 +1,19 @@
-package vn.edu.vnua.fita.student.request.admin.point;
+package vn.edu.vnua.fita.student.request.admin.pointofyear;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import jakarta.validation.constraints.*;
 import vn.edu.vnua.fita.student.request.admin.student.CreateStudentRequest;
 import vn.edu.vnua.fita.student.request.admin.term.CreateTermRequest;
 
-
 @Data
-public class UpdatePointRequest {
+public class CreatePointYearRequest {
     private CreateStudentRequest student;
 
-    private CreateTermRequest term;
+    @NotBlank(message = "Năm không được để trống")
+    private String year;
 
     @NotNull(message = "Điểm trung bình hệ 10 không được để trống")
     @Min(value = 0, message = "Điểm trung bình hệ 10 không được dưới 0")

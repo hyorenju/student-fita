@@ -3,10 +3,10 @@ package vn.edu.vnua.fita.student.dto;
 import lombok.Data;
 
 @Data
-public class PointDTO {
+public class PointOfYearDTO {
     private Long id;
     private StudentDTO student;
-    private TermDTO term;
+    private String year;
     private Float avgPoint10;
     private Float avgPoint4;
     private Integer trainingPoint;

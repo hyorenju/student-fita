@@ -100,11 +100,10 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public StudentStatistic getStatistic() {
-        try {
             Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
             Student student = studentRepository.findById(authentication.getPrincipal().toString()).orElseThrow(() -> new RuntimeException(studentNotFound));
 
-            return statisticService.getStudentStatistic(student.getId())
+            return statisticService.getStudentStatistic(student.getId());
     }
 
     @Override

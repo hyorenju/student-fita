@@ -33,7 +33,7 @@ public class ClassManager implements IClassService {
     private final String classNotFound = "Mã lớp %s không tồn tại trong hệ thống";
     private final String cannotDelete = "Lớp này đang ràng buộc với bảng sinh viên, vui lòng xoá hết sinh viên thuộc lớp này trước khi tiến hành xoá lớp";
     private final String studentNotFound = "Không tìm thấy sinh viên %s";
-    private final String duplicateMonitor = "Sinh viên này đã là lớp trưởng của một lớp khác, vui lòng chọn lại";
+    private final String duplicateMonitor = "Có ít nhất 1 sinh viên đã là ban cán sự ở nơi khác, vui lòng nhập lại";
 
     @Override
     public Page<AClass> getClassList(GetClassListRequest request) {
@@ -54,18 +54,39 @@ public class ClassManager implements IClassService {
             if (classRepository.existsById(request.getId())) {
                 throw new RuntimeException(classHadExisted);
             }
+
             Student monitor = null;
-            String monitorId = request.getMonitorId();
+            Student viceMonitor = null;
+            Student secretary = null;
+            Student deputySecretary = null;
+
+            String monitorId = request.getClassOfficers().getMonitor();
+            String viceMonitorId = request.getClassOfficers().getViceMonitor();
+            String secretaryId = request.getClassOfficers().getSecretary();
+            String deputySecretaryId = request.getClassOfficers().getDeputySecretary();
+
             if(monitorId!=null) {
                 monitor = studentRepository.findById(monitorId).orElseThrow(() -> new RuntimeException(String.format(studentNotFound, monitorId)));
                 monitor.setRole(Role.builder().id(RoleConstant.MONITOR).build());
 //                studentRepository.saveAndFlush(monitor);
+            }
+            if(viceMonitorId != null) {
+                viceMonitor = studentRepository.findById(viceMonitorId).orElseThrow(() -> new RuntimeException(String.format(studentNotFound, viceMonitorId)));
+            }
+            if(secretaryId != null) {
+                secretary = studentRepository.findById(secretaryId).orElseThrow(() -> new RuntimeException(String.format(studentNotFound, secretaryId)));
+            }
+            if(deputySecretaryId != null) {
+                deputySecretary = studentRepository.findById(deputySecretaryId).orElseThrow(() -> new RuntimeException(String.format(studentNotFound, deputySecretaryId)));
             }
 
             AClass aClass = AClass.builder()
                     .id(request.getId().toUpperCase())
                     .name(request.getName())
                     .monitor(monitor)
+                    .secretary(secretary)
+                    .viceMonitor(viceMonitor)
+                    .deputySecretary(deputySecretary)
                     .build();
 
             return classRepository.saveAndFlush(aClass);
@@ -78,8 +99,17 @@ public class ClassManager implements IClassService {
     public AClass updateClass(UpdateClassRequest request) {
         try {
             AClass aClass = classRepository.findById(request.getId()).orElseThrow(() -> new RuntimeException(String.format(classNotFound, request.getId())));
+
             Student newMonitor = null;
-            String monitorId = request.getMonitorId();
+            Student newViceMonitor = null;
+            Student newSecretary = null;
+            Student newDeputySecretary = null;
+
+            String monitorId = request.getClassOfficers().getMonitor();
+            String viceMonitorId = request.getClassOfficers().getViceMonitor();
+            String secretaryId = request.getClassOfficers().getSecretary();
+            String deputySecretaryId = request.getClassOfficers().getDeputySecretary();
+
             if(monitorId!=null) {
                 newMonitor = studentRepository.findById(monitorId).orElseThrow(() -> new RuntimeException(String.format(studentNotFound, monitorId)));
                 newMonitor.setRole(Role.builder().id(RoleConstant.MONITOR).build());
@@ -96,8 +126,21 @@ public class ClassManager implements IClassService {
                     oldMonitor.setRole(Role.builder().id(RoleConstant.STUDENT).build());
                 }
             }
+            if(viceMonitorId != null) {
+                newViceMonitor = studentRepository.findById(viceMonitorId).orElseThrow(() -> new RuntimeException(String.format(studentNotFound, viceMonitorId)));
+            }
+            if(secretaryId != null) {
+                newSecretary = studentRepository.findById(secretaryId).orElseThrow(() -> new RuntimeException(String.format(studentNotFound, secretaryId)));
+            }
+            if(deputySecretaryId != null) {
+                newDeputySecretary = studentRepository.findById(deputySecretaryId).orElseThrow(() -> new RuntimeException(String.format(studentNotFound, deputySecretaryId)));
+            }
+
             aClass.setName(request.getName());
             aClass.setMonitor(newMonitor);
+            aClass.setViceMonitor(newViceMonitor);
+            aClass.setSecretary(newSecretary);
+            aClass.setDeputySecretary(newDeputySecretary);
             return classRepository.saveAndFlush(aClass);
         } catch (DataIntegrityViolationException e) {
             throw new RuntimeException(duplicateMonitor);

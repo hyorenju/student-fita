@@ -26,6 +26,18 @@ public class AClass {
     @JoinColumn(name = "monitor")
     private Student monitor;
 
+    @OneToOne
+    @JoinColumn(name = "vice_monitor")
+    private Student viceMonitor;
+
+    @OneToOne
+    @JoinColumn(name = "secretary")
+    private Student secretary;
+
+    @OneToOne
+    @JoinColumn(name = "deputy_secretary")
+    private Student deputySecretary;
+
     @OneToMany(mappedBy = "aclass", cascade = CascadeType.ALL)
     private Collection<Student> students;
 

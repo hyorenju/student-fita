@@ -39,14 +39,23 @@ public class Point{
     @Column(name = "training_point")
     private Integer trainingPoint;
 
-    @Column(name = "credits_accumulated")
-    private Integer creditsAcc;
-
     @Column(name = "point_accumulated_10")
     private Float pointAcc10;
 
     @Column(name = "point_accumulated_4")
     private Float pointAcc4;
+
+    @Column(name = "credits_registered")
+    private Integer creditsRegistered;
+
+    @Column(name = "credits_passed")
+    private Integer creditsPassed;
+
+    @Column(name = "credits_not_passed")
+    private Integer creditsNotPassed;
+
+    @Column(name = "credits_accumulated")
+    private Integer creditsAcc;
 
     @Column(name = "is_deleted")
     private Boolean isDeleted;

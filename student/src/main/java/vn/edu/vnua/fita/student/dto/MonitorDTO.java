@@ -9,4 +9,6 @@ public class MonitorDTO {
     private String surname;
 
     private String lastName;
+
+    private String phoneNumber;
 }

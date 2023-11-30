@@ -74,6 +74,9 @@ public class PointManager implements IPointService {
                 .creditsAcc(request.getCreditsAcc())
                 .pointAcc10(request.getPointAcc10())
                 .pointAcc4(request.getPointAcc4())
+                .creditsRegistered(request.getCreditsRegistered())
+                .creditsPassed(request.getCreditsPassed())
+                .creditsNotPassed(request.getCreditsNotPassed())
                 .isDeleted(false)
                 .build();
 
@@ -96,6 +99,9 @@ public class PointManager implements IPointService {
         point.setCreditsAcc(request.getCreditsAcc());
         point.setPointAcc10(request.getPointAcc10());
         point.setPointAcc4(request.getPointAcc4());
+        point.setCreditsRegistered(request.getCreditsRegistered());
+        point.setCreditsPassed(request.getCreditsPassed());
+        point.setCreditsNotPassed(request.getCreditsNotPassed());
 
         return pointRepository.saveAndFlush(point);
     }
