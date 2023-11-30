@@ -8,6 +8,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import vn.edu.vnua.fita.student.common.RoleConstant;
 import vn.edu.vnua.fita.student.dto.MajorDTO;
@@ -62,26 +63,26 @@ public class ClassManager implements IClassService {
 
             if (request.getMonitor() != null) {
                 String monitorId = request.getMonitor().getId();
-                if (monitorId != null) {
+                if (StringUtils.hasText(monitorId)) {
                     monitor = studentRepository.findById(monitorId).orElseThrow(() -> new RuntimeException(String.format(studentNotFound, monitorId)));
                     monitor.setRole(Role.builder().id(RoleConstant.MONITOR).build());
                 }
             }
             if (request.getViceMonitor() != null) {
                 String viceMonitorId = request.getViceMonitor().getId();
-                if (viceMonitorId != null) {
+                if (StringUtils.hasText(viceMonitorId)) {
                     viceMonitor = studentRepository.findById(viceMonitorId).orElseThrow(() -> new RuntimeException(String.format(studentNotFound, viceMonitorId)));
                 }
             }
             if (request.getSecretary() != null) {
                 String secretaryId = request.getSecretary().getId();
-                if (secretaryId != null) {
+                if (StringUtils.hasText(secretaryId)) {
                     secretary = studentRepository.findById(secretaryId).orElseThrow(() -> new RuntimeException(String.format(studentNotFound, secretaryId)));
                 }
             }
             if (request.getDeputySecretary() != null) {
                 String deputySecretaryId = request.getDeputySecretary().getId();
-                if (deputySecretaryId != null) {
+                if (StringUtils.hasText(deputySecretaryId)) {
                     deputySecretary = studentRepository.findById(deputySecretaryId).orElseThrow(() -> new RuntimeException(String.format(studentNotFound, deputySecretaryId)));
                 }
             }
@@ -113,7 +114,7 @@ public class ClassManager implements IClassService {
 
             if (request.getMonitor() != null) {
                 String monitorId = request.getMonitor().getId();
-                if (monitorId != null) {
+                if (StringUtils.hasText(monitorId)) {
                     newMonitor = studentRepository.findById(monitorId).orElseThrow(() -> new RuntimeException(String.format(studentNotFound, monitorId)));
                     newMonitor.setRole(Role.builder().id(RoleConstant.MONITOR).build());
 
@@ -130,19 +131,19 @@ public class ClassManager implements IClassService {
             }
             if (request.getViceMonitor() != null) {
                 String viceMonitorId = request.getViceMonitor().getId();
-                if (viceMonitorId != null) {
+                if (StringUtils.hasText(viceMonitorId)) {
                     newViceMonitor = studentRepository.findById(viceMonitorId).orElseThrow(() -> new RuntimeException(String.format(studentNotFound, viceMonitorId)));
                 }
             }
             if (request.getSecretary() != null) {
                 String secretaryId = request.getSecretary().getId();
-                if (secretaryId != null) {
+                if (StringUtils.hasText(secretaryId)) {
                     newSecretary = studentRepository.findById(secretaryId).orElseThrow(() -> new RuntimeException(String.format(studentNotFound, secretaryId)));
                 }
             }
             if (request.getDeputySecretary() != null) {
                 String deputySecretaryId = request.getDeputySecretary().getId();
-                if (deputySecretaryId != null) {
+                if (StringUtils.hasText(deputySecretaryId)) {
                     newDeputySecretary = studentRepository.findById(deputySecretaryId).orElseThrow(() -> new RuntimeException(String.format(studentNotFound, deputySecretaryId)));
                 }
             }
