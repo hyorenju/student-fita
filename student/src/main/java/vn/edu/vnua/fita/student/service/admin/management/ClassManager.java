@@ -60,10 +60,10 @@ public class ClassManager implements IClassService {
             Student secretary = null;
             Student deputySecretary = null;
 
-            String monitorId = request.getClassOfficers().getMonitor();
-            String viceMonitorId = request.getClassOfficers().getViceMonitor();
-            String secretaryId = request.getClassOfficers().getSecretary();
-            String deputySecretaryId = request.getClassOfficers().getDeputySecretary();
+            String monitorId = request.getMonitor().getId();
+            String viceMonitorId = request.getViceMonitor().getId();
+            String secretaryId = request.getSecretary().getId();
+            String deputySecretaryId = request.getDeputySecretary().getId();
 
             if(monitorId!=null) {
                 monitor = studentRepository.findById(monitorId).orElseThrow(() -> new RuntimeException(String.format(studentNotFound, monitorId)));
@@ -105,10 +105,10 @@ public class ClassManager implements IClassService {
             Student newSecretary = null;
             Student newDeputySecretary = null;
 
-            String monitorId = request.getClassOfficers().getMonitor();
-            String viceMonitorId = request.getClassOfficers().getViceMonitor();
-            String secretaryId = request.getClassOfficers().getSecretary();
-            String deputySecretaryId = request.getClassOfficers().getDeputySecretary();
+            String monitorId = request.getMonitor().getId();
+            String viceMonitorId = request.getViceMonitor().getId();
+            String secretaryId = request.getSecretary().getId();
+            String deputySecretaryId = request.getDeputySecretary().getId();
 
             if(monitorId!=null) {
                 newMonitor = studentRepository.findById(monitorId).orElseThrow(() -> new RuntimeException(String.format(studentNotFound, monitorId)));

@@ -11,13 +11,31 @@ public class UpdateClassRequest {
     @NotBlank(message = "Tên lớp không được để trống")
     private String name;
 
-    private ClassOfficers classOfficers;
+    private Monitor monitor;
+
+    private ViceMonitor viceMonitor;
+
+    private Secretary secretary;
+
+    private DeputySecretary deputySecretary;
 
     @Data
-    public static class ClassOfficers{
-        private String monitor;
-        private String viceMonitor;
-        private String secretary;
-        private String deputySecretary;
+    public static class Monitor{
+        private String id;
+    }
+
+    @Data
+    public static class ViceMonitor{
+        private String id;
+    }
+
+    @Data
+    public static class Secretary{
+        private String id;
+    }
+
+    @Data
+    public static class DeputySecretary{
+        private String id;
     }
 }
