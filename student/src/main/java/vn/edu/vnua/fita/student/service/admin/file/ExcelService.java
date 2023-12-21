@@ -242,7 +242,7 @@ public class ExcelService implements IExcelService {
             return firebaseService.uploadFileExcel(FilePathConstant.ERROR_STUDENT_FILE, bucketName);
 
         } catch (IOException e) {
-            throw new RuntimeException("Đã có lỗi, không thể ghi file.");
+            throw new RuntimeException("Đã có lỗi, không thể ghi file báo lỗi dssv.");
         }
     }
 
@@ -284,7 +284,7 @@ public class ExcelService implements IExcelService {
             return firebaseService.uploadFileExcel(FilePathConstant.ERROR_POINT_FILE, bucketName);
 
         } catch (IOException e) {
-            throw new RuntimeException("Đã có lỗi, không thể ghi file.");
+            throw new RuntimeException("Đã có lỗi, không thể ghi file báo lỗi ds điểm.");
         }
     }
 
