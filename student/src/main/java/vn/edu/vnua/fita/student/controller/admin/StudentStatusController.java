@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import vn.edu.vnua.fita.student.controller.BaseController;
 import vn.edu.vnua.fita.student.dto.StudentStatusDTO;
 import vn.edu.vnua.fita.student.entity.StudentStatus;
-import vn.edu.vnua.fita.student.request.admin.student_status.CreateStudentStatusRequest;
-import vn.edu.vnua.fita.student.request.admin.student_status.GetStudentStatusListRequest;
-import vn.edu.vnua.fita.student.request.admin.student_status.UpdateStudentStatusRequest;
+import vn.edu.vnua.fita.student.request.admin.studentstatus.CreateStudentStatusRequest;
+import vn.edu.vnua.fita.student.request.admin.studentstatus.GetStudentStatusListRequest;
+import vn.edu.vnua.fita.student.request.admin.studentstatus.UpdateStudentStatusRequest;
 import vn.edu.vnua.fita.student.service.admin.management.StudentStatusManager;
 
 import java.text.ParseException;

@@ -1,4 +1,4 @@
-package vn.edu.vnua.fita.student.service.admin.file.thread;
+package vn.edu.vnua.fita.student.service.admin.file.thread.point;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,7 +29,10 @@ public class WriteErrorPointWorker implements Callable<Void> {
         row.createCell(5).setCellValue(point.getCreditsAcc());
         row.createCell(6).setCellValue(MyUtils.parseFloatToString(point.getPointAcc10()));
         row.createCell(7).setCellValue(MyUtils.parseFloatToString(point.getPointAcc4()));
-        row.createCell(8);
+        row.createCell(8).setCellValue(point.getCreditsRegistered());
+        row.createCell(9).setCellValue(point.getCreditsPassed());
+        row.createCell(10).setCellValue(point.getCreditsNotPassed());
+        row.createCell(11);
 
         pointExcelData.getErrorDetailList().forEach(errorDetail -> {
             Cell cell = row.getCell(errorDetail.getColumnIndex());

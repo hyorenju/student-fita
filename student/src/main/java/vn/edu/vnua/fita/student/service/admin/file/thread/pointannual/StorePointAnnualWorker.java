@@ -1,11 +1,14 @@
-package vn.edu.vnua.fita.student.service.admin.file.thread;
+package vn.edu.vnua.fita.student.service.admin.file.thread.pointannual;
 
 import lombok.AllArgsConstructor;
 import vn.edu.vnua.fita.student.entity.Point;
+import vn.edu.vnua.fita.student.entity.PointOfYear;
 import vn.edu.vnua.fita.student.entity.Student;
 import vn.edu.vnua.fita.student.entity.Term;
+import vn.edu.vnua.fita.student.model.file.PointAnnualExcelData;
 import vn.edu.vnua.fita.student.model.file.PointExcelData;
 import vn.edu.vnua.fita.student.repository.jparepo.PointRepository;
+import vn.edu.vnua.fita.student.repository.jparepo.PointYearRepository;
 import vn.edu.vnua.fita.student.repository.jparepo.StudentRepository;
 import vn.edu.vnua.fita.student.repository.jparepo.TermRepository;
 import vn.edu.vnua.fita.student.util.MyUtils;
@@ -16,21 +19,19 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @AllArgsConstructor
-public class StorePointWorker implements Callable<PointExcelData> {
+public class StorePointAnnualWorker implements Callable<PointAnnualExcelData> {
     private final StudentRepository studentRepository;
-    private final TermRepository termRepository;
-    private final PointRepository pointRepository;
     private final String pointStr;
     private final int row;
 
     @Override
-    public PointExcelData call() throws Exception {
-        PointExcelData pointExcelData = new PointExcelData();
+    public PointAnnualExcelData call() throws Exception {
+        PointAnnualExcelData pointAnnualExcelData = new PointAnnualExcelData();
 
         if(!pointStr.isEmpty()){
             String[] infoList = pointStr.strip().split(",");
             String studentId = infoList[0].strip();
-            String termId = infoList[1].strip();
+            String year = infoList[1].strip();
             String avgPoint10 = infoList[2].strip();
             String avgPoint4 = infoList[3].strip();
             String trainingPoint = infoList[4].strip();
@@ -44,9 +45,9 @@ public class StorePointWorker implements Callable<PointExcelData> {
                 student = studentOptional.get();
             }
 
-            Point point = Point.builder()
+            PointOfYear pointOfYear = PointOfYear.builder()
                     .student(student)
-                    .term(Term.builder().id(termId).build())
+                    .year(year)
                     .avgPoint10(MyUtils.parseFloatFromString(avgPoint10))
                     .avgPoint4(MyUtils.parseFloatFromString(avgPoint4))
                     .trainingPoint(MyUtils.parseIntegerFromString(trainingPoint))
@@ -56,25 +57,19 @@ public class StorePointWorker implements Callable<PointExcelData> {
                     .isDeleted(false)
                     .build();
 
-            List<PointExcelData.ErrorDetail> errorDetailList = point.validateInformationDetailError(new CopyOnWriteArrayList<>());
+            List<PointAnnualExcelData.ErrorDetail> errorDetailList = pointOfYear.validateInformationDetailError(new CopyOnWriteArrayList<>());
             if(studentOptional.isEmpty()){
                 errorDetailList.add(PointExcelData.ErrorDetail.builder().columnIndex(0).errorMsg("Mã sv không tồn tại").build());
             }
-            if(!termRepository.existsById(termId)){
-                errorDetailList.add(PointExcelData.ErrorDetail.builder().columnIndex(1).errorMsg("Học kỳ không tồn tại").build());
-            }
-            if(pointRepository.existsByStudentIdAndTermId(studentId,termId)){
-                errorDetailList.add(PointExcelData.ErrorDetail.builder().columnIndex(8).errorMsg("Dữ liệu của hàng này đã tồn tại").build());
-            }
 
-            pointExcelData.setPoint(point);
+            pointAnnualExcelData.setPointOfYear(pointOfYear);
             if (!errorDetailList.isEmpty()) {
-                pointExcelData.setErrorDetailList(errorDetailList);
-                pointExcelData.setValid(false);
+                pointAnnualExcelData.setErrorDetailList(errorDetailList);
+                pointAnnualExcelData.setValid(false);
             }
-            pointExcelData.setRowIndex(row);
+            pointAnnualExcelData.setRowIndex(row);
         }
 
-        return pointExcelData;
+        return pointAnnualExcelData;
     }
 }

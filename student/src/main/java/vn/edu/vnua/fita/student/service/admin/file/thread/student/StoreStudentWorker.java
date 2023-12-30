@@ -1,4 +1,4 @@
-package vn.edu.vnua.fita.student.service.admin.file.thread;
+package vn.edu.vnua.fita.student.service.admin.file.thread.student;
 
 import java.text.ParseException;
 import java.util.List;

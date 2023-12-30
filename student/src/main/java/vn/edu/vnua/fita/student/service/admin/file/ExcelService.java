@@ -9,12 +9,23 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import vn.edu.vnua.fita.student.common.FilePathConstant;
 import vn.edu.vnua.fita.student.entity.Point;
+import vn.edu.vnua.fita.student.entity.PointOfYear;
 import vn.edu.vnua.fita.student.entity.Student;
 import vn.edu.vnua.fita.student.model.file.ExcelData;
+import vn.edu.vnua.fita.student.model.file.PointAnnualExcelData;
 import vn.edu.vnua.fita.student.model.file.PointExcelData;
 import vn.edu.vnua.fita.student.model.file.StudentExcelData;
 import vn.edu.vnua.fita.student.repository.jparepo.*;
 import vn.edu.vnua.fita.student.service.admin.file.thread.*;
+import vn.edu.vnua.fita.student.service.admin.file.thread.point.StorePointWorker;
+import vn.edu.vnua.fita.student.service.admin.file.thread.point.WriteErrorPointWorker;
+import vn.edu.vnua.fita.student.service.admin.file.thread.point.WritePointWorker;
+import vn.edu.vnua.fita.student.service.admin.file.thread.pointannual.StorePointAnnualWorker;
+import vn.edu.vnua.fita.student.service.admin.file.thread.pointannual.WriteErrorPointAnnualWorker;
+import vn.edu.vnua.fita.student.service.admin.file.thread.pointannual.WritePointAnnualWorker;
+import vn.edu.vnua.fita.student.service.admin.file.thread.student.StoreStudentWorker;
+import vn.edu.vnua.fita.student.service.admin.file.thread.student.WriteErrorStudentWorker;
+import vn.edu.vnua.fita.student.service.admin.file.thread.student.WriteStudentWorker;
 import vn.edu.vnua.fita.student.service.admin.iservice.IExcelService;
 
 import java.io.FileOutputStream;
@@ -32,6 +43,7 @@ public class ExcelService implements IExcelService {
     private final MajorRepository majorRepository;
     private final PointRepository pointRepository;
     private final TermRepository termRepository;
+    private final PointYearRepository pointYearRepository;
     private final FirebaseService firebaseService;
     private final ExecutorService executor;
     private final PasswordEncoder encoder;
@@ -139,6 +151,55 @@ public class ExcelService implements IExcelService {
         }
     }
 
+    @Override
+    public List<PointOfYear> readPointAnnualFromExcel(MultipartFile file) throws IOException, ExecutionException, InterruptedException {
+        List<String> pointAnnualStrList = readExcel(file);
+        List<PointAnnualExcelData> pointAnnualExcelDataList = storePointAnnualData(pointAnnualStrList);
+        if (!isContinue(pointAnnualExcelDataList)) {
+            throw new RuntimeException(exportErrorPointAnnualList(pointAnnualExcelDataList));
+        }
+        List<PointOfYear> pointOfYears = new ArrayList<>();
+        pointAnnualExcelDataList.forEach(pointAnnualExcelData -> pointOfYears.add(pointAnnualExcelData.getPointOfYear()));
+        return pointOfYears;
+    }
+
+    @Override
+    public String writePointAnnualToExcel(List<PointOfYear> pointOfYears) {
+        try {
+            Workbook workbook = new XSSFWorkbook();
+            Sheet sheet = workbook.createSheet("danh-sach-diem-nam-hoc");
+
+            // Tạo hàng tiêu đề
+            createPointAnnualListHeader(sheet);
+
+            // Sử dụng đa luồng in danh sách sinh viên ra excel
+            int rowNum = 1;
+            for (PointOfYear pointOfYear : pointOfYears) {
+                Row row = sheet.createRow(rowNum++);
+
+                Callable<Void> callable = new WritePointAnnualWorker(row, pointOfYear);
+                Future<Void> future = executor.submit(callable);
+                try {
+                    future.get(); // Đợi và nhận giá trị null từ Callable
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            FileOutputStream fos = new FileOutputStream(FilePathConstant.POINT_ANNUAL_FILE);
+            workbook.write(fos);
+
+            workbook.close();
+            fos.close();
+
+            // Gọi hàm upload firebase
+            return firebaseService.uploadFileExcel(FilePathConstant.POINT_ANNUAL_FILE, bucketName);
+
+        } catch (IOException e) {
+            throw new RuntimeException("Đã có lỗi, không thể ghi file.");
+        }
+    }
+
     private List<String> readExcel(MultipartFile file) throws IOException, ExecutionException, InterruptedException {
         List<String> stringList = new CopyOnWriteArrayList<>();
 
@@ -183,15 +244,27 @@ public class ExcelService implements IExcelService {
     }
 
     private List<PointExcelData> storePointData(List<String> pointStrList) throws ExecutionException, InterruptedException {
-        List<PointExcelData> studentExcelDataList = new CopyOnWriteArrayList<>();
+        List<PointExcelData> pointExcelData = new CopyOnWriteArrayList<>();
 
         for (int i = 0; i < pointStrList.size(); i++) {
             String pointStr = pointStrList.get(i);
-            Callable<PointExcelData> callable = new StorePointWorker(studentRepository, termRepository, pointRepository, pointStr, i);
+            Callable<PointExcelData> callable = new StorePointWorker(studentRepository, termRepository, pointStr, i);
             Future<PointExcelData> future = executor.submit(callable);
-            studentExcelDataList.add(future.get());
+            pointExcelData.add(future.get());
         }
-        return studentExcelDataList;
+        return pointExcelData;
+    }
+
+    private List<PointAnnualExcelData> storePointAnnualData(List<String> pointAnnualStrList) throws ExecutionException, InterruptedException {
+        List<PointAnnualExcelData> pointAnnualExcelData = new CopyOnWriteArrayList<>();
+
+        for (int i = 0; i < pointAnnualStrList.size(); i++) {
+            String pointStr = pointAnnualStrList.get(i);
+            Callable<PointAnnualExcelData> callable = new StorePointAnnualWorker(studentRepository, pointStr, i);
+            Future<PointAnnualExcelData> future = executor.submit(callable);
+            pointAnnualExcelData.add(future.get());
+        }
+        return pointAnnualExcelData;
     }
 
     private boolean isContinue(List<? extends ExcelData> excelDataList) {
@@ -288,6 +361,48 @@ public class ExcelService implements IExcelService {
         }
     }
 
+    private String exportErrorPointAnnualList(List<PointAnnualExcelData> pointAnnualExcelDataList) {
+        try {
+            Workbook workbook = new XSSFWorkbook();
+            Sheet sheet = workbook.createSheet("danh-sach-diem-nam-hoc-loi");
+
+            // Tạo hàng tiêu đề
+            createPointAnnualErrorHeader(sheet);
+
+            // Tạo style cho error cell
+            CellStyle cellStyle = workbook.createCellStyle();
+            cellStyle.setFillForegroundColor(IndexedColors.YELLOW.getIndex());
+            cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+            // Sử dụng đa luồng in dữ liệu lỗi ra excel
+            for (PointAnnualExcelData pointAnnualExcelData :
+                    pointAnnualExcelDataList) {
+                Row row = sheet.createRow(pointAnnualExcelData.getRowIndex() + 1);
+                PointOfYear pointOfYear = pointAnnualExcelData.getPointOfYear();
+
+                Callable<Void> callable = new WriteErrorPointAnnualWorker(row, pointOfYear, cellStyle, pointAnnualExcelData);
+                Future<Void> future = executor.submit(callable);
+                try {
+                    future.get(); // Đợi và nhận giá trị null từ Callable
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            FileOutputStream fos = new FileOutputStream(FilePathConstant.ERROR_POINT_ANNUAL_FILE);
+            workbook.write(fos);
+
+            workbook.close();
+            fos.close();
+
+            //gọi hàm upload firebase
+            return firebaseService.uploadFileExcel(FilePathConstant.ERROR_POINT_ANNUAL_FILE, bucketName);
+
+        } catch (IOException e) {
+            throw new RuntimeException("Đã có lỗi, không thể ghi file báo lỗi ds điểm.");
+        }
+    }
+
     private void createStudentErrorHeader(Sheet sheet) {
         Row headerRow = sheet.createRow(0);
         headerRow.createCell(0).setCellValue("Mã sinh viên");
@@ -334,7 +449,10 @@ public class ExcelService implements IExcelService {
         headerRow.createCell(5).setCellValue("TC tích luỹ");
         headerRow.createCell(6).setCellValue("ĐTBTL hệ 10");
         headerRow.createCell(7).setCellValue("ĐTBTL hệ 4");
-        headerRow.createCell(8).setCellValue("Ghi chú");
+        headerRow.createCell(8).setCellValue("TC Đkí");
+        headerRow.createCell(9).setCellValue("TC đạt");
+        headerRow.createCell(10).setCellValue("TC ko đạt");
+        headerRow.createCell(11).setCellValue("Ghi chú");
     }
 
     private void createPointListHeader(Sheet sheet) {
@@ -350,5 +468,44 @@ public class ExcelService implements IExcelService {
         headerRow.createCell(8).setCellValue("TC tích luỹ");
         headerRow.createCell(9).setCellValue("ĐTBTL hệ 10");
         headerRow.createCell(10).setCellValue("ĐTBTL hệ 4");
+        headerRow.createCell(11).setCellValue("TC Đkí");
+        headerRow.createCell(12).setCellValue("TC đạt");
+        headerRow.createCell(13).setCellValue("TC ko đạt");
+    }
+
+
+
+    private void createPointAnnualErrorHeader(Sheet sheet) {
+        Row headerRow = sheet.createRow(0);
+        headerRow.createCell(0).setCellValue("Mã sinh viên");
+        headerRow.createCell(1).setCellValue("Năm học");
+        headerRow.createCell(2).setCellValue("ĐTB hệ 10");
+        headerRow.createCell(3).setCellValue("ĐTB hệ 4");
+        headerRow.createCell(4).setCellValue("ĐRL");
+        headerRow.createCell(5).setCellValue("TC tích luỹ");
+        headerRow.createCell(6).setCellValue("ĐTBTL hệ 10");
+        headerRow.createCell(7).setCellValue("ĐTBTL hệ 4");
+        headerRow.createCell(8).setCellValue("TC Đkí");
+        headerRow.createCell(9).setCellValue("TC đạt");
+        headerRow.createCell(10).setCellValue("TC ko đạt");
+        headerRow.createCell(11).setCellValue("Ghi chú");
+    }
+
+    private void createPointAnnualListHeader(Sheet sheet) {
+        Row headerRow = sheet.createRow(0);
+        headerRow.createCell(0).setCellValue("Mã sinh viên");
+        headerRow.createCell(1).setCellValue("Họ đệm");
+        headerRow.createCell(2).setCellValue("Tên");
+        headerRow.createCell(3).setCellValue("Lớp");
+        headerRow.createCell(4).setCellValue("Năm học");
+        headerRow.createCell(5).setCellValue("ĐTB hệ 10");
+        headerRow.createCell(6).setCellValue("ĐTB hệ 4");
+        headerRow.createCell(7).setCellValue("ĐRL");
+        headerRow.createCell(8).setCellValue("TC tích luỹ");
+        headerRow.createCell(9).setCellValue("ĐTBTL hệ 10");
+        headerRow.createCell(10).setCellValue("ĐTBTL hệ 4");
+        headerRow.createCell(11).setCellValue("TC Đkí");
+        headerRow.createCell(12).setCellValue("TC đạt");
+        headerRow.createCell(13).setCellValue("TC ko đạt");
     }
 }

@@ -2,6 +2,7 @@ package vn.edu.vnua.fita.student.service.admin.iservice;
 
 import org.springframework.web.multipart.MultipartFile;
 import vn.edu.vnua.fita.student.entity.Point;
+import vn.edu.vnua.fita.student.entity.PointOfYear;
 import vn.edu.vnua.fita.student.entity.Student;
 
 import java.io.IOException;
@@ -13,4 +14,6 @@ public interface IExcelService {
     String writeStudentToExcel(List<Student> students) throws IOException;
     List<Point> readPointFromExcel(MultipartFile file) throws IOException, ExecutionException, InterruptedException;
     String writePointToExcel(List<Point> points);
+    List<PointOfYear> readPointAnnualFromExcel(MultipartFile file) throws IOException, ExecutionException, InterruptedException;
+    String writePointAnnualToExcel(List<PointOfYear> pointOfYears);
 }

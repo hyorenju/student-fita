@@ -1,4 +1,4 @@
-package vn.edu.vnua.fita.student.service.admin.file.thread;
+package vn.edu.vnua.fita.student.service.admin.file.thread.student;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

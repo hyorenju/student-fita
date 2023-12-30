@@ -65,5 +65,8 @@ public class Admin {
     private Collection<TrashPoint> trashPoints;
 
     @OneToMany(mappedBy = "deletedBy", cascade = CascadeType.ALL)
+    private Collection<TrashPointOfYear> trashPointOfYears;
+
+    @OneToMany(mappedBy = "deletedBy", cascade = CascadeType.ALL)
     private Collection<TrashStudent> trashStudents;
 }

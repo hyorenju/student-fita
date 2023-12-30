@@ -1,4 +1,4 @@
-package vn.edu.vnua.fita.student.request.admin.student_status;
+package vn.edu.vnua.fita.student.request.admin.studentstatus;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

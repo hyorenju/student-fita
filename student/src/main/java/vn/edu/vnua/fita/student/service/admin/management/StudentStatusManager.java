@@ -3,7 +3,6 @@ package vn.edu.vnua.fita.student.service.admin.management;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import vn.edu.vnua.fita.student.entity.Status;
@@ -13,16 +12,15 @@ import vn.edu.vnua.fita.student.repository.customrepo.CustomStudentStatusReposit
 import vn.edu.vnua.fita.student.repository.jparepo.StatusRepository;
 import vn.edu.vnua.fita.student.repository.jparepo.StudentRepository;
 import vn.edu.vnua.fita.student.repository.jparepo.StudentStatusRepository;
-import vn.edu.vnua.fita.student.request.admin.student_status.CreateStudentStatusRequest;
-import vn.edu.vnua.fita.student.request.admin.student_status.GetStudentStatusListRequest;
-import vn.edu.vnua.fita.student.request.admin.student_status.UpdateStudentStatusRequest;
+import vn.edu.vnua.fita.student.request.admin.studentstatus.CreateStudentStatusRequest;
+import vn.edu.vnua.fita.student.request.admin.studentstatus.GetStudentStatusListRequest;
+import vn.edu.vnua.fita.student.request.admin.studentstatus.UpdateStudentStatusRequest;
 import vn.edu.vnua.fita.student.service.admin.iservice.IStudentStatusService;
 import vn.edu.vnua.fita.student.util.MyUtils;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.Calendar;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

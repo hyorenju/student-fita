@@ -85,6 +85,15 @@ public class Point{
         if(!ImportPointValidator.validateQuadPoint(pointAcc4)){
             errorDetailList.add(PointExcelData.ErrorDetail.builder().columnIndex(7).errorMsg("ĐTBTL4 không hợp lệ").build());
         }
+        if(!ImportPointValidator.validateNaturalNum(creditsRegistered)){
+            errorDetailList.add(PointExcelData.ErrorDetail.builder().columnIndex(8).errorMsg("TC ĐK không hợp lệ").build());
+        }
+        if(!ImportPointValidator.validateNaturalNum(creditsPassed)){
+            errorDetailList.add(PointExcelData.ErrorDetail.builder().columnIndex(9).errorMsg("TC đạt không hợp lệ").build());
+        }
+        if(!ImportPointValidator.validateNaturalNum(creditsNotPassed)){
+            errorDetailList.add(PointExcelData.ErrorDetail.builder().columnIndex(10).errorMsg("TC ko đạt không hợp lệ").build());
+        }
 
         return errorDetailList;
     }
