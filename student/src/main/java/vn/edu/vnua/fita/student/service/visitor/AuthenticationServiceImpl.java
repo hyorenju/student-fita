@@ -1,19 +1,15 @@
 package vn.edu.vnua.fita.student.service.visitor;
 
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpServletResponseWrapper;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import vn.edu.vnua.fita.student.common.ErrorCodeDefinitions;
-import vn.edu.vnua.fita.student.common.UserIdentifyPatternConstant;
+import vn.edu.vnua.fita.student.common.IdentifyPatternConstant;
 import vn.edu.vnua.fita.student.dto.*;
 import vn.edu.vnua.fita.student.entity.Admin;
 import vn.edu.vnua.fita.student.entity.AdminRefresher;
@@ -26,14 +22,11 @@ import vn.edu.vnua.fita.student.repository.jparepo.StudentRefresherRepository;
 import vn.edu.vnua.fita.student.repository.jparepo.StudentRepository;
 import vn.edu.vnua.fita.student.response.AdminLoginResponse;
 import vn.edu.vnua.fita.student.response.BaseLoginResponse;
-import vn.edu.vnua.fita.student.response.BaseResponse;
 import vn.edu.vnua.fita.student.response.StudentLoginResponse;
 import vn.edu.vnua.fita.student.security.JwtTokenProvider;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.time.Instant;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -53,7 +46,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public BaseLoginResponse authenticateUser(String id, String password) {
-        if (id.matches(UserIdentifyPatternConstant.STUDENT_ID_PATTERN)) {
+        if (id.matches(IdentifyPatternConstant.STUDENT_ID_PATTERN)) {
             Student student = studentRepository.findById(id).orElseThrow(() -> new RuntimeException(cannotLogin));
 
             if (!encoder.matches(password, student.getPassword())) {
@@ -99,7 +92,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                     studentDTO.getFatherPhoneNumber(),
                     studentDTO.getMotherName(),
                     studentDTO.getMotherPhoneNumber());
-        } else if (id.matches(UserIdentifyPatternConstant.ADMIN_ID_PATTERN)) {
+        } else if (id.matches(IdentifyPatternConstant.ADMIN_ID_PATTERN)) {
             Admin admin = adminRepository.findById(id).orElseThrow(() -> new RuntimeException(cannotLogin));
 
             if (!encoder.matches(password, admin.getPassword())) {

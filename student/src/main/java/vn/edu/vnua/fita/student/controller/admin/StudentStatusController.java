@@ -7,16 +7,22 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import vn.edu.vnua.fita.student.controller.BaseController;
+import vn.edu.vnua.fita.student.dto.PointDTO;
 import vn.edu.vnua.fita.student.dto.StudentStatusDTO;
 import vn.edu.vnua.fita.student.entity.StudentStatus;
+import vn.edu.vnua.fita.student.request.admin.point.ExportPointListRequest;
 import vn.edu.vnua.fita.student.request.admin.studentstatus.CreateStudentStatusRequest;
+import vn.edu.vnua.fita.student.request.admin.studentstatus.ExportStudentStatusRequest;
 import vn.edu.vnua.fita.student.request.admin.studentstatus.GetStudentStatusListRequest;
 import vn.edu.vnua.fita.student.request.admin.studentstatus.UpdateStudentStatusRequest;
 import vn.edu.vnua.fita.student.service.admin.management.StudentStatusManager;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("admin/student-status")
@@ -53,6 +59,22 @@ public class StudentStatusController extends BaseController {
     @PreAuthorize("hasAnyAuthority('DELETE_STUDENT_STATUS', 'SUPERADMIN')")
     public ResponseEntity<?> deleteStudentStatus(@PathVariable Long id){
         StudentStatusDTO response = modelMapper.map(studentStatusManager.deleteStudentStatus(id), StudentStatusDTO.class);
+        return buildItemResponse(response);
+    }
+
+    @PostMapping("import")
+    @PreAuthorize("hasAnyAuthority('IMPORT_STUDENT_STATUS', 'SUPERADMIN')")
+    public ResponseEntity<?> importPointList(@RequestBody MultipartFile file) throws IOException, ExecutionException, InterruptedException {
+        List<StudentStatusDTO> response = studentStatusManager.importFromExcel(file).stream().map(
+                studentStatus -> modelMapper.map(studentStatus, StudentStatusDTO.class)
+        ).toList();
+        return buildListItemResponse(response, response.size());
+    }
+
+    @PostMapping("export")
+    @PreAuthorize("hasAnyAuthority('EXPORT_STUDENT_STATUS', 'SUPERADMIN')")
+    public ResponseEntity<?> exportPointList(@RequestBody ExportStudentStatusRequest request){
+        String response = studentStatusManager.exportToExcel(request);
         return buildItemResponse(response);
     }
 }

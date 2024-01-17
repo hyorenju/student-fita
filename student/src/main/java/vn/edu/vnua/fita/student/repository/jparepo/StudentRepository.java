@@ -13,4 +13,5 @@ public interface StudentRepository extends JpaRepository<Student, String>, JpaSp
     List<Student> findAllByCourse(Course course);
     List<Student> findAllByMajor(Major major);
     List<Student> findAllByTerms(Term term);
+    boolean existsByEmail(String email);
 }

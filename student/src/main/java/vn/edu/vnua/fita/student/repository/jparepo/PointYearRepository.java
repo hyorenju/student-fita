@@ -7,5 +7,5 @@ import vn.edu.vnua.fita.student.entity.PointOfYear;
 
 @Repository
 public interface PointYearRepository extends JpaRepository<PointOfYear, Long>, JpaSpecificationExecutor<PointOfYear> {
-    boolean existsByStudentIdAndYear(String studentId, String year);
+    boolean existsByStudentIdAndYearId(String studentId, String year);
 }

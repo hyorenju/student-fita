@@ -6,7 +6,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import jakarta.persistence.*;
+import vn.edu.vnua.fita.student.domain.validator.ImportPointValidator;
+import vn.edu.vnua.fita.student.domain.validator.ImportStudentStatusValidator;
+import vn.edu.vnua.fita.student.model.file.ExcelData;
+import vn.edu.vnua.fita.student.model.file.PointExcelData;
+import vn.edu.vnua.fita.student.model.file.StudentExcelData;
+import vn.edu.vnua.fita.student.model.file.StudentStatusExcelData;
+
 import java.sql.Timestamp;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -36,4 +44,11 @@ public class StudentStatus {
     @Column(length = 200)
     private String note;
 
+    public List<StudentStatusExcelData.ErrorDetail> validateInformationDetailError(List<StudentStatusExcelData.ErrorDetail> errorDetailList){
+        if(!ImportStudentStatusValidator.validateTime(time)){
+            errorDetailList.add(StudentStatusExcelData.ErrorDetail.builder().columnIndex(2).errorMsg("Thời gian không hợp lệ").build());
+        }
+
+        return errorDetailList;
+    }
 }

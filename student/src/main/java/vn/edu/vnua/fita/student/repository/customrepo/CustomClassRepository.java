@@ -11,7 +11,11 @@ import java.util.List;
 
 @Repository
 public class CustomClassRepository {
-    public static Specification<AClass> filterClassList(String classId) {
+    public static Specification<AClass> filterClassList(String classId,
+                                                        String monitorId,
+                                                        String viceMonitorId,
+                                                        String secretaryId,
+                                                        String deputySecretaryId) {
         return ((root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
             if (StringUtils.hasText(classId)) {
@@ -21,7 +25,19 @@ public class CustomClassRepository {
                     predicates.add(criteriaBuilder.like(root.get("id"), "%" + classId + "%"));
                 }
             }
-            query.orderBy(criteriaBuilder.desc(root.get("id")));
+            if (StringUtils.hasText(monitorId)) {
+                predicates.add(criteriaBuilder.like(root.get("monitor").get("id"), monitorId));
+            }
+            if (StringUtils.hasText(viceMonitorId)) {
+                predicates.add(criteriaBuilder.like(root.get("viceMonitor").get("id"), viceMonitorId));
+            }
+            if (StringUtils.hasText(secretaryId)) {
+                predicates.add(criteriaBuilder.like(root.get("secretary").get("id"), secretaryId));
+            }
+            if (StringUtils.hasText(deputySecretaryId)) {
+                predicates.add(criteriaBuilder.like(root.get("deputySecretary").get("id"), deputySecretaryId));
+            }
+            query.orderBy(criteriaBuilder.asc(root.get("id")));
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         });
     }

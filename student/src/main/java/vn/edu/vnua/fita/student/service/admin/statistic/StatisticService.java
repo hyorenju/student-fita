@@ -26,6 +26,7 @@ public class StatisticService implements IStatisticService {
     private final StudentRepository studentRepository;
     private final TermRepository termRepository;
     private final PointRepository pointRepository;
+    private final PointYearRepository pointYearRepository;
     private final StudentStatusRepository studentStatusRepository;
     private final ClassRepository classRepository;
     private final ClassClassificationRepository classClassificationRepository;
@@ -37,7 +38,7 @@ public class StatisticService implements IStatisticService {
     private final ModelMapper modelMapper;
 
     @Override
-    @Scheduled(cron = "0 0 0 4 1,6 ?")
+    @Scheduled(cron = "0 0 0 4 4,11 ?")
     public void createClassClassificationPeriodic() {
 //        List<Term> terms = termRepository.findAll();
 //        for (Term term :
@@ -69,7 +70,7 @@ public class StatisticService implements IStatisticService {
     }
 
     @Override
-    @Scheduled(cron = "0 0 0 3 1,6 ?")
+    @Scheduled(cron = "0 0 0 3 4,11 ?")
     public void createCourseClassificationPeriodic() {
 //        List<Term> terms = termRepository.findAll();
 //        for (Term term :
@@ -101,7 +102,7 @@ public class StatisticService implements IStatisticService {
     }
 
     @Override
-    @Scheduled(cron = "0 0 0 2 1,6 ?")
+    @Scheduled(cron = "0 0 0 2 4,11 ?")
     public void createMajorClassificationPeriodic() {
 //        List<Term> terms = termRepository.findAll();
 //        for (Term term :
@@ -133,7 +134,7 @@ public class StatisticService implements IStatisticService {
     }
 
     @Override
-    @Scheduled(cron = "0 0 12 1 1,6 ?")
+    @Scheduled(cron = "0 0 12 1 4,11 ?")
     public void createFacultyClassificationPeriodic() {
 //        List<Term> terms = termRepository.findAll();
 //        for (Term term :
@@ -142,13 +143,13 @@ public class StatisticService implements IStatisticService {
         Term term = termRepository.findFirstByOrderByIdDesc();
         if (facultyClassificationRepository.findByTerm(term) == null) {
             String termId = term.getId();
-            Integer dropoutWithoutPermission = studentStatusRepository
-                    .findAllByTermIdAndStatusId(termId, 2).size();
+            Integer forcedOut = studentStatusRepository
+                    .findAllByTermIdAndStatusId(termId, 4).size();
             Integer dropoutWithPermission = studentStatusRepository
                     .findAllByTermIdAndStatusId(termId, 3).size();
 
             facultyClassification.setTerm(term);
-            facultyClassification.setDropoutWithoutPermission(dropoutWithoutPermission);
+            facultyClassification.setForcedOut(forcedOut);
             facultyClassification.setDropoutWithPermission(dropoutWithPermission);
         }
         if (facultyClassificationRepository.findByTerm(term) == null) {
@@ -426,9 +427,9 @@ public class StatisticService implements IStatisticService {
         for (FacultyClassification facultyClassification :
                 facultyClassifications) {
             GroupedColumnChart chart = GroupedColumnChart.builder()
-                    .name("Đã bỏ học")
+                    .name("Bị buộc thôi học")
                     .termId(facultyClassification.getTerm().getId())
-                    .quantity(facultyClassification.getDropoutWithoutPermission())
+                    .quantity(facultyClassification.getForcedOut())
                     .build();
             charts.add(chart);
         }

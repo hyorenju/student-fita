@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import vn.edu.vnua.fita.student.common.UserIdentifyPatternConstant;
+import vn.edu.vnua.fita.student.common.IdentifyPatternConstant;
 import vn.edu.vnua.fita.student.dto.ClassDTO;
 import vn.edu.vnua.fita.student.dto.CourseDTO;
 import vn.edu.vnua.fita.student.dto.MajorDTO;
@@ -25,7 +25,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
-        if(id.matches(UserIdentifyPatternConstant.ADMIN_ID_PATTERN)) {
+        if(id.matches(IdentifyPatternConstant.ADMIN_ID_PATTERN)) {
             Admin admin = adminRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy quản trị viên"));
             return UserDetailsImpl.builder()
                     .id(admin.getId())
@@ -36,7 +36,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                     .roleId(admin.getRole().getId())
                     .authorities(admin.getAuthorities())
                     .build();
-        } else if(id.matches(UserIdentifyPatternConstant.STUDENT_ID_PATTERN)){
+        } else if(id.matches(IdentifyPatternConstant.STUDENT_ID_PATTERN)){
             Student student = studentRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy sinh viên"));
             return UserDetailsImpl.builder()
                     .id(student.getId())

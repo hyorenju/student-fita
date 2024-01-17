@@ -36,9 +36,13 @@ public class StorePointWorker implements Callable<PointExcelData> {
             String creditsAcc = infoList[5].strip();
             String pointAcc10 = infoList[6].strip();
             String pointAcc4 = infoList[7].strip();
+            String creditsRegistered = infoList[8].strip();
+            String creditsPassed = infoList[9].strip();
+            String creditsNotPassed = infoList[10].strip();
+
 
             Optional<Student> studentOptional = studentRepository.findById(studentId);
-            Student student = null;
+            Student student = Student.builder().id(studentId).build();
             if (studentOptional.isPresent()) {
                 student = studentOptional.get();
             }
@@ -52,6 +56,9 @@ public class StorePointWorker implements Callable<PointExcelData> {
                     .creditsAcc(MyUtils.parseIntegerFromString(creditsAcc))
                     .pointAcc10(MyUtils.parseFloatFromString(pointAcc10))
                     .pointAcc4(MyUtils.parseFloatFromString(pointAcc4))
+                    .creditsRegistered(MyUtils.parseIntegerFromString(creditsRegistered))
+                    .creditsPassed(MyUtils.parseIntegerFromString(creditsPassed))
+                    .creditsNotPassed(MyUtils.parseIntegerFromString(creditsNotPassed))
                     .isDeleted(false)
                     .build();
 

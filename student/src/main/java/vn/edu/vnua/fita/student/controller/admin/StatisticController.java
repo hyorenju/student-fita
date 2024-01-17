@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import vn.edu.vnua.fita.student.controller.BaseController;
 import vn.edu.vnua.fita.student.dto.*;
 import vn.edu.vnua.fita.student.model.statistic.StudentStatistic;
+import vn.edu.vnua.fita.student.repository.jparepo.PointRepository;
+import vn.edu.vnua.fita.student.repository.jparepo.StudentRepository;
 import vn.edu.vnua.fita.student.request.admin.statistic.GetStatisticRequest;
 import vn.edu.vnua.fita.student.service.admin.statistic.StatisticService;
 

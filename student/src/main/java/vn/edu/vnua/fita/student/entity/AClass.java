@@ -6,7 +6,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import jakarta.persistence.*;
+import vn.edu.vnua.fita.student.domain.validator.ImportClassValidator;
+import vn.edu.vnua.fita.student.domain.validator.ImportStudentStatusValidator;
+import vn.edu.vnua.fita.student.model.file.ClassExcelData;
+import vn.edu.vnua.fita.student.model.file.ExcelData;
+import vn.edu.vnua.fita.student.model.file.StudentStatusExcelData;
+
 import java.util.Collection;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -47,4 +54,12 @@ public class AClass {
             inverseJoinColumns = @JoinColumn(name = "term_id")
     )
     private Collection<Term> terms;
+
+    public List<ClassExcelData.ErrorDetail> validateInformationDetailError(List<ClassExcelData.ErrorDetail> errorDetailList){
+        if(!ImportClassValidator.validateId(id)){
+            errorDetailList.add(StudentStatusExcelData.ErrorDetail.builder().columnIndex(0).errorMsg("Mã lớp không hợp lệ").build());
+        }
+
+        return errorDetailList;
+    }
 }

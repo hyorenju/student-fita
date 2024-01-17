@@ -13,6 +13,10 @@ public class ImportPointValidator {
 //        return termId.matches("^[0-9]+$");
 //    }
 
+    public static boolean validateSchoolYear(String year){
+        return year.matches("\\d{4}-\\d{4}");
+    }
+
     public static boolean validateQuadPoint(Float quadPoint){
         return (quadPoint != null && quadPoint >= 0 && quadPoint <= 4);
     }

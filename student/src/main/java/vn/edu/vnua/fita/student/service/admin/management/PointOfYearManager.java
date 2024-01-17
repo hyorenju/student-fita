@@ -36,12 +36,12 @@ public class PointOfYearManager implements IPointOfYearService {
     private final PointYearRepository pointYearRepository;
     private final StudentRepository studentRepository;
     private final AdminRepository adminRepository;
-    private final TermRepository termRepository;
+    private final SchoolYearRepository schoolYearRepository;
     private final TrashPointYearRepository trashPointYearRepository;
     private final ExcelService excelService;
     private final String pointHadExistedMsg = "Dữ liệu của sinh viên %s trong học kỳ %s đã tồn tại trong hệ thống";
     private final String studentNotFoundMsg = "Mã sinh viên %s không tồn tại trong hệ thống";
-    private final String termNotFoundMsg = "Học kỳ %s không tồn tại trong hệ thống";
+    private final String yearNotFoundMsg = "Năm học %s không tồn tại trong hệ thống";
     private final String pointNotFoundMsg = "Không tìm thấy mã điểm %d";
     private final String byWhomNotFound = "Không thể xác định danh tính người xoá";
     private final String trashNotFound = "Không tìm thấy rác";
@@ -65,11 +65,12 @@ public class PointOfYearManager implements IPointOfYearService {
     @Override
     public PointOfYear createPoint(CreatePointYearRequest request) {
         String studentId = request.getStudent().getId();
-        String year = request.getYear();
-        if (pointYearRepository.existsByStudentIdAndYear(studentId, year)) {
-            throw new RuntimeException(String.format(pointHadExistedMsg, studentId, year));
+        String yearId = request.getYear().getId();
+        if (pointYearRepository.existsByStudentIdAndYearId(studentId, yearId)) {
+            throw new RuntimeException(String.format(pointHadExistedMsg, studentId, yearId));
         }
         Student student = studentRepository.findById(studentId).orElseThrow(() -> new RuntimeException(String.format(studentNotFoundMsg, studentId)));
+        SchoolYear year = schoolYearRepository.findById(yearId).orElseThrow(() -> new RuntimeException(String.format(yearNotFoundMsg, yearId)));
         PointOfYear point = PointOfYear.builder()
                 .student(student)
                 .year(year)
@@ -91,9 +92,10 @@ public class PointOfYearManager implements IPointOfYearService {
     @Override
     public PointOfYear updatePoint(Long id, UpdatePointYearRequest request) {
         String studentId = request.getStudent().getId();
-        String year = request.getYear();
-        PointOfYear point = pointYearRepository.findById(id).orElseThrow(() -> new RuntimeException(String.format(pointHadExistedMsg, studentId, year)));
+        String yearId = request.getYear().getId();
+        PointOfYear point = pointYearRepository.findById(id).orElseThrow(() -> new RuntimeException(String.format(pointHadExistedMsg, studentId, yearId)));
         Student student = studentRepository.findById(studentId).orElseThrow(() -> new RuntimeException(String.format(studentNotFoundMsg, studentId)));
+        SchoolYear year = schoolYearRepository.findById(yearId).orElseThrow(() -> new RuntimeException(String.format(yearNotFoundMsg, yearId)));
 
         point.setStudent(student);
         point.setYear(year);

@@ -19,7 +19,7 @@ public class WritePointAnnualWorker implements Callable<Void> {
         row.createCell(1).setCellValue(point.getStudent().getSurname());
         row.createCell(2).setCellValue(point.getStudent().getLastName());
         row.createCell(3).setCellValue(point.getStudent().getAclass().getId());
-        row.createCell(4).setCellValue(point.getYear());
+        row.createCell(4).setCellValue(point.getYear().getId());
         row.createCell(5).setCellValue(MyUtils.parseFloatToString(point.getAvgPoint10()));
         row.createCell(6).setCellValue(MyUtils.parseFloatToString(point.getAvgPoint4()));
         row.createCell(7).setCellValue(point.getTrainingPoint());

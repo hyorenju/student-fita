@@ -24,7 +24,7 @@ public class WriteErrorPointAnnualWorker implements Callable<Void> {
     @Override
     public Void call() throws Exception {
         row.createCell(0).setCellValue(pointOfYear.getStudent().getId());
-        row.createCell(1).setCellValue(pointOfYear.getYear());
+        row.createCell(1).setCellValue(pointOfYear.getYear().getId());
         row.createCell(2).setCellValue(MyUtils.parseFloatToString(pointOfYear.getAvgPoint10()));
         row.createCell(3).setCellValue(MyUtils.parseFloatToString(pointOfYear.getAvgPoint4()));
         row.createCell(4).setCellValue(pointOfYear.getTrainingPoint());

@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import vn.edu.vnua.fita.student.common.ErrorCodeDefinitions;
-import vn.edu.vnua.fita.student.common.UserIdentifyPatternConstant;
+import vn.edu.vnua.fita.student.common.IdentifyPatternConstant;
 import vn.edu.vnua.fita.student.domain.exception.TokenInvalid;
 import vn.edu.vnua.fita.student.entity.Admin;
 import vn.edu.vnua.fita.student.entity.Student;
@@ -37,7 +37,7 @@ public class ForgotPasswordServiceImpl implements ForgotPasswordService {
     @Override
     public void sendMessage(SendMailRequest request) {
         String id = request.getUser().getId();
-        if(id.matches(UserIdentifyPatternConstant.STUDENT_ID_PATTERN)) {
+        if(id.matches(IdentifyPatternConstant.STUDENT_ID_PATTERN)) {
             Student student = studentRepository.findById(id).orElseThrow(() -> new RuntimeException(String.format(studentNotFound, id)));
 
             if (student.getEmail().equals(request.getUser().getEmail())) {
@@ -46,7 +46,7 @@ public class ForgotPasswordServiceImpl implements ForgotPasswordService {
             } else {
                 throw new RuntimeException(userError);
             }
-        } else if(id.matches(UserIdentifyPatternConstant.ADMIN_ID_PATTERN)) {
+        } else if(id.matches(IdentifyPatternConstant.ADMIN_ID_PATTERN)) {
             Admin admin = adminRepository.findById(id).orElseThrow(() -> new RuntimeException(String.format(adminNotFound, id)));;
             if(admin.getEmail().equals(request.getUser().getEmail())) {
                 String verificationToken = generateVerificationToken(admin.getId());
@@ -69,7 +69,7 @@ public class ForgotPasswordServiceImpl implements ForgotPasswordService {
         String token = request.getToken();
         String id = decodeToken(token);
 
-        if (id.matches(UserIdentifyPatternConstant.STUDENT_ID_PATTERN)) {
+        if (id.matches(IdentifyPatternConstant.STUDENT_ID_PATTERN)) {
             Student student = studentRepository.findById(id).orElseThrow(() -> new RuntimeException(String.format(studentNotFound, id)));
 
             if (encoder.matches(request.getValues().getNewPassword(), student.getPassword())) {
@@ -80,7 +80,7 @@ public class ForgotPasswordServiceImpl implements ForgotPasswordService {
             }
             student.setPassword(encoder.encode(request.getValues().getNewPassword()));
             studentRepository.saveAndFlush(student);
-        } else if (id.matches(UserIdentifyPatternConstant.ADMIN_ID_PATTERN)) {
+        } else if (id.matches(IdentifyPatternConstant.ADMIN_ID_PATTERN)) {
             Admin admin = adminRepository.findById(id).orElseThrow(() -> new RuntimeException(String.format(adminNotFound, id)));
 
             if (encoder.matches(request.getValues().getNewPassword(), admin.getPassword())) {

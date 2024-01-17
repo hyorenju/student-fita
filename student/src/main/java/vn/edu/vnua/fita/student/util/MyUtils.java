@@ -59,7 +59,7 @@ public class MyUtils {
         try {
             return Float.parseFloat(input);
         } catch (NumberFormatException e) {
-            return null;
+            return (float) -1;
         }
     }
 
@@ -67,8 +67,14 @@ public class MyUtils {
         try {
             return Integer.parseInt(input);
         } catch (NumberFormatException e) {
-            return null;
+            return -1;
         }
+    }
+
+    public static String createTermIdFromTimestamp(Timestamp time) {
+        int term = (time.getMonth() >= Calendar.AUGUST) ? 1 : 2;
+        int year = term == 1 ? time.getYear() + 1900 : time.getYear() + 1899;
+        return "" + year + term;
     }
 
     public Timestamp test(String inputDate) throws ParseException {

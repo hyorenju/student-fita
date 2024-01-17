@@ -54,8 +54,8 @@ public class StoreStudentWorker implements Callable<StudentExcelData> {
             String dob = infoList[6].strip();
             String gender = infoList[7].strip();
             String phoneNumber = infoList[8].strip();
-//            String email = infoList[9].strip();
             String homeTown = infoList[9].strip();
+            String email = infoList[10].strip();
 
             Student student = Student.builder()
                     .id(id)
@@ -67,7 +67,7 @@ public class StoreStudentWorker implements Callable<StudentExcelData> {
                     .dob(MyUtils.convertTimestampFromExcel(dob))
                     .gender(gender)
                     .phoneNumber(phoneNumber)
-//                    .email(email)
+                    .email(email)
                     .homeTown(homeTown)
                     .isDeleted(false)
                     .role(Role.builder().id(RoleConstant.STUDENT).build())
@@ -77,7 +77,7 @@ public class StoreStudentWorker implements Callable<StudentExcelData> {
 
             List<StudentExcelData.ErrorDetail> errorDetailList = student.validateInformationDetailError(new CopyOnWriteArrayList<>());
             if (studentRepository.existsById(id)) {
-                errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(0).errorMsg("Mã đã tồn tại").build());
+                errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(0).errorMsg("Mã sinh viên đã tồn tại").build());
             }
             if (!courseRepository.existsById(courseId)) {
                 errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(3).errorMsg("Khoá không tồn tại").build());
@@ -88,9 +88,9 @@ public class StoreStudentWorker implements Callable<StudentExcelData> {
             if (!classRepository.existsById(classId)) {
                 errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(5).errorMsg("Lớp không tồn tại").build());
             }
-//            if (studentRepository.existsByEmail(email)) {
-//                errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(9).errorMsg("Email đã tồn tại").build());
-//            }
+            if (studentRepository.existsByEmail(email)) {
+                errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(9).errorMsg("Email đã tồn tại").build());
+            }
 
             studentExcelData.setStudent(student);
             if (!errorDetailList.isEmpty()) {

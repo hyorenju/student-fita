@@ -2,14 +2,14 @@ package vn.edu.vnua.fita.student.request.admin.admin;
 
 import lombok.Data;
 import jakarta.validation.constraints.*;
-import vn.edu.vnua.fita.student.common.UserIdentifyPatternConstant;
+import vn.edu.vnua.fita.student.common.IdentifyPatternConstant;
 
 
 @Data
 public class CreateAdminRequest {
     @NotBlank(message = "Tài khoản của trị viên không được để trống")
     @Size(max = 10, message = "Tài khoản của trị viên chỉ được tối đa 10 ký tự")
-    @Pattern(regexp = UserIdentifyPatternConstant.ADMIN_ID_PATTERN, message = "Tài khoản của trị viên phải bắt đầu bằng ký tự chữ, không được chứa dấu cách và ký tự đặc biệt")
+    @Pattern(regexp = IdentifyPatternConstant.ADMIN_ID_PATTERN, message = "Tài khoản của trị viên phải bắt đầu bằng ký tự chữ, không được chứa dấu cách và ký tự đặc biệt")
     private String id;
 
     @NotBlank(message = "Tên quản trị viên không được để trống")

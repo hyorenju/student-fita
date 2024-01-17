@@ -28,8 +28,9 @@ public class PointOfYear{
     @JoinColumn(name = "student_id")
     private Student student;
 
-    @Column(length = 200)
-    private String year;
+    @ManyToOne
+    @JoinColumn(name = "school_year")
+    private SchoolYear year;
 
     @Column(name = "average_point_10")
     private Float avgPoint10;
@@ -65,8 +66,8 @@ public class PointOfYear{
 //        if(!ImportPointValidator.validateStudentId(studentId)){
 //            errorDetailList.add(PointExcelData.ErrorDetail.builder().columnIndex(0).errorMsg("Mã sv không hợp lệ").build());
 //        }
-//        if(!ImportPointValidator.validateTermId(termId)){
-//            errorDetailList.add(PointExcelData.ErrorDetail.builder().columnIndex(1).errorMsg("Học kỳ không hợp lệ").build());
+//        if(!ImportPointValidator.validateSchoolYear(year)){
+//            errorDetailList.add(PointExcelData.ErrorDetail.builder().columnIndex(1).errorMsg("Năm học không hợp lệ").build());
 //        }
         if(!ImportPointValidator.validateDecPoint(avgPoint10)){
             errorDetailList.add(PointExcelData.ErrorDetail.builder().columnIndex(2).errorMsg("ĐTB10 không hợp lệ").build());

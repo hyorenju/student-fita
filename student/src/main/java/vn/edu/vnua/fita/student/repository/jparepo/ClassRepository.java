@@ -9,4 +9,8 @@ import vn.edu.vnua.fita.student.entity.Student;
 @Repository
 public interface ClassRepository extends JpaRepository<AClass, String>, JpaSpecificationExecutor<AClass> {
     AClass findByMonitor(Student student);
+    boolean existsByMonitorId(String id);
+    boolean existsByViceMonitorId(String id);
+    boolean existsBySecretaryId(String id);
+    boolean existsByDeputySecretaryId(String id);
 }

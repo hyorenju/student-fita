@@ -8,17 +8,24 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import vn.edu.vnua.fita.student.controller.BaseController;
 import vn.edu.vnua.fita.student.dto.ClassDTO;
 import vn.edu.vnua.fita.student.dto.MajorDTO;
+import vn.edu.vnua.fita.student.dto.StudentStatusDTO;
 import vn.edu.vnua.fita.student.request.admin.aclass.CreateClassRequest;
+import vn.edu.vnua.fita.student.request.admin.aclass.ExportClassListRequest;
 import vn.edu.vnua.fita.student.request.admin.aclass.GetClassListRequest;
 import vn.edu.vnua.fita.student.request.admin.aclass.UpdateClassRequest;
+import vn.edu.vnua.fita.student.request.admin.studentstatus.ExportStudentStatusRequest;
+import vn.edu.vnua.fita.student.service.admin.file.ExcelService;
 import vn.edu.vnua.fita.student.service.admin.management.ClassManager;
 import vn.edu.vnua.fita.student.entity.AClass;
 
+import java.io.IOException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("admin/class")
@@ -64,6 +71,22 @@ public class ClassController extends BaseController {
     @PreAuthorize("hasAnyAuthority('SUPERADMIN')")
     public ResponseEntity<?> deleteClass(@PathVariable String id) {
         ClassDTO response = modelMapper.map(classManager.deleteClass(id), ClassDTO.class);
+        return buildItemResponse(response);
+    }
+
+    @PostMapping("import")
+    @PreAuthorize("hasAnyAuthority('IMPORT_CLASS_LIST', 'SUPERADMIN')")
+    public ResponseEntity<?> importPointList(@RequestBody MultipartFile file) throws IOException, ExecutionException, InterruptedException {
+        List<ClassDTO> response = classManager.importFromExcel(file).stream().map(
+                aClass -> modelMapper.map(aClass, ClassDTO.class)
+        ).toList();
+        return buildListItemResponse(response, response.size());
+    }
+
+    @PostMapping("export")
+    @PreAuthorize("hasAnyAuthority('EXPORT_CLASS_LIST', 'SUPERADMIN')")
+    public ResponseEntity<?> exportPointList(@RequestBody ExportClassListRequest request){
+        String response = classManager.exportToExcel(request);
         return buildItemResponse(response);
     }
 }

@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import vn.edu.vnua.fita.student.entity.Status;
 import vn.edu.vnua.fita.student.entity.Student;
 import vn.edu.vnua.fita.student.entity.StudentStatus;
@@ -13,14 +14,19 @@ import vn.edu.vnua.fita.student.repository.jparepo.StatusRepository;
 import vn.edu.vnua.fita.student.repository.jparepo.StudentRepository;
 import vn.edu.vnua.fita.student.repository.jparepo.StudentStatusRepository;
 import vn.edu.vnua.fita.student.request.admin.studentstatus.CreateStudentStatusRequest;
+import vn.edu.vnua.fita.student.request.admin.studentstatus.ExportStudentStatusRequest;
 import vn.edu.vnua.fita.student.request.admin.studentstatus.GetStudentStatusListRequest;
 import vn.edu.vnua.fita.student.request.admin.studentstatus.UpdateStudentStatusRequest;
+import vn.edu.vnua.fita.student.service.admin.file.ExcelService;
 import vn.edu.vnua.fita.student.service.admin.iservice.IStudentStatusService;
 import vn.edu.vnua.fita.student.util.MyUtils;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.Calendar;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +34,7 @@ public class StudentStatusManager implements IStudentStatusService {
     private final StudentStatusRepository studentStatusRepository;
     private final StudentRepository studentRepository;
     private final StatusRepository statusRepository;
+    private final ExcelService excelService;
     private final String studentStatusHadExisted = "Trạng thái của sinh viên này đã tồn tại trong hệ thống";
     private final String studentStatusNotFound = "Trạng thái của sinh viên này không tồn tại trong hệ thống";
     private final String studentNotFound = "Sinh viên %s không tồn tại trong hệ thống";
@@ -59,7 +66,7 @@ public class StudentStatusManager implements IStudentStatusService {
                 .time(MyUtils.convertTimestampFromString(request.getTime()))
                 .note(request.getNote())
                 .build();
-        studentStatus.setTermId(createTermId(studentStatus.getTime()));
+        studentStatus.setTermId(MyUtils.createTermIdFromTimestamp(studentStatus.getTime()));
         return studentStatusRepository.saveAndFlush(studentStatus);
     }
 
@@ -68,7 +75,7 @@ public class StudentStatusManager implements IStudentStatusService {
         StudentStatus studentStatus = studentStatusRepository.findById(id).orElseThrow(() -> new RuntimeException(studentStatusNotFound));
         studentStatus.setTime(MyUtils.convertTimestampFromString(request.getTime()));
         studentStatus.setNote(request.getNote());
-        studentStatus.setTermId(createTermId(studentStatus.getTime()));
+        studentStatus.setTermId(MyUtils.createTermIdFromTimestamp(studentStatus.getTime()));
         return studentStatusRepository.saveAndFlush(studentStatus);
     }
 
@@ -79,9 +86,26 @@ public class StudentStatusManager implements IStudentStatusService {
         return studentStatus;
     }
 
-    private String createTermId(Timestamp time) {
-        int term = (time.getMonth() >= Calendar.AUGUST) ? 1 : 2;
-        int year = term == 1 ? time.getYear() + 1900 : time.getYear() + 1899;
-        return "" + year + term;
+    @Override
+    public List<StudentStatus> importFromExcel(MultipartFile file) throws IOException, ExecutionException, InterruptedException {
+        return studentStatusRepository.saveAllAndFlush(excelService.readStudentStatusFromExcel(file));
     }
+
+    @Override
+    public String exportToExcel(ExportStudentStatusRequest request) {
+        Specification<StudentStatus> specification = CustomStudentStatusRepository.filterStudentStatusList(
+                request.getStudentId(),
+                request.getFilter().getStatusId(),
+                request.getFilter().getTermId()
+        );
+        List<StudentStatus> studentStatuses = studentStatusRepository.findAll(specification);
+
+        return excelService.writeStudentStatusToExcel(studentStatuses);
+    }
+
+//    private String createTermId(Timestamp time) {
+//        int term = (time.getMonth() >= Calendar.AUGUST) ? 1 : 2;
+//        int year = term == 1 ? time.getYear() + 1900 : time.getYear() + 1899;
+//        return "" + year + term;
+//    }
 }

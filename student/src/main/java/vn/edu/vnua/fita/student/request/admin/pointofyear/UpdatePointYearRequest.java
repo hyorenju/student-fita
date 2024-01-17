@@ -4,15 +4,14 @@ import jakarta.validation.constraints.*;
 import lombok.Data;
 import vn.edu.vnua.fita.student.request.admin.student.CreateStudentRequest;
 import vn.edu.vnua.fita.student.request.admin.term.CreateTermRequest;
+import vn.edu.vnua.fita.student.request.admin.year.CreateYearRequest;
 
 
 @Data
 public class UpdatePointYearRequest {
     private CreateStudentRequest student;
 
-    @NotBlank(message = "Năm học không được để trống")
-    @Pattern(regexp = "\\d{4}-\\d{4}", message = "Năm học phải đúng định dạng. VD: 2016-2017")
-    private String year;
+    private CreateYearRequest year;
 
     @NotNull(message = "Điểm trung bình hệ 10 không được để trống")
     @Min(value = 0, message = "Điểm trung bình hệ 10 không được dưới 0")
