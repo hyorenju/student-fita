@@ -17,7 +17,7 @@ public class StudentStatusDTO {
     @JsonFormat(pattern = DateTimeConstant.DATE_FORMAT, timezone = DateTimeConstant.TIME_ZONE)
     private Timestamp time;
 
-    private String termId;
+    private TermDTO term;
 
     private String note;
 }

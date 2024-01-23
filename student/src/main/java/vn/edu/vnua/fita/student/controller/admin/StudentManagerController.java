@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -45,14 +46,14 @@ public class StudentManagerController extends BaseController {
 
     @PostMapping("create")
     @PreAuthorize("hasAnyAuthority('CREATE_STUDENT', 'SUPERADMIN')")
-    public ResponseEntity<?> createStudent(@Valid @RequestBody CreateStudentRequest request) {
+    public ResponseEntity<?> createStudent(@Valid @RequestBody CreateStudentRequest request) throws ParseException {
         StudentDTO response = modelMapper.map(studentManager.createStudent(request), StudentDTO.class);
         return buildItemResponse(response);
     }
 
     @PostMapping("update")
     @PreAuthorize("hasAnyAuthority('UPDATE_STUDENT', 'SUPERADMIN')")
-    public ResponseEntity<?> updateStudent(@Valid @RequestBody UpdateStudentRequest request) {
+    public ResponseEntity<?> updateStudent(@Valid @RequestBody UpdateStudentRequest request) throws ParseException {
         StudentDTO response = modelMapper.map(studentManager.updateStudent(request), StudentDTO.class);
         return buildItemResponse(response);
     }
@@ -110,8 +111,9 @@ public class StudentManagerController extends BaseController {
     @PostMapping("import")
     @PreAuthorize("hasAnyAuthority('SUPERADMIN')")
     public ResponseEntity<?> importStudentList(MultipartFile file) throws IOException, ExecutionException, InterruptedException {
-        studentManager.importFromExcel(file);
-        String response = "Nhập liệu thành công";
+        List<StudentDTO> response = studentManager.importFromExcel(file).stream().map(
+                student -> modelMapper.map(student, StudentDTO.class)
+        ).toList();
         return buildItemResponse(response);
     }
 

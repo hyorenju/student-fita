@@ -7,6 +7,6 @@ import lombok.Data;
 @Builder
 public class GroupedColumnChart {
     private String name;
-    private String termId;
+    private String time;
     private Integer quantity;
 }

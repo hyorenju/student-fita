@@ -33,15 +33,15 @@ public class ImportStudentValidator {
         return gender.toLowerCase().matches("^(nam|nữ)$");
     }
 
-    public static boolean validatePhoneNumber(String phoneNumber){
-        return new PhoneNumberValidator().validatePhoneNumber(phoneNumber);
-    }
+//    public static boolean validatePhoneNumber(String phoneNumber){
+//        return new PhoneNumberValidator().validatePhoneNumber(phoneNumber);
+//    }
 
 //    public static boolean validateEmail(String email){
 //        return new EmailValidator().validateEmail(email);
 //    }
 
     public static boolean validateHomeTown(String homeTown){
-        return homeTown.matches("^[\\p{L}[0-9] ,.-]+$");
+        return homeTown.matches("^[\\p{L}[0-9] ,/()._:–-]+$");
     }
 }

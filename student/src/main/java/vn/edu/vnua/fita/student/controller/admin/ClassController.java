@@ -3,7 +3,6 @@ package vn.edu.vnua.fita.student.controller.admin;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -75,7 +74,7 @@ public class ClassController extends BaseController {
     }
 
     @PostMapping("import")
-    @PreAuthorize("hasAnyAuthority('IMPORT_CLASS_LIST', 'SUPERADMIN')")
+    @PreAuthorize("hasAnyAuthority('SUPERADMIN')")
     public ResponseEntity<?> importPointList(@RequestBody MultipartFile file) throws IOException, ExecutionException, InterruptedException {
         List<ClassDTO> response = classManager.importFromExcel(file).stream().map(
                 aClass -> modelMapper.map(aClass, ClassDTO.class)
@@ -84,7 +83,7 @@ public class ClassController extends BaseController {
     }
 
     @PostMapping("export")
-    @PreAuthorize("hasAnyAuthority('EXPORT_CLASS_LIST', 'SUPERADMIN')")
+    @PreAuthorize("hasAnyAuthority('SUPERADMIN')")
     public ResponseEntity<?> exportPointList(@RequestBody ExportClassListRequest request){
         String response = classManager.exportToExcel(request);
         return buildItemResponse(response);

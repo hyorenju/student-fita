@@ -13,6 +13,7 @@ import vn.edu.vnua.fita.student.dto.StudentStatusDTO;
 import vn.edu.vnua.fita.student.model.statistic.StudentStatistic;
 import vn.edu.vnua.fita.student.request.ChangePasswordRequest;
 import vn.edu.vnua.fita.student.request.student.UpdateEmailRequest;
+import vn.edu.vnua.fita.student.request.student.UpdatePhoneRequest;
 import vn.edu.vnua.fita.student.request.student.UpdateStudentProfileRequest;
 import vn.edu.vnua.fita.student.service.student.StudentServiceImpl;
 
@@ -74,6 +75,13 @@ public class StudentController extends BaseController {
     @PreAuthorize("hasAnyAuthority('STUDENT', 'MONITOR')")
     public ResponseEntity<?> updateEmail(@Valid @RequestBody UpdateEmailRequest request){
         StudentDTO response = modelMapper.map(studentService.updateEmail(request), StudentDTO.class);
+        return buildItemResponse(response);
+    }
+
+    @PostMapping("phone")
+    @PreAuthorize("hasAnyAuthority('STUDENT', 'MONITOR')")
+    public ResponseEntity<?> updatePhoneNumber(@Valid @RequestBody UpdatePhoneRequest request){
+        StudentDTO response = modelMapper.map(studentService.updatePhoneNumber2(request), StudentDTO.class);
         return buildItemResponse(response);
     }
 }

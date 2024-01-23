@@ -1,6 +1,7 @@
 package vn.edu.vnua.fita.student.service.admin.file.thread.aclass;
 
 import lombok.AllArgsConstructor;
+import vn.edu.vnua.fita.student.common.AppendCharacterConstant;
 import vn.edu.vnua.fita.student.entity.AClass;
 import vn.edu.vnua.fita.student.entity.Status;
 import vn.edu.vnua.fita.student.entity.Student;
@@ -30,7 +31,7 @@ public class StoreClassWorker implements Callable<ClassExcelData> {
         ClassExcelData classExcelData = new ClassExcelData();
 
         if (!classStr.isEmpty()) {
-            String[] infoList = classStr.strip().split(",");
+            String[] infoList = classStr.strip().split(AppendCharacterConstant.APPEND_CHARACTER);
             String classId = infoList[0].strip();
             String name = infoList[1].strip();
 

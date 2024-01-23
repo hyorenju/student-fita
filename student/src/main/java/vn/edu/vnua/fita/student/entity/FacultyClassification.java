@@ -21,11 +21,19 @@ public class FacultyClassification {
     @JoinColumn(name = "term_id")
     private Term term;
 
+    @OneToOne
+    @JoinColumn(name = "year_id")
+    private SchoolYear year;
+
     @Column(name = "forced_out")
     private Integer forcedOut;
 
     @Column(name = "dropout_with_permission")
     private Integer dropoutWithPermission;
+
+    private Integer admission;
+
+    private Integer graduate;
 
     @Column(name = "excellent")
     private Integer excellent;

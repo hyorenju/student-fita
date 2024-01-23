@@ -1,15 +1,14 @@
 package vn.edu.vnua.fita.student.service.admin.file.thread.studentstatus;
 
 import lombok.AllArgsConstructor;
-import vn.edu.vnua.fita.student.common.RoleConstant;
+import vn.edu.vnua.fita.student.common.AppendCharacterConstant;
 import vn.edu.vnua.fita.student.entity.*;
-import vn.edu.vnua.fita.student.model.file.ExcelData;
 import vn.edu.vnua.fita.student.model.file.PointExcelData;
-import vn.edu.vnua.fita.student.model.file.StudentExcelData;
 import vn.edu.vnua.fita.student.model.file.StudentStatusExcelData;
 import vn.edu.vnua.fita.student.repository.jparepo.StatusRepository;
 import vn.edu.vnua.fita.student.repository.jparepo.StudentRepository;
 import vn.edu.vnua.fita.student.repository.jparepo.StudentStatusRepository;
+import vn.edu.vnua.fita.student.repository.jparepo.TermRepository;
 import vn.edu.vnua.fita.student.util.MyUtils;
 
 import java.sql.Timestamp;
@@ -20,8 +19,10 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 @AllArgsConstructor
 public class StoreStudentStatusWorker implements Callable<StudentStatusExcelData> {
+    private final StudentStatusRepository studentStatusRepository;
     private final StudentRepository studentRepository;
     private final StatusRepository statusRepository;
+    private final TermRepository termRepository;
     private final String studentStatusStr;
     private final int row;
 
@@ -31,7 +32,7 @@ public class StoreStudentStatusWorker implements Callable<StudentStatusExcelData
         StudentStatusExcelData studentStatusExcelData = new StudentStatusExcelData();
 
         if (!studentStatusStr.isEmpty()) {
-            String[] infoList = studentStatusStr.strip().split(",");
+            String[] infoList = studentStatusStr.strip().split(AppendCharacterConstant.APPEND_CHARACTER);
             String studentId = infoList[0].strip();
             String statusName = infoList[1].strip();
             String time = infoList[2].strip();
@@ -44,21 +45,33 @@ public class StoreStudentStatusWorker implements Callable<StudentStatusExcelData
             }
 
             Optional<Status> statusOptional = statusRepository.findByName(statusName);
-            Status status = Status.builder().name(statusName).build();
+            Status status = Status.builder().id(1000).name(statusName).build();
             if(statusOptional.isPresent()) {
                 status = statusOptional.get();
             }
 
             Timestamp date = MyUtils.convertTimestampFromExcel(time);
             String termId = MyUtils.createTermIdFromTimestamp(date);
+            Optional<Term> termOptional = termRepository.findById(termId);
+            Term term = Term.builder().id(termId).build();
+            if(termOptional.isPresent()){
+                term = termOptional.get();
+            }
 
-            StudentStatus studentStatus = StudentStatus.builder()
-                    .student(student)
-                    .status(status)
-                    .time(date)
-                    .note(note)
-                    .termId(termId)
-                    .build();
+            StudentStatus studentStatus;
+            Optional<StudentStatus> studentStatusOptional = studentStatusRepository.findByStudentIdAndTimeAndStatusId(studentId, date, status.getId());
+            if(studentStatusOptional.isPresent()){
+                studentStatus = studentStatusOptional.get();
+                studentStatus.setNote(note);
+            } else {
+                studentStatus = StudentStatus.builder()
+                        .student(student)
+                        .status(status)
+                        .time(date)
+                        .note(note)
+                        .term(term)
+                        .build();
+            }
 
             List<StudentStatusExcelData.ErrorDetail> errorDetailList = studentStatus.validateInformationDetailError(new CopyOnWriteArrayList<>());
             if(studentOptional.isEmpty()){
@@ -66,6 +79,9 @@ public class StoreStudentStatusWorker implements Callable<StudentStatusExcelData
             }
             if(statusOptional.isEmpty()){
                 errorDetailList.add(PointExcelData.ErrorDetail.builder().columnIndex(1).errorMsg("Trạng thái không tồn tại").build());
+            }
+            if(termOptional.isEmpty()) {
+                errorDetailList.add(PointExcelData.ErrorDetail.builder().columnIndex(2).errorMsg("Thời gian không hợp lệ").build());
             }
 
             studentStatusExcelData.setStudentStatus(studentStatus);

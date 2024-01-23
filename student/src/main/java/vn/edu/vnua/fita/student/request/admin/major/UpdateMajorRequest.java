@@ -8,9 +8,9 @@ import jakarta.validation.constraints.*;
 public class UpdateMajorRequest {
     private String id;
 
-    @NotBlank(message = "Tên chuyên ngành không được để trống")
+    @NotBlank(message = "Tên ngành không được để trống")
     private String name;
 
-    @NotNull(message = "Số lượng tín chỉ của chuyên ngành không được để trống")
+    @NotNull(message = "Số lượng tín chỉ của ngành không được để trống")
     private Integer totalCredits;
 }

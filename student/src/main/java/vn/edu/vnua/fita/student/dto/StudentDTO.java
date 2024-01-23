@@ -29,6 +29,8 @@ public class StudentDTO {
 
     private String phoneNumber;
 
+    private String phoneNumber2;
+
     private String email;
 
     private String homeTown;

@@ -38,8 +38,9 @@ public class StudentStatus {
     @Column
     private Timestamp time;
 
-    @Column(name = "term_id",length = 100)
-    private String termId;
+    @ManyToOne
+    @JoinColumn(name = "term_id")
+    private Term term;
 
     @Column(length = 200)
     private String note;

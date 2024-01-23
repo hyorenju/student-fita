@@ -10,7 +10,7 @@ public class PointOfYearDTO {
     private SchoolYearDTO year;
     private Float avgPoint10;
     private Float avgPoint4;
-    private Integer trainingPoint;
+    private Float trainingPoint;
     private Float pointAcc10;
     private Float pointAcc4;
     private Integer creditsRegistered;

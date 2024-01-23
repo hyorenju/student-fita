@@ -17,6 +17,7 @@ import vn.edu.vnua.fita.student.repository.jparepo.StudentRepository;
 import vn.edu.vnua.fita.student.request.ChangePasswordRequest;
 import vn.edu.vnua.fita.student.request.admin.studentstatus.GetStudentStatusListRequest;
 import vn.edu.vnua.fita.student.request.student.UpdateEmailRequest;
+import vn.edu.vnua.fita.student.request.student.UpdatePhoneRequest;
 import vn.edu.vnua.fita.student.request.student.UpdateStudentProfileRequest;
 import vn.edu.vnua.fita.student.service.admin.file.FirebaseService;
 import vn.edu.vnua.fita.student.service.admin.management.StudentStatusManager;
@@ -127,5 +128,13 @@ public class StudentServiceImpl implements StudentService {
         studentRepository.saveAndFlush(student);
 
         return student;
+    }
+
+    @Override
+    public Student updatePhoneNumber2(UpdatePhoneRequest request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Student student = studentRepository.findById(authentication.getPrincipal().toString()).orElseThrow(() -> new RuntimeException(studentNotFound));
+        student.setPhoneNumber2(request.getPhoneNumber2());
+        return studentRepository.saveAndFlush(student);
     }
 }

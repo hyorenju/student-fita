@@ -28,4 +28,8 @@ public class ImportPointValidator {
     public static boolean validateNaturalNum(Integer naturalNum){
         return (naturalNum != null && naturalNum >= 0);
     }
+
+    public static boolean validateTrainingPointAnnual(Float trainingPointAnnual){
+        return (trainingPointAnnual != null && trainingPointAnnual >= 0);
+    }
 }

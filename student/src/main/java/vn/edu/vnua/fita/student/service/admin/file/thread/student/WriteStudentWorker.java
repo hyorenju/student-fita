@@ -25,14 +25,15 @@ public class WriteStudentWorker implements Callable<Void> {
         row.createCell(6).setCellValue(MyUtils.convertTimestampToString(student.getDob()));
         row.createCell(7).setCellValue(student.getGender());
         row.createCell(8).setCellValue(student.getPhoneNumber());
-        row.createCell(9).setCellValue(student.getEmail());
-        row.createCell(10).setCellValue(student.getFamilySituation());
-        row.createCell(11).setCellValue(student.getHomeTown());
-        row.createCell(12).setCellValue(student.getResidence());
-        row.createCell(13).setCellValue(student.getFatherName());
-        row.createCell(14).setCellValue(student.getFatherPhoneNumber());
-        row.createCell(15).setCellValue(student.getMotherName());
-        row.createCell(16).setCellValue(student.getMotherPhoneNumber());
+        row.createCell(9).setCellValue(student.getPhoneNumber2());
+        row.createCell(10).setCellValue(student.getEmail());
+        row.createCell(11).setCellValue(student.getFamilySituation());
+        row.createCell(12).setCellValue(student.getHomeTown());
+        row.createCell(13).setCellValue(student.getResidence());
+        row.createCell(14).setCellValue(student.getFatherName());
+        row.createCell(15).setCellValue(student.getFatherPhoneNumber());
+        row.createCell(16).setCellValue(student.getMotherName());
+        row.createCell(17).setCellValue(student.getMotherPhoneNumber());
         return null;
     }
 

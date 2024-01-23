@@ -20,8 +20,8 @@ import java.util.Locale;
 @RequiredArgsConstructor
 public class MajorManager implements IMajorService {
     private final MajorRepository majorRepository;
-    private final String majorHadExisted = "Mã chuyên ngành đã tồn tại trong hệ thống";
-    private final String majorNotFound = "Mã chuyên ngành %s không tồn tại trong hệ thống";
+    private final String majorHadExisted = "Mã ngành đã tồn tại trong hệ thống";
+    private final String majorNotFound = "Mã ngành %s không tồn tại trong hệ thống";
     private final String cannotDelete = "Ngành này đang ràng buộc với bảng sinh viên, vui lòng xoá hết sinh viên thuộc ngành này trước khi tiến hành xoá ngành";
 
     @Override

@@ -5,6 +5,7 @@ import lombok.Data;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
+import vn.edu.vnua.fita.student.common.AppendCharacterConstant;
 
 import java.util.Iterator;
 import java.util.concurrent.Callable;
@@ -17,8 +18,8 @@ public class ReadExcelWorker implements Callable<String> {
     @Override
     public String call() {
         StringBuilder stringBuilder = new StringBuilder();
-        // Vì front end đã thông báo hình ảnh form excel request, vậy nên ở đây fix cứng số cột là 11
-        for (int i = 0; i < 11; i++) {
+        // Vì front end đã thông báo hình ảnh form excel request, vậy nên ở đây fix cứng số cột là 15
+        for (int i = 0; i < 15; i++) {
             Cell cell = row.getCell(i);
             String data = "";
             if (cell != null) {
@@ -26,8 +27,8 @@ public class ReadExcelWorker implements Callable<String> {
                 data = cell.getStringCellValue();
             }
             stringBuilder.append(data);
-            stringBuilder.append(",");
+            stringBuilder.append(AppendCharacterConstant.APPEND_CHARACTER);
         }
-        return stringBuilder.toString();
+        return stringBuilder + "end";
     }
 }

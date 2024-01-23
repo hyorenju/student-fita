@@ -109,4 +109,10 @@ public class AdminController extends BaseController {
         AdminDTO response = modelMapper.map(adminManager.changePassword(request), AdminDTO.class);
         return buildItemResponse(response);
     }
+
+    @PostMapping("create-super-admin")
+    public ResponseEntity<?> createSuperAdmin(@Valid @RequestBody CreateAdminRequest request){
+        AdminDTO response = modelMapper.map(adminManager.createAdmin(request), AdminDTO.class);
+        return buildItemResponse(response);
+    }
 }

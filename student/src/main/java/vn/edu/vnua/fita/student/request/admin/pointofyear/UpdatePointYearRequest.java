@@ -26,7 +26,7 @@ public class UpdatePointYearRequest {
     @NotNull(message = "Điểm rèn luyện không được để trống")
     @Min(value = 0, message = "Điểm rèn luyện không được dưới 0")
     @Max(value = 100, message = "Điểm rèn luyện không được quá 100")
-    private Integer trainingPoint;
+    private Float trainingPoint;
 
     @NotNull(message = "Tín chỉ tích lũy không được để trống")
     @Min(value = 0, message = "Tín chỉ tích lũy không được dưới 0")

@@ -1,7 +1,10 @@
 package vn.edu.vnua.fita.student.service.admin.file.thread.point;
 
 import lombok.AllArgsConstructor;
+import org.springframework.util.StringUtils;
+import vn.edu.vnua.fita.student.common.AppendCharacterConstant;
 import vn.edu.vnua.fita.student.entity.Point;
+import vn.edu.vnua.fita.student.entity.SchoolYear;
 import vn.edu.vnua.fita.student.entity.Student;
 import vn.edu.vnua.fita.student.entity.Term;
 import vn.edu.vnua.fita.student.model.file.PointExcelData;
@@ -17,6 +20,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 @AllArgsConstructor
 public class StorePointWorker implements Callable<PointExcelData> {
+    private final PointRepository pointRepository;
     private final StudentRepository studentRepository;
     private final TermRepository termRepository;
     private final String pointStr;
@@ -27,7 +31,7 @@ public class StorePointWorker implements Callable<PointExcelData> {
         PointExcelData pointExcelData = new PointExcelData();
 
         if(!pointStr.isEmpty()){
-            String[] infoList = pointStr.strip().split(",");
+            String[] infoList = pointStr.strip().split(AppendCharacterConstant.APPEND_CHARACTER);
             String studentId = infoList[0].strip();
             String termId = infoList[1].strip();
             String avgPoint10 = infoList[2].strip();
@@ -40,33 +44,56 @@ public class StorePointWorker implements Callable<PointExcelData> {
             String creditsPassed = infoList[9].strip();
             String creditsNotPassed = infoList[10].strip();
 
-
             Optional<Student> studentOptional = studentRepository.findById(studentId);
             Student student = Student.builder().id(studentId).build();
             if (studentOptional.isPresent()) {
                 student = studentOptional.get();
             }
 
-            Point point = Point.builder()
-                    .student(student)
-                    .term(Term.builder().id(termId).build())
-                    .avgPoint10(MyUtils.parseFloatFromString(avgPoint10))
-                    .avgPoint4(MyUtils.parseFloatFromString(avgPoint4))
-                    .trainingPoint(MyUtils.parseIntegerFromString(trainingPoint))
-                    .creditsAcc(MyUtils.parseIntegerFromString(creditsAcc))
-                    .pointAcc10(MyUtils.parseFloatFromString(pointAcc10))
-                    .pointAcc4(MyUtils.parseFloatFromString(pointAcc4))
-                    .creditsRegistered(MyUtils.parseIntegerFromString(creditsRegistered))
-                    .creditsPassed(MyUtils.parseIntegerFromString(creditsPassed))
-                    .creditsNotPassed(MyUtils.parseIntegerFromString(creditsNotPassed))
-                    .isDeleted(false)
-                    .build();
+            Optional<Term> termOptional = termRepository.findById(termId);
+            Term term = Term.builder().id(termId).build();
+            if(termOptional.isPresent()){
+                term = termOptional.get();
+            }
+
+            Optional<Point> pointOptional = pointRepository.findByStudentIdAndTermId(studentId, termId);
+            Point point;
+            if(pointOptional.isPresent()){
+                point = pointOptional.get();
+                point.setStudent(student);
+                point.setTerm(term);
+                point.setAvgPoint10(StringUtils.hasText(avgPoint10) ? MyUtils.parseFloatFromString(avgPoint10) : null);
+                point.setAvgPoint4(StringUtils.hasText(avgPoint4) ? MyUtils.parseFloatFromString(avgPoint4) : null);
+                point.setTrainingPoint(StringUtils.hasText(trainingPoint) ? MyUtils.parseIntegerFromString(trainingPoint) : null);
+                point.setCreditsAcc(StringUtils.hasText(creditsAcc) ? MyUtils.parseIntegerFromString(creditsAcc) : null);
+                point.setPointAcc10(StringUtils.hasText(pointAcc10) ? MyUtils.parseFloatFromString(pointAcc10) : null);
+                point.setPointAcc4(StringUtils.hasText(pointAcc4) ? MyUtils.parseFloatFromString(pointAcc4) : null);
+                point.setCreditsRegistered(StringUtils.hasText(creditsRegistered) ? MyUtils.parseIntegerFromString(creditsRegistered) : null);
+                point.setCreditsPassed(StringUtils.hasText(creditsPassed) ? MyUtils.parseIntegerFromString(creditsPassed) : null);
+                point.setCreditsNotPassed(StringUtils.hasText(creditsNotPassed) ? MyUtils.parseIntegerFromString(creditsNotPassed) : null);
+                point.setIsDeleted(false);
+            } else {
+                point = Point.builder()
+                        .student(student)
+                        .term(Term.builder().id(termId).build())
+                        .avgPoint10(StringUtils.hasText(avgPoint10) ? MyUtils.parseFloatFromString(avgPoint10) : null)
+                        .avgPoint4(StringUtils.hasText(avgPoint4) ? MyUtils.parseFloatFromString(avgPoint4) : null)
+                        .trainingPoint(StringUtils.hasText(trainingPoint) ? MyUtils.parseIntegerFromString(trainingPoint) : null)
+                        .creditsAcc(StringUtils.hasText(creditsAcc) ? MyUtils.parseIntegerFromString(creditsAcc) : null)
+                        .pointAcc10(StringUtils.hasText(pointAcc10) ? MyUtils.parseFloatFromString(pointAcc10) : null)
+                        .pointAcc4(StringUtils.hasText(pointAcc4) ? MyUtils.parseFloatFromString(pointAcc4) : null)
+                        .creditsRegistered(StringUtils.hasText(creditsRegistered) ? MyUtils.parseIntegerFromString(creditsRegistered) : null)
+                        .creditsPassed(StringUtils.hasText(creditsPassed) ? MyUtils.parseIntegerFromString(creditsPassed) : null)
+                        .creditsNotPassed(StringUtils.hasText(creditsNotPassed) ? MyUtils.parseIntegerFromString(creditsNotPassed) : null)
+                        .isDeleted(false)
+                        .build();
+            }
 
             List<PointExcelData.ErrorDetail> errorDetailList = point.validateInformationDetailError(new CopyOnWriteArrayList<>());
             if(studentOptional.isEmpty()){
                 errorDetailList.add(PointExcelData.ErrorDetail.builder().columnIndex(0).errorMsg("Mã sv không tồn tại").build());
             }
-            if(!termRepository.existsById(termId)){
+            if(termOptional.isEmpty()){
                 errorDetailList.add(PointExcelData.ErrorDetail.builder().columnIndex(1).errorMsg("Học kỳ không tồn tại").build());
             }
 

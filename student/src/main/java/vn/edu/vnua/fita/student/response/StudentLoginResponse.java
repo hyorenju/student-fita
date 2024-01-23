@@ -23,6 +23,7 @@ public class StudentLoginResponse extends BaseLoginResponse{
     private Timestamp dob;
     private String gender;
     private String phoneNumber;
+    private String phoneNumber2;
     private String familySituation;
     private String email;
     private String homeTown;
@@ -32,7 +33,7 @@ public class StudentLoginResponse extends BaseLoginResponse{
     private String motherName;
     private String motherPhoneNumber;
 
-    public StudentLoginResponse(String jwt, String roleId, String refreshToken, String id, String surname, String lastName, String avatar, CourseDTO course, MajorDTO major, ClassDTO aclass, Timestamp dob, String gender, String phoneNumber, String familySituation, String email, String homeTown, String residence, String fatherName, String fatherPhoneNumber, String motherName, String motherPhoneNumber) {
+    public StudentLoginResponse(String jwt, String roleId, String refreshToken, String id, String surname, String lastName, String avatar, CourseDTO course, MajorDTO major, ClassDTO aclass, Timestamp dob, String gender, String phoneNumber, String phoneNumber2, String familySituation, String email, String homeTown, String residence, String fatherName, String fatherPhoneNumber, String motherName, String motherPhoneNumber) {
         super(jwt, roleId);
         this.refreshToken = refreshToken;
         this.id = id;
@@ -45,6 +46,7 @@ public class StudentLoginResponse extends BaseLoginResponse{
         this.dob = dob;
         this.gender = gender;
         this.phoneNumber = phoneNumber;
+        this.phoneNumber2 = phoneNumber2;
         this.familySituation = familySituation;
         this.email = email;
         this.homeTown = homeTown;

@@ -13,6 +13,7 @@ import java.util.Optional;
 public interface PointRepository extends JpaRepository<Point, Long>, JpaSpecificationExecutor<Point> {
     boolean existsByStudentIdAndTermId(String studentId, String termId);
     Optional<Point> findByStudentIdAndTermId(String studentId, String termId);
+    Optional<Point> findByStudentIdAndTermIdAndIsDeleted(String studentId, String termId, Boolean isDeleted);
     List<Point> findAllByStudentIdOrderByTermId(String studentId);
     List<Point> findAllByStudent(Student student);
     void deleteAllByStudent(Student student);

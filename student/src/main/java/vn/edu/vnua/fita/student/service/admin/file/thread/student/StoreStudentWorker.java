@@ -7,6 +7,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.util.StringUtils;
+import vn.edu.vnua.fita.student.common.AppendCharacterConstant;
 import vn.edu.vnua.fita.student.common.RoleConstant;
 import vn.edu.vnua.fita.student.entity.Role;
 import vn.edu.vnua.fita.student.entity.AClass;
@@ -44,7 +46,8 @@ public class StoreStudentWorker implements Callable<StudentExcelData> {
         StudentExcelData studentExcelData = new StudentExcelData();
 
         if (!studentStr.isEmpty()) {
-            String[] infoList = studentStr.strip().split(",");
+            String[] infoList = studentStr.strip().split(AppendCharacterConstant.APPEND_CHARACTER);
+
             String id = infoList[0].strip();
             String surname = infoList[1].strip();
             String lastName = infoList[2].strip();
@@ -56,6 +59,10 @@ public class StoreStudentWorker implements Callable<StudentExcelData> {
             String phoneNumber = infoList[8].strip();
             String homeTown = infoList[9].strip();
             String email = infoList[10].strip();
+            String fatherName = infoList[11].strip();
+            String fatherPhone = infoList[12].strip();
+            String motherName = infoList[13].strip();
+            String motherPhone = infoList[14].strip();
 
             Student student = Student.builder()
                     .id(id)
@@ -64,21 +71,25 @@ public class StoreStudentWorker implements Callable<StudentExcelData> {
                     .course(Course.builder().id(courseId).build())
                     .major(Major.builder().id(majorId).build())
                     .aclass(AClass.builder().id(classId).build())
-                    .dob(MyUtils.convertTimestampFromExcel(dob))
-                    .gender(gender)
-                    .phoneNumber(phoneNumber)
-                    .email(email)
-                    .homeTown(homeTown)
+                    .dob(StringUtils.hasText(dob) ? MyUtils.convertTimestampFromExcel(dob) : null)
+                    .gender(StringUtils.hasText(gender) ? gender : null)
+                    .phoneNumber(StringUtils.hasText(phoneNumber) ? phoneNumber : null)
+                    .email(StringUtils.hasText(email) ? email : null)
+                    .homeTown(StringUtils.hasText(homeTown) ? homeTown : null)
+                    .fatherName(StringUtils.hasText(fatherName) ? fatherName : null)
+                    .fatherPhoneNumber(StringUtils.hasText(fatherPhone) ? fatherPhone : null)
+                    .motherName(StringUtils.hasText(motherName) ? motherName : null)
+                    .motherPhoneNumber(StringUtils.hasText(motherPhone) ? motherPhone : null)
                     .isDeleted(false)
                     .role(Role.builder().id(RoleConstant.STUDENT).build())
-                    .password(encoder.encode(MyUtils.formatDobToPassword(dob)))
+                    .password(StringUtils.hasText(dob) ? encoder.encode(MyUtils.formatDobToPassword(dob)) : encoder.encode("12345678"))
                     .familySituation("Không")
                     .build();
 
             List<StudentExcelData.ErrorDetail> errorDetailList = student.validateInformationDetailError(new CopyOnWriteArrayList<>());
-            if (studentRepository.existsById(id)) {
-                errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(0).errorMsg("Mã sinh viên đã tồn tại").build());
-            }
+//            if (studentRepository.existsById(id)) {
+//                errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(0).errorMsg("Mã sinh viên đã tồn tại").build());
+//            }
             if (!courseRepository.existsById(courseId)) {
                 errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(3).errorMsg("Khoá không tồn tại").build());
             }
@@ -89,7 +100,7 @@ public class StoreStudentWorker implements Callable<StudentExcelData> {
                 errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(5).errorMsg("Lớp không tồn tại").build());
             }
             if (studentRepository.existsByEmail(email)) {
-                errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(9).errorMsg("Email đã tồn tại").build());
+                errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(9).errorMsg("Email đã được sinh viên khác sử dụng").build());
             }
 
             studentExcelData.setStudent(student);

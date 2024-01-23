@@ -5,6 +5,7 @@ import lombok.*;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.util.StringUtils;
 import vn.edu.vnua.fita.student.common.RoleConstant;
 import vn.edu.vnua.fita.student.domain.validator.ImportStudentValidator;
 import vn.edu.vnua.fita.student.model.file.StudentExcelData;
@@ -55,10 +56,13 @@ public class Student {
     @Column(name = "phone_number", length = 200)
     private String phoneNumber;
 
+    @Column(name = "phone_number_2", length = 200)
+    private String phoneNumber2;
+
     @Column(name = "family_situation", length = 200)
     private String familySituation;
 
-    @Column(length = 190, unique = true)
+    @Column(length = 190)
     private String email;
 
     @Column(name = "home_town", length = 200)
@@ -138,19 +142,19 @@ public class Student {
 //        if (!ImportStudentValidator.validateClass(aclass.getId())) {
 //            errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(5).errorMsg("Lớp không hợp lệ").build());
 //        }
-        if (!ImportStudentValidator.validateDob(dob)) {
+        if (dob != null && !ImportStudentValidator.validateDob(dob)) {
             errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(6).errorMsg("Dạng dd/MM/yyyy").build());
         }
-        if (!ImportStudentValidator.validateGender(gender)) {
-            errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(7).errorMsg("Giới tính không hợp lệ").build());
-        }
-        if (!ImportStudentValidator.validatePhoneNumber(phoneNumber)) {
-            errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(8).errorMsg("Sđt không hợp lệ").build());
-        }
+//        if (!ImportStudentValidator.validateGender(gender)) {
+//            errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(7).errorMsg("Giới tính không hợp lệ").build());
+//        }
+//        if (StringUtils.hasText(phoneNumber) && !ImportStudentValidator.validatePhoneNumber(phoneNumber)) {
+//            errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(8).errorMsg("Sđt không hợp lệ").build());
+//        }
 //        if (!ImportStudentValidator.validateEmail(email)) {
 //            errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(9).errorMsg("Email không hợp lệ").build());
 //        }
-        if (!ImportStudentValidator.validateHomeTown(homeTown)) {
+        if (StringUtils.hasText(homeTown) && !ImportStudentValidator.validateHomeTown(homeTown)) {
             errorDetailList.add(StudentExcelData.ErrorDetail.builder().columnIndex(9).errorMsg("Quê quán không hợp lệ").build());
         }
 

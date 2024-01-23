@@ -11,6 +11,6 @@ import java.time.LocalDateTime;
 public class Test {
     public static void main(String[] args) throws ParseException {
         MyUtils myUtils = new MyUtils();
-        System.out.println(myUtils.test("06/12/2002"));
+        System.out.println(myUtils.test("3/1/2001"));
     }
 }

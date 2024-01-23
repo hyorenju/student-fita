@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import vn.edu.vnua.fita.student.controller.BaseController;
 import vn.edu.vnua.fita.student.dto.*;
 import vn.edu.vnua.fita.student.model.statistic.StudentStatistic;
-import vn.edu.vnua.fita.student.repository.jparepo.PointRepository;
-import vn.edu.vnua.fita.student.repository.jparepo.StudentRepository;
 import vn.edu.vnua.fita.student.request.admin.statistic.GetStatisticRequest;
 import vn.edu.vnua.fita.student.service.admin.statistic.StatisticService;
 
@@ -57,10 +55,17 @@ public class StatisticController extends BaseController {
         return buildListItemResponse(response, response.size());
     }
 
-    @PostMapping("faculty/column")
+    @PostMapping("faculty/column/interrupt")
     @PreAuthorize("hasAnyAuthority('GET_FACULTY_STATISTIC', 'SUPERADMIN')")
-    public ResponseEntity<?> getFacultyColumnChart(@Valid @RequestBody GetStatisticRequest request){
-        FacultyColumnChartDTO response = modelMapper.map(statisticService.getFacultyColumnChart(request), FacultyColumnChartDTO.class);
+    public ResponseEntity<?> getFacultyInterruptColumnChart(@Valid @RequestBody GetStatisticRequest request){
+        FacultyColumnChartDTO response = modelMapper.map(statisticService.getFacultyInterruptColumnChart(request), FacultyColumnChartDTO.class);
+        return buildItemResponse(response);
+    }
+
+    @PostMapping("faculty/column/io")
+    @PreAuthorize("hasAnyAuthority('GET_FACULTY_STATISTIC', 'SUPERADMIN')")
+    public ResponseEntity<?> getFacultyIOColumnChart(@Valid @RequestBody GetStatisticRequest request){
+        FacultyColumnChartDTO response = modelMapper.map(statisticService.getFacultyIOColumnChart(request), FacultyColumnChartDTO.class);
         return buildItemResponse(response);
     }
 

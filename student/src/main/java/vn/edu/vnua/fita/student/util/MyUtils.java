@@ -51,7 +51,7 @@ public class MyUtils {
         try {
             return String.format("%.2f", input);
         } catch (NumberFormatException e) {
-            return null;
+            return "";
         }
     }
 

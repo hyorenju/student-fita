@@ -6,5 +6,5 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class ThreadsNumConstant {
-    public static final int MAX_THREADS = 3;
+    public static final int MAX_THREADS = 4;
 }

@@ -48,6 +48,10 @@ public class CreateStudentRequest {
     @PhoneNumber(message = "Số điện thoại không đúng định dạng")
     private String phoneNumber;
 
+    @NotBlank(message = "Số điện thoại 2 không được để trống")
+    @PhoneNumber(message = "Số điện thoại 2 không đúng định dạng")
+    private String phoneNumber2;
+
     @NotBlank(message = "Email không được để trống")
     @EmailAnnotation(message = "Email không đúng định dạng")
     @Size(max = 190,message = "Email quá dài")

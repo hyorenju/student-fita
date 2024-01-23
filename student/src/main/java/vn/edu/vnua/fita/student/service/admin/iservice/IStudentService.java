@@ -22,6 +22,6 @@ public interface IStudentService {
     TrashStudent restoreStudent(Long id);
     List<TrashStudent> restoreManyStudent(RestoreStudentRequest request);
     Page<TrashStudent> getTrashStudentList(GetTrashStudentRequest request);
-    void importFromExcel(MultipartFile file) throws IOException, ExecutionException, InterruptedException;
+    List<Student> importFromExcel(MultipartFile file) throws IOException, ExecutionException, InterruptedException;
     String exportToExcel(ExportStudentListRequest request) throws IOException;
 }

@@ -359,7 +359,7 @@ public class ExcelService implements IExcelService {
 
         for (int i = 0; i < pointStrList.size(); i++) {
             String pointStr = pointStrList.get(i);
-            Callable<PointExcelData> callable = new StorePointWorker(studentRepository, termRepository, pointStr, i);
+            Callable<PointExcelData> callable = new StorePointWorker(pointRepository, studentRepository, termRepository, pointStr, i);
             Future<PointExcelData> future = executor.submit(callable);
             pointExcelData.add(future.get());
         }
@@ -371,7 +371,7 @@ public class ExcelService implements IExcelService {
 
         for (int i = 0; i < pointAnnualStrList.size(); i++) {
             String pointStr = pointAnnualStrList.get(i);
-            Callable<PointAnnualExcelData> callable = new StorePointAnnualWorker(studentRepository, schoolYearRepository, pointStr, i);
+            Callable<PointAnnualExcelData> callable = new StorePointAnnualWorker(pointYearRepository, studentRepository, schoolYearRepository, pointStr, i);
             Future<PointAnnualExcelData> future = executor.submit(callable);
             pointAnnualExcelData.add(future.get());
         }
@@ -383,7 +383,7 @@ public class ExcelService implements IExcelService {
 
         for (int i = 0; i < studentStatusStrList.size(); i++) {
             String studentStatusStr = studentStatusStrList.get(i);
-            Callable<StudentStatusExcelData> callable = new StoreStudentStatusWorker(studentRepository, statusRepository, studentStatusStr, i);
+            Callable<StudentStatusExcelData> callable = new StoreStudentStatusWorker(studentStatusRepository, studentRepository, statusRepository, termRepository, studentStatusStr, i);
             Future<StudentStatusExcelData> future = executor.submit(callable);
             studentStatusExcelDataList.add(future.get());
         }
@@ -637,7 +637,12 @@ public class ExcelService implements IExcelService {
         headerRow.createCell(7).setCellValue("Giới tính");
         headerRow.createCell(8).setCellValue("Số điện thoại");
         headerRow.createCell(9).setCellValue("Quê quán");
-        headerRow.createCell(10).setCellValue("Ghi chú");
+        headerRow.createCell(10).setCellValue("Email");
+        headerRow.createCell(11).setCellValue("Tên bố");
+        headerRow.createCell(12).setCellValue("Sđt bố");
+        headerRow.createCell(13).setCellValue("Tên mẹ");
+        headerRow.createCell(14).setCellValue("Sđt mẹ");
+        headerRow.createCell(15).setCellValue("Ghi chú");
     }
 
     private void createStudentListHeader(Sheet sheet) {
@@ -651,14 +656,15 @@ public class ExcelService implements IExcelService {
         headerRow.createCell(6).setCellValue("Ngày sinh");
         headerRow.createCell(7).setCellValue("Giới tính");
         headerRow.createCell(8).setCellValue("Số điện thoại");
-        headerRow.createCell(9).setCellValue("Email");
-        headerRow.createCell(10).setCellValue("Hoàn cảnh");
-        headerRow.createCell(11).setCellValue("Quê quán");
-        headerRow.createCell(12).setCellValue("Nơi ở");
-        headerRow.createCell(13).setCellValue("Họ tên bố");
-        headerRow.createCell(14).setCellValue("Sđt bố");
-        headerRow.createCell(15).setCellValue("Họ tên mẹ");
-        headerRow.createCell(16).setCellValue("Sđt mẹ");
+        headerRow.createCell(9).setCellValue("Số điện thoại 2");
+        headerRow.createCell(10).setCellValue("Email");
+        headerRow.createCell(11).setCellValue("Hoàn cảnh");
+        headerRow.createCell(12).setCellValue("Quê quán");
+        headerRow.createCell(13).setCellValue("Nơi ở");
+        headerRow.createCell(14).setCellValue("Họ tên bố");
+        headerRow.createCell(15).setCellValue("Sđt bố");
+        headerRow.createCell(16).setCellValue("Họ tên mẹ");
+        headerRow.createCell(17).setCellValue("Sđt mẹ");
     }
 
 // Tạo tiêu đề file điểm học kỳ
