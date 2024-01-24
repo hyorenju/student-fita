@@ -94,7 +94,7 @@ public class StatisticController extends BaseController {
         return buildItemResponse("Tạo thành công");
     }
     @PostMapping("major-classification")
-    public ResponseEntity<?> createMajorClassification(){
+    public ResponseEntity<?> createMajorClassification() {
         statisticService.createMajorClassificationPeriodic();
         return buildItemResponse("Tạo thành công");
     }

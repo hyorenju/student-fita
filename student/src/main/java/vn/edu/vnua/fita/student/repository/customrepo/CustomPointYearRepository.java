@@ -24,7 +24,7 @@ public class CustomPointYearRepository {
                 predicates.add(criteriaBuilder.like(root.get("student").get("id"), studentId));
             }
             if (StringUtils.hasText(year)) {
-                predicates.add(criteriaBuilder.like(root.get("year"), year));
+                predicates.add(criteriaBuilder.like(root.get("year").get("id"), year));
             }
             if (StringUtils.hasText(classId)){
                 predicates.add(criteriaBuilder.like(root.get("student").get("aclass").get("id"), classId));
@@ -92,7 +92,7 @@ public class CustomPointYearRepository {
                 }
             } else {
                 query.orderBy(
-                        criteriaBuilder.asc(root.get("year")),
+                        criteriaBuilder.asc(root.get("year").get("id")),
                         criteriaBuilder.asc(root.get("student").get("lastName")),
                         criteriaBuilder.asc(root.get("student").get("surname"))
                 );

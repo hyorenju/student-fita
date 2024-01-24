@@ -23,10 +23,12 @@ public class WriteErrorStudentStatusWorker implements Callable<Void> {
 
     @Override
     public Void call() throws Exception {
+        String note = studentStatus.getNote();
+
         row.createCell(0).setCellValue(studentStatus.getStudent().getId());
         row.createCell(1).setCellValue(studentStatus.getStatus().getName());
         row.createCell(2).setCellValue(MyUtils.convertTimestampToString(studentStatus.getTime()));
-        row.createCell(3).setCellValue(studentStatus.getNote());
+        row.createCell(3).setCellValue(note != null ? note : "");
 
         studentStatusExcelData.getErrorDetailList().forEach(errorDetail -> {
             Cell cell = row.getCell(errorDetail.getColumnIndex());

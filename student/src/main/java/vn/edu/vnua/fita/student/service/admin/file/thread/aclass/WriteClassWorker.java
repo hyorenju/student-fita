@@ -21,20 +21,36 @@ public class WriteClassWorker implements Callable<Void> {
         Student secretary = aClass.getSecretary();
         Student deputySecretary = aClass.getDeputySecretary();
 
+        String monitorId = monitor != null ? monitor.getId() : "";
+        String monitorName = monitor != null ? monitor.getSurname() + monitor.getLastName() : "";
+        String monitorPhone = monitor != null ? monitor.getPhoneNumber() : "";
+
+        String viceMonitorId = viceMonitor != null ? viceMonitor.getId() : "";
+        String viceMonitorName = viceMonitor != null ? viceMonitor.getSurname() + viceMonitor.getLastName() : "";
+        String viceMonitorPhone = viceMonitor != null ? viceMonitor.getPhoneNumber() : "";
+
+        String secretaryId = secretary != null ? secretary.getId() : "";
+        String secretaryName = secretary != null ? secretary.getSurname() + secretary.getLastName() : "";
+        String secretaryPhone = secretary != null ? secretary.getPhoneNumber() : "";
+
+        String deputySecretaryId = deputySecretary != null ? deputySecretary.getId() : "";
+        String deputySecretaryName = deputySecretary != null ? deputySecretary.getSurname() + deputySecretary.getLastName() : "";
+        String deputySecretaryPhone = deputySecretary != null ? deputySecretary.getPhoneNumber() : "";
+
         row.createCell(0).setCellValue(aClass.getId());
         row.createCell(1).setCellValue(aClass.getName());
-        row.createCell(2).setCellValue(monitor.getId());
-        row.createCell(3).setCellValue(monitor.getSurname() + monitor.getLastName());
-        row.createCell(4).setCellValue(monitor.getPhoneNumber());
-        row.createCell(5).setCellValue(viceMonitor.getId());
-        row.createCell(6).setCellValue(viceMonitor.getSurname() + viceMonitor.getLastName());
-        row.createCell(7).setCellValue(viceMonitor.getPhoneNumber());
-        row.createCell(8).setCellValue(secretary.getId());
-        row.createCell(9).setCellValue(secretary.getSurname() + secretary.getLastName());
-        row.createCell(10).setCellValue(secretary.getPhoneNumber());
-        row.createCell(11).setCellValue(deputySecretary.getId());
-        row.createCell(12).setCellValue(deputySecretary.getSurname() + deputySecretary.getLastName());
-        row.createCell(13).setCellValue(deputySecretary.getPhoneNumber());
+        row.createCell(2).setCellValue(monitorId);
+        row.createCell(3).setCellValue(monitorName);
+        row.createCell(4).setCellValue(monitorPhone);
+        row.createCell(5).setCellValue(viceMonitorId);
+        row.createCell(6).setCellValue(viceMonitorName);
+        row.createCell(7).setCellValue(viceMonitorPhone);
+        row.createCell(8).setCellValue(secretaryId);
+        row.createCell(9).setCellValue(secretaryName);
+        row.createCell(10).setCellValue(secretaryPhone);
+        row.createCell(11).setCellValue(deputySecretaryId);
+        row.createCell(12).setCellValue(deputySecretaryName);
+        row.createCell(13).setCellValue(deputySecretaryPhone);
         return null;
     }
 }

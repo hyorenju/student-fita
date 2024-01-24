@@ -22,18 +22,18 @@ public class WriteStudentWorker implements Callable<Void> {
         row.createCell(3).setCellValue(student.getCourse().getId());
         row.createCell(4).setCellValue(student.getMajor().getId());
         row.createCell(5).setCellValue(student.getAclass().getId());
-        row.createCell(6).setCellValue(MyUtils.convertTimestampToString(student.getDob()));
-        row.createCell(7).setCellValue(student.getGender());
-        row.createCell(8).setCellValue(student.getPhoneNumber());
-        row.createCell(9).setCellValue(student.getPhoneNumber2());
-        row.createCell(10).setCellValue(student.getEmail());
-        row.createCell(11).setCellValue(student.getFamilySituation());
-        row.createCell(12).setCellValue(student.getHomeTown());
-        row.createCell(13).setCellValue(student.getResidence());
-        row.createCell(14).setCellValue(student.getFatherName());
-        row.createCell(15).setCellValue(student.getFatherPhoneNumber());
-        row.createCell(16).setCellValue(student.getMotherName());
-        row.createCell(17).setCellValue(student.getMotherPhoneNumber());
+        row.createCell(6).setCellValue(student.getDob() != null ? MyUtils.convertTimestampToString(student.getDob()) : "");
+        row.createCell(7).setCellValue(student.getGender() != null ? student.getGender() : "");
+        row.createCell(8).setCellValue(student.getPhoneNumber() != null ? student.getPhoneNumber() : "");
+        row.createCell(9).setCellValue(student.getPhoneNumber2() != null ? student.getPhoneNumber2() : "");
+        row.createCell(10).setCellValue(student.getEmail() != null ? student.getEmail() : "");
+        row.createCell(11).setCellValue(student.getFamilySituation() != null ? student.getFamilySituation() : "");
+        row.createCell(12).setCellValue(student.getHomeTown() != null ? student.getHomeTown() : "");
+        row.createCell(13).setCellValue(student.getResidence() != null ? student.getResidence() : "");
+        row.createCell(14).setCellValue(student.getFatherName() != null ? student.getFatherName() : "");
+        row.createCell(15).setCellValue(student.getFatherPhoneNumber() != null ? student.getFatherPhoneNumber() : "");
+        row.createCell(16).setCellValue(student.getMotherName() != null ? student.getMotherName() : "");
+        row.createCell(17).setCellValue(student.getMotherPhoneNumber() != null ? student.getMotherPhoneNumber() : "");
         return null;
     }
 

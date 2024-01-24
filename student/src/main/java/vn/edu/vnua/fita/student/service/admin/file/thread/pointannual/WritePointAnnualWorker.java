@@ -11,24 +11,34 @@ import java.util.concurrent.Callable;
 @AllArgsConstructor
 public class WritePointAnnualWorker implements Callable<Void> {
     private Row row;
-    private PointOfYear point;
+    private PointOfYear pointOfYear;
 
     @Override
     public Void call() throws Exception {
-        row.createCell(0).setCellValue(point.getStudent().getId());
-        row.createCell(1).setCellValue(point.getStudent().getSurname());
-        row.createCell(2).setCellValue(point.getStudent().getLastName());
-        row.createCell(3).setCellValue(point.getStudent().getAclass().getId());
-        row.createCell(4).setCellValue(point.getYear().getId());
-        row.createCell(5).setCellValue(MyUtils.parseFloatToString(point.getAvgPoint10()));
-        row.createCell(6).setCellValue(MyUtils.parseFloatToString(point.getAvgPoint4()));
-        row.createCell(7).setCellValue(MyUtils.parseFloatToString(point.getTrainingPoint()));
-        row.createCell(8).setCellValue(point.getCreditsAcc());
-        row.createCell(9).setCellValue(MyUtils.parseFloatToString(point.getPointAcc10()));
-        row.createCell(10).setCellValue(MyUtils.parseFloatToString(point.getPointAcc4()));
-        row.createCell(11).setCellValue(point.getCreditsRegistered());
-        row.createCell(12).setCellValue(point.getCreditsPassed());
-        row.createCell(13).setCellValue(point.getCreditsNotPassed());
+        Float avgPoint10 = pointOfYear.getAvgPoint10();
+        Float avgPoint4 = pointOfYear.getAvgPoint10();
+        Float trainingPoint = pointOfYear.getTrainingPoint();
+        Integer creditsAcc = pointOfYear.getCreditsAcc();
+        Float pointAcc10 = pointOfYear.getAvgPoint10();
+        Float pointAcc4 = pointOfYear.getAvgPoint10();
+        Integer creditsRegistered = pointOfYear.getCreditsRegistered();
+        Integer creditsPassed = pointOfYear.getCreditsPassed();
+        Integer creditsNotPassed = pointOfYear.getCreditsNotPassed();
+
+        row.createCell(0).setCellValue(pointOfYear.getStudent().getId());
+        row.createCell(1).setCellValue(pointOfYear.getStudent().getSurname());
+        row.createCell(2).setCellValue(pointOfYear.getStudent().getLastName());
+        row.createCell(3).setCellValue(pointOfYear.getStudent().getAclass().getId());
+        row.createCell(4).setCellValue(pointOfYear.getYear().getId());
+        row.createCell(5).setCellValue(avgPoint10 != null ? MyUtils.parseFloatToString(avgPoint10) : "");
+        row.createCell(6).setCellValue(avgPoint4 != null ? MyUtils.parseFloatToString(avgPoint4) : "");
+        row.createCell(7).setCellValue(trainingPoint != null ? MyUtils.parseFloatToString(trainingPoint) : "");
+        row.createCell(8).setCellValue(creditsAcc != null ? "" + creditsAcc : "");
+        row.createCell(9).setCellValue(pointAcc10 != null ? MyUtils.parseFloatToString(pointAcc10) : "");
+        row.createCell(10).setCellValue(pointAcc4 != null ? MyUtils.parseFloatToString(pointAcc4) : "");
+        row.createCell(11).setCellValue(creditsRegistered != null ? "" + creditsRegistered : "");
+        row.createCell(12).setCellValue(creditsPassed != null ? "" + creditsPassed : "");
+        row.createCell(13).setCellValue(creditsNotPassed != null ? "" + creditsNotPassed : "");
         return null;
     }
 }

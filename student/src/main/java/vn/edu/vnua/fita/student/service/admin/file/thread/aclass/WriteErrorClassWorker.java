@@ -23,8 +23,10 @@ public class WriteErrorClassWorker implements Callable<Void> {
 
     @Override
     public Void call() throws Exception {
+        String name = aClass.getName();
+
         row.createCell(0).setCellValue(aClass.getId());
-        row.createCell(1).setCellValue(aClass.getName());
+        row.createCell(1).setCellValue(name != null ? name : "");
 
         classExcelData.getErrorDetailList().forEach(errorDetail -> {
             Cell cell = row.getCell(errorDetail.getColumnIndex());

@@ -27,15 +27,15 @@ public class WriteErrorStudentWorker implements Callable<Void> {
         row.createCell(3).setCellValue(student.getCourse().getId());
         row.createCell(4).setCellValue(student.getMajor().getId());
         row.createCell(5).setCellValue(student.getAclass().getId());
-        row.createCell(6).setCellValue(student.getDob()!=null ? MyUtils.convertTimestampToString(student.getDob()) : null);
-        row.createCell(7).setCellValue(student.getGender());
-        row.createCell(8).setCellValue(student.getPhoneNumber());
-        row.createCell(9).setCellValue(student.getHomeTown());
-        row.createCell(10).setCellValue(student.getEmail());
-        row.createCell(11).setCellValue(student.getFatherName());
-        row.createCell(12).setCellValue(student.getFatherPhoneNumber());
-        row.createCell(13).setCellValue(student.getMotherName());
-        row.createCell(14).setCellValue(student.getMotherPhoneNumber());
+        row.createCell(6).setCellValue(student.getDob() != null ? MyUtils.convertTimestampToString(student.getDob()) : "");
+        row.createCell(7).setCellValue(student.getGender() != null ? student.getGender() : "");
+        row.createCell(8).setCellValue(student.getPhoneNumber() != null ? student.getPhoneNumber() : "");
+        row.createCell(9).setCellValue(student.getHomeTown() != null ? student.getHomeTown() : "");
+        row.createCell(10).setCellValue(student.getEmail() != null ? student.getEmail() : "");
+        row.createCell(11).setCellValue(student.getFatherName() != null ? student.getFatherName() : "");
+        row.createCell(12).setCellValue(student.getFatherPhoneNumber() != null ? student.getFatherPhoneNumber() : "");
+        row.createCell(13).setCellValue(student.getMotherName() != null ? student.getMotherName() : "");
+        row.createCell(14).setCellValue(student.getMotherPhoneNumber() != null ? student.getMotherPhoneNumber() : "");
         row.createCell(15).setCellValue("");
 
         studentExcelData.getErrorDetailList().forEach(errorDetail -> {

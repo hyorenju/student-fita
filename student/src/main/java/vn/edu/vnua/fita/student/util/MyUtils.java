@@ -77,9 +77,7 @@ public class MyUtils {
         return "" + year + term;
     }
 
-    public Timestamp test(String inputDate) throws ParseException {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DateTimeConstant.DATE_FORMAT);
-        simpleDateFormat.setLenient(false);
-        return new Timestamp(simpleDateFormat.parse(inputDate).getTime());
+    public Timestamp test(long inputDate) throws ParseException {
+        return new Timestamp(inputDate);
     }
 }

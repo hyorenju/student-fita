@@ -15,11 +15,13 @@ public class WriteStudentStatusWorker implements Callable<Void> {
 
     @Override
     public Void call() throws Exception {
+        String note = studentStatus.getNote();
+
         row.createCell(0).setCellValue(studentStatus.getStudent().getId());
         row.createCell(1).setCellValue(studentStatus.getStatus().getName());
         row.createCell(2).setCellValue(MyUtils.convertTimestampToString(studentStatus.getTime()));
         row.createCell(3).setCellValue(studentStatus.getTerm().getId());
-        row.createCell(4).setCellValue(studentStatus.getNote());
+        row.createCell(4).setCellValue(note != null ? note : "");
         return null;
     }
 }
