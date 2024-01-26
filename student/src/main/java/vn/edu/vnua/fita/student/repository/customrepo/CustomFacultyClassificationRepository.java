@@ -33,4 +33,15 @@ public class CustomFacultyClassificationRepository {
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         });
     }
+
+    public static Specification<FacultyClassification> filterFacultyCircleClassificationList(String time) {
+        return ((root, query, criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            if (time != null) {
+                predicates.add(criteriaBuilder.like(root.get("year").get("id"), time));
+            }
+            query.orderBy(criteriaBuilder.asc(root.get("year").get("id")));
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        });
+    }
 }

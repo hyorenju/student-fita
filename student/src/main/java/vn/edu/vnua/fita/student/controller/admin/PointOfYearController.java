@@ -33,7 +33,7 @@ public class PointOfYearController extends BaseController {
     private final ModelMapper modelMapper;
 
     @PostMapping("list")
-    @PreAuthorize("hasAnyAuthority('GET_POINT_LIST', 'SUPERADMIN')")
+    @PreAuthorize("hasAnyAuthority('GET_POINT_LIST', 'SUPERADMIN', 'MOD_GET_POINT_LIST')")
     public ResponseEntity<?> getPointList(@Valid @RequestBody GetPointYearListRequest request){
         Page<PointOfYear> page = pointOfYearManager.filterPointList(request);
         List<PointOfYearDTO> response = page.getContent().stream().map(
@@ -115,7 +115,7 @@ public class PointOfYearController extends BaseController {
     }
 
     @PostMapping("export")
-    @PreAuthorize("hasAnyAuthority('EXPORT_POINT', 'SUPERADMIN')")
+    @PreAuthorize("hasAnyAuthority('EXPORT_POINT', 'SUPERADMIN', 'MOD_EXPORT_POINT')")
     public ResponseEntity<?> exportPointList(@RequestBody ExportPointYearListRequest request){
         String response = pointOfYearManager.exportToExcel(request);
         return buildItemResponse(response);

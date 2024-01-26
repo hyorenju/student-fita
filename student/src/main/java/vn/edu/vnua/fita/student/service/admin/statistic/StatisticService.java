@@ -12,6 +12,7 @@ import vn.edu.vnua.fita.student.model.statistic.chartform.CircleChart;
 import vn.edu.vnua.fita.student.model.statistic.chartform.GroupedColumnChart;
 import vn.edu.vnua.fita.student.repository.customrepo.*;
 import vn.edu.vnua.fita.student.repository.jparepo.*;
+import vn.edu.vnua.fita.student.request.admin.statistic.GetCircleStatisticRequest;
 import vn.edu.vnua.fita.student.request.admin.statistic.GetStatisticRequest;
 import vn.edu.vnua.fita.student.service.admin.iservice.IStatisticService;
 
@@ -164,12 +165,14 @@ public class StatisticService implements IStatisticService {
                 List<Student> students = studentRepository.findAllByTerms(term);
                 ClassificationCounter classificationCounter = countClassified(students, termId);
 
-                facultyClassification.setExcellent(classificationCounter.getExcellent());
-                facultyClassification.setGood(classificationCounter.getGood());
-                facultyClassification.setFair(classificationCounter.getFair());
-                facultyClassification.setMedium(classificationCounter.getMedium());
-                facultyClassification.setWeak(classificationCounter.getWeak());
-                facultyClassification.setWorst(classificationCounter.getWorst());
+                if (classificationCounter != null) {
+                    facultyClassification.setExcellent(classificationCounter.getExcellent());
+                    facultyClassification.setGood(classificationCounter.getGood());
+                    facultyClassification.setFair(classificationCounter.getFair());
+                    facultyClassification.setMedium(classificationCounter.getMedium());
+                    facultyClassification.setWeak(classificationCounter.getWeak());
+                    facultyClassification.setWorst(classificationCounter.getWorst());
+                }
             }
             facultyClassifications.add(facultyClassification);
         }
@@ -245,11 +248,10 @@ public class StatisticService implements IStatisticService {
     }
 
     @Override
-    public List<ClassChart> getClassClassification(String classId, GetStatisticRequest request) {
+    public List<ClassChart> getClassClassification(String classId, GetCircleStatisticRequest request) {
         Specification<ClassClassification> specification = CustomClassClassificationRepository.filterClassClassificationList(
                 classId,
-                request.getStart(),
-                request.getEnd()
+                request.getTime()
         );
         List<ClassClassification> classClassifications = classClassificationRepository.findAll(specification);
 
@@ -275,11 +277,10 @@ public class StatisticService implements IStatisticService {
     }
 
     @Override
-    public List<CourseChart> getCourseClassification(String courseId, GetStatisticRequest request) {
+    public List<CourseChart> getCourseClassification(String courseId, GetCircleStatisticRequest request) {
         Specification<CourseClassification> specification = CustomCourseClassificationRepository.filterCourseClassificationList(
                 courseId,
-                request.getStart(),
-                request.getEnd()
+                request.getTime()
         );
         List<CourseClassification> courseClassifications = courseClassificationRepository.findAll(specification);
 
@@ -305,11 +306,10 @@ public class StatisticService implements IStatisticService {
     }
 
     @Override
-    public List<MajorChart> getMajorClassification(String majorId, GetStatisticRequest request) {
+    public List<MajorChart> getMajorClassification(String majorId, GetCircleStatisticRequest request) {
         Specification<MajorClassification> specification = CustomMajorClassificationRepository.filterMajorClassificationList(
                 majorId,
-                request.getStart(),
-                request.getEnd()
+                request.getTime()
         );
         List<MajorClassification> majorClassifications = majorClassificationRepository.findAll(specification);
 
@@ -355,10 +355,9 @@ public class StatisticService implements IStatisticService {
     }
 
     @Override
-    public List<FacultyCircleChart> getFacultyCircleChart(GetStatisticRequest request) {
-        Specification<FacultyClassification> specification = CustomFacultyClassificationRepository.filterFacultyInterruptClassificationList(
-                request.getStart(),
-                request.getEnd()
+    public List<FacultyCircleChart> getFacultyCircleChart(GetCircleStatisticRequest request) {
+        Specification<FacultyClassification> specification = CustomFacultyClassificationRepository.filterFacultyCircleClassificationList(
+                request.getTime()
         );
         List<FacultyClassification> facultyClassifications = facultyClassificationRepository.findAll(specification);
 

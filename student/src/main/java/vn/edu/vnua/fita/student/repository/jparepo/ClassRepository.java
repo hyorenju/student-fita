@@ -13,4 +13,5 @@ public interface ClassRepository extends JpaRepository<AClass, String>, JpaSpeci
     boolean existsByViceMonitorId(String id);
     boolean existsBySecretaryId(String id);
     boolean existsByDeputySecretaryId(String id);
+    boolean existsByMonitorIdOrViceMonitorIdOrSecretaryIdOrDeputySecretaryId(String monitor, String vice, String secretary, String deputy);
 }

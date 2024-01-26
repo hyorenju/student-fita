@@ -5,6 +5,8 @@ import lombok.Data;
 
 @Data
 public class UpdateStudentProfileRequest {
+    private String phoneNumber2;
+
     @Size(max = 200,message = "Nơi ở hiện tại không được quá dài")
     private String residence;
 

@@ -29,7 +29,7 @@ public class StudentManagerController extends BaseController {
     private final ModelMapper modelMapper;
 
     @PostMapping("list")
-    @PreAuthorize("hasAnyAuthority('GET_STUDENT_LIST', 'SUPERADMIN')")
+    @PreAuthorize("hasAnyAuthority('GET_STUDENT_LIST', 'SUPERADMIN', 'MOD_GET_STUDENT_LIST')")
     public ResponseEntity<?> getStudentList(@Valid @RequestBody GetStudentListRequest request) {
         Page<Student> page = studentManager.getStudentList(request);
         List<StudentDTO> response = page.getContent().stream().map(
@@ -118,7 +118,7 @@ public class StudentManagerController extends BaseController {
     }
 
     @PostMapping("export")
-    @PreAuthorize("hasAnyAuthority('EXPORT_STUDENT', 'SUPERADMIN')")
+    @PreAuthorize("hasAnyAuthority('EXPORT_STUDENT', 'SUPERADMIN', 'MOD_EXPORT_STUDENT')")
     public ResponseEntity<?> exportStudentList(@RequestBody ExportStudentListRequest request){
         String response = studentManager.exportToExcel(request);
         return buildItemResponse(response);

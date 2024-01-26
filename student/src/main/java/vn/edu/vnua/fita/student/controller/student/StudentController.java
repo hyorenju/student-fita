@@ -78,10 +78,10 @@ public class StudentController extends BaseController {
         return buildItemResponse(response);
     }
 
-    @PostMapping("phone")
-    @PreAuthorize("hasAnyAuthority('STUDENT', 'MONITOR')")
-    public ResponseEntity<?> updatePhoneNumber(@Valid @RequestBody UpdatePhoneRequest request){
-        StudentDTO response = modelMapper.map(studentService.updatePhoneNumber2(request), StudentDTO.class);
-        return buildItemResponse(response);
-    }
+//    @PostMapping("phone")
+//    @PreAuthorize("hasAnyAuthority('STUDENT', 'MONITOR')")
+//    public ResponseEntity<?> updatePhoneNumber(@Valid @RequestBody UpdatePhoneRequest request){
+//        StudentDTO response = modelMapper.map(studentService.updatePhoneNumber2(request), StudentDTO.class);
+//        return buildItemResponse(response);
+//    }
 }

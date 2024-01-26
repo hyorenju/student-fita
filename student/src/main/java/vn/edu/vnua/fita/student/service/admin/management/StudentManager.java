@@ -127,7 +127,7 @@ public class StudentManager implements IStudentService {
         Course course = courseRepository.findById(request.getCourse().getId()).orElseThrow(() -> new RuntimeException(String.format(courseNotFound, request.getCourse().getId())));
         AClass aClass = classRepository.findById(request.getAclass().getId()).orElseThrow(() -> new RuntimeException(String.format(classNotFound, request.getAclass().getId())));
         Major major = majorRepository.findById(request.getMajor().getId()).orElseThrow(() -> new RuntimeException(String.format(majorNotFound, request.getMajor().getId())));
-        if (studentRepository.existsByEmail(request.getEmail())) {
+        if (!student.getEmail().equals(request.getEmail()) && studentRepository.existsByEmail(request.getEmail())) {
             throw new RuntimeException(String.format(emailHasExisted, request.getEmail()));
         }
 

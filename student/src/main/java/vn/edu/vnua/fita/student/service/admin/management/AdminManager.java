@@ -83,7 +83,7 @@ public class    AdminManager implements IAdminService {
             } else if (request.getId().matches("^[0-9]+")) {
                 throw new RuntimeException(validAdminId);
             }
-            Role role = roleRepository.findById(request.getRoleId()).orElseThrow(() -> new RuntimeException(roleNotFound));
+            Role role = roleRepository.findById(request.getRole().getId()).orElseThrow(() -> new RuntimeException(roleNotFound));
             Admin admin = Admin.builder()
                     .id(request.getId())
                     .name(request.getName())
@@ -101,7 +101,7 @@ public class    AdminManager implements IAdminService {
     @Override
     public Admin updateAdmin(UpdateAdminRequest request) {
         try {
-            Role role = roleRepository.findById(request.getRoleId()).orElseThrow(() -> new RuntimeException(roleNotFound));
+            Role role = roleRepository.findById(request.getRole().getId()).orElseThrow(() -> new RuntimeException(roleNotFound));
             Admin admin = adminRepository.findById(request.getId()).orElseThrow(() -> new RuntimeException(adminNotFound));
             if(admin.getRole().getId().equals(RoleConstant.SUPERADMIN)) {
                 throw new RuntimeException(cannotUpdate);

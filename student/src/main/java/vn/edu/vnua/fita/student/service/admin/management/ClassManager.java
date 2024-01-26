@@ -75,51 +75,27 @@ public class ClassManager implements IClassService {
 
             if (request.getMonitor() != null) {
                 String monitorId = request.getMonitor().getId();
-                if (StringUtils.hasText(monitorId) &&
-                        classRepository.existsByMonitorId(monitorId) &&
-                        classRepository.existsByViceMonitorId(monitorId) &&
-                        classRepository.existsBySecretaryId(monitorId) &&
-                        classRepository.existsByDeputySecretaryId(monitorId)) {
+                if (StringUtils.hasText(monitorId)) {
                     monitor = studentRepository.findById(monitorId).orElseThrow(() -> new RuntimeException(String.format(studentNotFound, monitorId)));
                     monitor.setRole(Role.builder().id(RoleConstant.MONITOR).build());
-                } else {
-                    throw new RuntimeException(duplicateMonitor);
                 }
             }
             if (request.getViceMonitor() != null) {
                 String viceMonitorId = request.getViceMonitor().getId();
-                if (StringUtils.hasText(viceMonitorId) &&
-                        classRepository.existsByMonitorId(viceMonitorId) &&
-                        classRepository.existsByViceMonitorId(viceMonitorId) &&
-                        classRepository.existsBySecretaryId(viceMonitorId) &&
-                        classRepository.existsByDeputySecretaryId(viceMonitorId)) {
+                if (StringUtils.hasText(viceMonitorId)) {
                     viceMonitor = studentRepository.findById(viceMonitorId).orElseThrow(() -> new RuntimeException(String.format(studentNotFound, viceMonitorId)));
-                } else {
-                    throw new RuntimeException(duplicateViceMonitor);
                 }
             }
             if (request.getSecretary() != null) {
                 String secretaryId = request.getSecretary().getId();
-                if (StringUtils.hasText(secretaryId) &&
-                        classRepository.existsByMonitorId(secretaryId) &&
-                        classRepository.existsByViceMonitorId(secretaryId) &&
-                        classRepository.existsBySecretaryId(secretaryId) &&
-                        classRepository.existsByDeputySecretaryId(secretaryId)) {
+                if (StringUtils.hasText(secretaryId)) {
                     secretary = studentRepository.findById(secretaryId).orElseThrow(() -> new RuntimeException(String.format(studentNotFound, secretaryId)));
-                } else {
-                    throw new RuntimeException(duplicateSecretary);
                 }
             }
             if (request.getDeputySecretary() != null) {
                 String deputySecretaryId = request.getDeputySecretary().getId();
-                if (StringUtils.hasText(deputySecretaryId) &&
-                        classRepository.existsByMonitorId(deputySecretaryId) &&
-                        classRepository.existsByViceMonitorId(deputySecretaryId) &&
-                        classRepository.existsBySecretaryId(deputySecretaryId) &&
-                        classRepository.existsByDeputySecretaryId(deputySecretaryId)) {
+                if (StringUtils.hasText(deputySecretaryId)) {
                     deputySecretary = studentRepository.findById(deputySecretaryId).orElseThrow(() -> new RuntimeException(String.format(studentNotFound, deputySecretaryId)));
-                } else {
-                    throw new RuntimeException(duplicateDeputySecretary);
                 }
             }
 
@@ -150,11 +126,7 @@ public class ClassManager implements IClassService {
 
             if (request.getMonitor() != null) {
                 String monitorId = request.getMonitor().getId();
-                if (StringUtils.hasText(monitorId) &&
-                        classRepository.existsByMonitorId(monitorId) &&
-                        classRepository.existsByViceMonitorId(monitorId) &&
-                        classRepository.existsBySecretaryId(monitorId) &&
-                        classRepository.existsByDeputySecretaryId(monitorId)) {
+                if (StringUtils.hasText(monitorId)) {
                     newMonitor = studentRepository.findById(monitorId).orElseThrow(() -> new RuntimeException(String.format(studentNotFound, monitorId)));
                     newMonitor.setRole(Role.builder().id(RoleConstant.MONITOR).build());
 

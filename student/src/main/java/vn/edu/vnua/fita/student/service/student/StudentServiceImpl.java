@@ -66,6 +66,7 @@ public class StudentServiceImpl implements StudentService {
     public Student updateProfile(UpdateStudentProfileRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Student student = studentRepository.findById(authentication.getPrincipal().toString()).orElseThrow(() -> new RuntimeException(studentNotFound));
+        student.setPhoneNumber2(request.getPhoneNumber2());
         student.setResidence(request.getResidence());
         student.setFatherName(request.getFatherName());
         student.setFatherPhoneNumber(request.getFatherPhoneNumber());
@@ -107,9 +108,14 @@ public class StudentServiceImpl implements StudentService {
         Student student = studentRepository.findById(authentication.getPrincipal().toString()).orElseThrow(() -> new RuntimeException(studentNotFound));
 
         GetStudentStatusListRequest request = new GetStudentStatusListRequest();
+        GetStudentStatusListRequest.FilterCondition filterCondition = new GetStudentStatusListRequest.FilterCondition();
+        filterCondition.setStatusId(null);
+        filterCondition.setTermId(null);
+
         request.setStudentId(student.getId());
         request.setPage(1);
         request.setSize(Integer.MAX_VALUE);
+        request.setFilter(filterCondition);
 
         Page<StudentStatus> page = studentStatusService.getStudentStatusList(request);
         return page.getContent().stream().toList();

@@ -46,14 +46,17 @@ public class CreateStudentRequest {
 
     @NotBlank(message = "Số điện thoại không được để trống")
     @PhoneNumber(message = "Số điện thoại không đúng định dạng")
+//    @Pattern(regexp = "^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$", message = "Số điện thoại không đúng định dạng")
     private String phoneNumber;
 
-    @NotBlank(message = "Số điện thoại 2 không được để trống")
-    @PhoneNumber(message = "Số điện thoại 2 không đúng định dạng")
+//    @NotBlank(message = "Số điện thoại 2 không được để trống")
+//    @PhoneNumber(message = "Số điện thoại 2 không đúng định dạng")
+//    @Pattern(regexp = "^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$", message = "Số điện thoại không đúng định dạng")
     private String phoneNumber2;
 
     @NotBlank(message = "Email không được để trống")
     @EmailAnnotation(message = "Email không đúng định dạng")
+//    @Email(message = "Email không đúng định dạng")
     @Size(max = 190,message = "Email quá dài")
     private String email;
 

@@ -35,7 +35,7 @@ public class StatusController extends BaseController {
     }
 
     @PostMapping("selection")
-    @PreAuthorize("hasAnyAuthority('SUPERADMIN', 'ADMIN')")
+    @PreAuthorize("hasAnyAuthority('SUPERADMIN', 'ADMIN', 'MOD')")
     public ResponseEntity<?> getAllStatus(){
         List<StatusDTO> response = statusManager.getAllStatus().stream().map(
                 status -> modelMapper.map(status, StatusDTO.class)

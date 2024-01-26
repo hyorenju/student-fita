@@ -29,7 +29,7 @@ public class PointController extends BaseController {
     private final PointManager pointManager;
 
     @PostMapping("list")
-    @PreAuthorize("hasAnyAuthority('GET_POINT_LIST', 'SUPERADMIN')")
+    @PreAuthorize("hasAnyAuthority('GET_POINT_LIST', 'SUPERADMIN', 'MOD_GET_POINT_LIST')")
     public ResponseEntity<?> getPointList(@Valid @RequestBody GetPointListRequest request){
         Page<Point> page = pointManager.filterPointList(request);
         List<PointDTO> response = page.getContent().stream().map(
@@ -111,7 +111,7 @@ public class PointController extends BaseController {
     }
 
     @PostMapping("export")
-    @PreAuthorize("hasAnyAuthority('EXPORT_POINT', 'SUPERADMIN')")
+    @PreAuthorize("hasAnyAuthority('EXPORT_POINT', 'SUPERADMIN', 'MOD_EXPORT_POINT')")
     public ResponseEntity<?> exportPointList(@RequestBody ExportPointListRequest request){
         String response = pointManager.exportToExcel(request);
         return buildItemResponse(response);

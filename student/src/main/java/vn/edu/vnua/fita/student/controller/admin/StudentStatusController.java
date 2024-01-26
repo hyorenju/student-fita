@@ -32,7 +32,7 @@ public class StudentStatusController extends BaseController {
     private final ModelMapper modelMapper;
 
     @PostMapping("list")
-    @PreAuthorize("hasAnyAuthority('GET_STUDENT_STATUS_LIST', 'SUPERADMIN')")
+    @PreAuthorize("hasAnyAuthority('GET_STUDENT_STATUS_LIST', 'SUPERADMIN', 'MOD_GET_STUDENT_STATUS_LIST')")
     public ResponseEntity<?> getStudentStatusList(@Valid @RequestBody GetStudentStatusListRequest request){
         Page<StudentStatus> page = studentStatusManager.getStudentStatusList(request);
         List<StudentStatusDTO> response = page.getContent().stream().map(
@@ -72,7 +72,7 @@ public class StudentStatusController extends BaseController {
     }
 
     @PostMapping("export")
-    @PreAuthorize("hasAnyAuthority('EXPORT_STUDENT_STATUS', 'SUPERADMIN')")
+    @PreAuthorize("hasAnyAuthority('EXPORT_STUDENT_STATUS', 'SUPERADMIN', 'MOD_EXPORT_STUDENT_STATUS')")
     public ResponseEntity<?> exportPointList(@RequestBody ExportStudentStatusRequest request){
         String response = studentStatusManager.exportToExcel(request);
         return buildItemResponse(response);

@@ -12,15 +12,14 @@ import java.util.List;
 @Repository
 public class CustomMajorClassificationRepository {
     public static Specification<MajorClassification> filterMajorClassificationList(String id,
-                                                                                    String start,
-                                                                                    String end) {
+                                                                                    String time) {
         return ((root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
             if (StringUtils.hasText(id)) {
                 predicates.add(criteriaBuilder.like(root.get("major").get("id"), id));
             }
-            if (start != null && end != null) {
-                predicates.add(criteriaBuilder.between(root.get("term").get("id"), start, end));
+            if (time != null) {
+                predicates.add(criteriaBuilder.like(root.get("term").get("id"), time));
             }
             query.orderBy(criteriaBuilder.asc(root.get("term").get("id")));
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));

@@ -3,6 +3,7 @@ package vn.edu.vnua.fita.student.request.admin.admin;
 import lombok.Data;
 import jakarta.validation.constraints.*;
 import vn.edu.vnua.fita.student.common.IdentifyPatternConstant;
+import vn.edu.vnua.fita.student.request.admin.role.CreateRoleRequest;
 
 
 @Data
@@ -26,6 +27,5 @@ public class CreateAdminRequest {
     @Size(max = 32, message = "Mật khẩu chỉ được tối đa 32 ký tự")
     private String password;
 
-    @NotBlank(message = "Vai trò không được để trống")
-    private String roleId;
+    private CreateRoleRequest role;
 }

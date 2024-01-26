@@ -752,6 +752,7 @@ public class ExcelService implements IExcelService {
         headerRow.createCell(1).setCellValue("Trạng thái");
         headerRow.createCell(2).setCellValue("Thời gian");
         headerRow.createCell(3).setCellValue("Học kỳ");
+        headerRow.createCell(4).setCellValue("Ghi chú");
     }
 
 // Tạo tiêu đề file lớp

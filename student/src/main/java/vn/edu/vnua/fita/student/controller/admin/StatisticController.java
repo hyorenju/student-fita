@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import vn.edu.vnua.fita.student.controller.BaseController;
 import vn.edu.vnua.fita.student.dto.*;
 import vn.edu.vnua.fita.student.model.statistic.StudentStatistic;
+import vn.edu.vnua.fita.student.request.admin.statistic.GetCircleStatisticRequest;
 import vn.edu.vnua.fita.student.request.admin.statistic.GetStatisticRequest;
 import vn.edu.vnua.fita.student.service.admin.statistic.StatisticService;
 
@@ -30,7 +31,7 @@ public class StatisticController extends BaseController {
 
     @PostMapping("class/{id}")
     @PreAuthorize("hasAnyAuthority('GET_CLASS_STATISTIC', 'SUPERADMIN')")
-    public ResponseEntity<?> getClassStatistic(@PathVariable String id, @Valid @RequestBody GetStatisticRequest request){
+    public ResponseEntity<?> getClassStatistic(@PathVariable String id, @Valid @RequestBody GetCircleStatisticRequest request){
         List<ClassChartDTO> response = statisticService.getClassClassification(id, request).stream().map(
                 classClassification -> modelMapper.map(classClassification, ClassChartDTO.class)
         ).toList();
@@ -39,7 +40,7 @@ public class StatisticController extends BaseController {
 
     @PostMapping("course/{id}")
     @PreAuthorize("hasAnyAuthority('GET_COURSE_STATISTIC', 'SUPERADMIN')")
-    public ResponseEntity<?> getCourseStatistic(@PathVariable String id, @Valid @RequestBody GetStatisticRequest request){
+    public ResponseEntity<?> getCourseStatistic(@PathVariable String id, @Valid @RequestBody GetCircleStatisticRequest request){
         List<CourseChartDTO> response = statisticService.getCourseClassification(id, request).stream().map(
                 courseClassification -> modelMapper.map(courseClassification, CourseChartDTO.class)
         ).toList();
@@ -48,7 +49,7 @@ public class StatisticController extends BaseController {
 
     @PostMapping("major/{id}")
     @PreAuthorize("hasAnyAuthority('GET_MAJOR_STATISTIC', 'SUPERADMIN')")
-    public ResponseEntity<?> getMajorStatistic(@PathVariable String id, @Valid @RequestBody GetStatisticRequest request){
+    public ResponseEntity<?> getMajorStatistic(@PathVariable String id, @Valid @RequestBody GetCircleStatisticRequest request){
         List<MajorChartDTO> response = statisticService.getMajorClassification(id, request).stream().map(
                 majorClassification -> modelMapper.map(majorClassification, MajorChartDTO.class)
         ).toList();
@@ -71,7 +72,7 @@ public class StatisticController extends BaseController {
 
     @PostMapping("faculty/circle")
     @PreAuthorize("hasAnyAuthority('GET_FACULTY_STATISTIC', 'SUPERADMIN')")
-    public ResponseEntity<?> getFacultyCircleChart(@Valid @RequestBody GetStatisticRequest request){
+    public ResponseEntity<?> getFacultyCircleChart(@Valid @RequestBody GetCircleStatisticRequest request){
         List<FacultyCircleChartDTO> response = statisticService.getFacultyCircleChart(request).stream().map(
                 facultyClassification -> modelMapper.map(facultyClassification, FacultyCircleChartDTO.class)
         ).toList();
