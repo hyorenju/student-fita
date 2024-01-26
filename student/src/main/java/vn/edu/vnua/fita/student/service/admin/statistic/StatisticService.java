@@ -496,7 +496,7 @@ public class StatisticService implements IStatisticService {
             GroupedColumnChart chart = GroupedColumnChart.builder()
                     .name("Đã nhập học")
                     .time(facultyClassification.getYear().getId())
-                    .quantity(facultyClassification.getForcedOut())
+                    .quantity(facultyClassification.getAdmission())
                     .build();
             charts.add(chart);
         }
@@ -505,7 +505,7 @@ public class StatisticService implements IStatisticService {
             GroupedColumnChart chart = GroupedColumnChart.builder()
                     .name("Đã tốt nghiệp")
                     .time(facultyClassification.getYear().getId())
-                    .quantity(facultyClassification.getDropoutWithPermission())
+                    .quantity(facultyClassification.getGraduate())
                     .build();
             charts.add(chart);
         }
