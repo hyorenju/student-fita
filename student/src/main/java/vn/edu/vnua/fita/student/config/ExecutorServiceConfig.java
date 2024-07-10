@@ -11,7 +11,6 @@ import java.util.concurrent.Executors;
 public class ExecutorServiceConfig {
     @Bean
     public ExecutorService executor(){
-        ExecutorService executor = Executors.newFixedThreadPool(ThreadsNumConstant.MAX_THREADS);
-        return executor;
+        return Executors.newFixedThreadPool(ThreadsNumConstant.MAX_THREADS);
     }
 }
