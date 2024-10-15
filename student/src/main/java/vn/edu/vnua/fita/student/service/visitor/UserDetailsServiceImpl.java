@@ -49,6 +49,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                     .dob(student.getDob())
                     .gender(student.getGender())
                     .phoneNumber(student.getPhoneNumber())
+                    .familySituation(student.getFamilySituation())
                     .email(student.getEmail())
                     .homeTown(student.getHomeTown())
                     .residence(student.getResidence())
